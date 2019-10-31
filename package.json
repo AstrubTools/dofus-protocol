@@ -1,0 +1,43 @@
+{
+  "name": "dofus-protocol",
+  "version": "0.0.1",
+  "description": "dofus packets parsing and serialization, and login sequence implementation to build clients and servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run lint && npm run validateProtocols && mocha",
+    "lint": "standard",
+    "fix": "standard --fix",
+    "validateProtocols": "protodef-validator data/1.30/data.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/louis030195/dofus-protocol.git"
+  },
+  "keywords": [
+    "bot",
+    "dofus",
+    "packets"
+  ],
+  "author": "Louis Beaumont",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/louis030195/dofus-protocol/issues"
+  },
+  "homepage": "https://github.com/louis030195/dofus-protocol#readme",
+  "dependencies": {
+    "bit-buffer": "^0.2.4",
+    "csvtojson": "^2.0.8",
+    "once-promise": "^2.0.0",
+    "protodef": "^1.6.9"
+  },
+  "standard": {
+    "ignore": [
+    ]
+  },
+  "devDependencies": {
+    "argparse": "^1.0.10",
+    "mocha": "^5.2.0",
+    "protodef-validator": "^1.2.2",
+    "standard": "^12.0.1"
+  }
+}
