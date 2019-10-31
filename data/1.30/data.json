@@ -18,24 +18,55 @@
   },
   "toServer": {
     "types": {
-      "AUTH": ["container", []],
-      "LISTSERVER": ["container", [
+      "ACCOUNT_AUTHENTICATION": ["container", []],
+      "ACCOUNT_SERVER_LIST": ["container", [
         {
           "name": "unknown",
           "type": "u8"
         }
       ]],
-      "ACCESSSERVER": ["container", []],
-      "SETCHARACTER": ["container", []],
-      "GETGIFTS": ["container", []],
-      "IDENTITY": ["container", []],
-      "GETCHARACTERS": ["container", []],
-      "KEY": ["container", []],
-      "REGIONVERSION": ["container", []],
-      "BEGIN_DIALOG": ["container", []],
-      "CREATE_DIALOG": ["container", []],
-      "RESPONSE_DIALOG": ["container", []],
-      "LEAVE_DIALOG": ["container", []],
+      "ACCOUNT_ACCESS_SERVER": ["container", [
+        {
+          "name": "serverId",
+          "type": "u32"
+        }
+      ]],
+      "ACCOUNT_SET_CHARACTER": ["container", [
+        {
+          "name": "characterId",
+          "type": "u64"
+        }
+      ]],
+      "ACCOUNT_GET_GIFTS": ["container", [
+        {
+          "name": "language",
+          "type": "string"
+        }
+      ]],
+      "ACCOUNT_IDENTITY": ["container", [
+        {
+          "name": "identity",
+          "type": "string"
+        }
+      ]],
+      "ACCOUNT_GET_CHARACTERS": ["container", []],
+      "ACCOUNT_KEY": ["container", [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ]],
+      "ACCOUNT_REGION_VERSION": ["container", [
+        {
+          "name": "region",
+          "type": "u32"
+        }
+      ]],
+      "ACCOUNT_BEGIN_DIALOG": ["container", []],
+      "DIALOG_CREATE": ["container", []],
+      "DIALOG_RESPONSE": ["container", []],
+      "DIALOG_LEAVE": ["container", []],
+      "TUTORIAL_LEAVE": ["container", []],
       "OBJECT_MOVEMENT": ["container", []],
       "OBJECT_DROP": ["container", []],
       "OBJECT_DESTROY": ["container", []],
@@ -103,20 +134,20 @@
               {
                 "type": "u16",
                 "mappings": {
-                  "0x4166": "AUTH",
-                  "0x4178": "LISTSERVER",
-                  "0x4158": "ACCESSSERVER",
-                  "0x4153": "SETCHARACTER",
-                  "0x4167": "GETGIFTS",
-                  "0x4169": "IDENTITY",
-                  "0x414C": "GETCHARACTERS",
-                  "0x416B": "KEY",
-                  "0x4156": "REGIONVERSION",
-                  "0x4442": "BEGIN_DIALOG",
-                  "0x4443": "CREATE_DIALOG",
-                  "0x4452": "RESPONSE_DIALOG",
-                  "0x4456": "LEAVE_DIALOG",
-                  "0x5456": "LEAVE_TUTORIAL",
+                  "0x4166": "ACCOUNT_AUTHENTICATION",
+                  "0x4178": "ACCOUNT_SERVER_LIST",
+                  "0x4158": "ACCOUNT_ACCESS_SERVER",
+                  "0x4153": "ACCOUNT_SET_CHARACTER",
+                  "0x4167": "ACCOUNT_GET_GIFTS",
+                  "0x4169": "ACCOUNT_IDENTITY",
+                  "0x414C": "ACCOUNT_GET_CHARACTERS",
+                  "0x416B": "ACCOUNT_KEY",
+                  "0x4156": "ACCOUNT_REGION_VERSION",
+                  "0x4442": "DIALOG_BEGIN",
+                  "0x4443": "DIALOG_CREATE",
+                  "0x4452": "DIALOG_RESPONSE",
+                  "0x4456": "DIALOG_LEAVE",
+                  "0x5456": "TUTORIAL_LEAVE",
                   "0x4F4D": "OBJECT_MOVEMENT",
                   "0x4F44": "OBJECT_DROP",
                   "0x4F64": "OBJECT_DESTROY",
@@ -185,20 +216,20 @@
               {
                 "compareTo": "name",
                 "fields": {
-                  "AUTH": "AUTH",
-                  "LISTSERVER": "LISTSERVER",
-                  "ACCESSSERVER": "ACCESSSERVER",
-                  "SETCHARACTER": "SETCHARACTER",
-                  "GETGIFTS": "GETGIFTS",
-                  "IDENTITY": "IDENTITY",
-                  "GETCHARACTERS": "GETCHARACTERS",
-                  "KEY": "KEY",
-                  "REGIONVERSION": "REGIONVERSION",
-                  "BEGIN_DIALOG": "BEGIN_DIALOG",
-                  "CREATE_DIALOG": "CREATE_DIALOG",
-                  "RESPONSE_DIALOG": "RESPONSE_DIALOG",
-                  "LEAVE_DIALOG": "LEAVE_DIALOG",
-                  "LEAVE_TUTORIAL": "LEAVE_TUTORIAL",
+                  "ACCOUNT_AUTHENTICATION": "ACCOUNT_AUTHENTICATION",
+                  "ACCOUNT_SERVER_LIST": "ACCOUNT_SERVER_LIST",
+                  "ACCOUNT_ACCESS_SERVER": "ACCOUNT_ACCESS_SERVER",
+                  "ACCOUNT_SET_CHARACTER": "ACCOUNT_SET_CHARACTER",
+                  "ACCOUNT_GET_GIFTS": "ACCOUNT_GET_GIFTS",
+                  "ACCOUNT__IDENTITY": "ACCOUNT__IDENTITY",
+                  "ACCOUNT_GET_CHARACTERS": "ACCOUNT_GET_CHARACTERS",
+                  "ACCOUNT_KEY": "ACCOUNT_KEY",
+                  "ACCOUNT_REGION_VERSION": "ACCOUNT_REGION_VERSION",
+                  "DIALOG_BEGIN": "DIALOG_BEGIN",
+                  "DIALOG_CREATE": "DIALOG_CREATE",
+                  "DIALOG_RESPONSE": "DIALOG_RESPONSE",
+                  "DIALOG_LEAVE": "DIALOG_LEAVE",
+                  "TUTORIAL_LEAVE": "TUTORIAL_LEAVE",
                   "OBJECT_MOVEMENT": "OBJECT_MOVEMENT",
                   "OBJECT_DROP": "OBJECT_DROP",
                   "OBJECT_DESTROY": "OBJECT_DESTROY",
@@ -270,8 +301,8 @@
   },
   "toClient": {
     "types": {
-      "GAME": ["container", []],
-      "CONNECTION": ["container", [
+      "HELLO_GAME": ["container", []],
+      "HELLO_CONNECTION": ["container", [
         {
           "name": "key",
           "type": ["pstring", {
@@ -280,42 +311,153 @@
           }]
         }
         ]],
-      "HOST": ["container", []],
-      "LOGIN": ["container", [
+      "ACCOUNT_QUEUE_POSITION": ["container", []],
+      "ACCOUNT_LOGIN": ["container", [
         {
           "name": "response",
           "type": "u16"
         }
       ]],
-      "PSEUDO": ["container", [
+      "ACCOUNT_PSEUDO": ["container", [
         {
           "name": "unknown",
           "type": "string"
         }
       ]],
-      "COMMUNITY": ["container", []],
-      "QUESTION": ["container", []],
-      "SERVERLIST": ["container", [
+      "ACCOUNT_COMMUNITY": ["container", []],
+      "ACCOUNT_HOST": ["container", []],
+      "ACCOUNT_QUESTION": ["container", []],
+      "ACCOUNT_SERVER_LIST": ["container", [
         {
-          "name": "unknown",
+          "name": "subscriptionDuration",
+          "type": "u64"
+        }
+      ]],
+      "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", []],
+      "ACCOUNT_TICKET": ["container", [
+        {
+          "name": "response",
+          "type": "u8"
+        }
+      ]],
+      "ACCOUNT_LIST_CHARACTER": ["container", [
+        {
+          "name": "subscriptionTime",
+          "type": "u64"
+        },
+        {
+          "name": "numberOfCharacters",
+          "type": "u32"
+        },
+        {
+          "name": "characters",
+          "type": [
+            "array",
+            {
+              "count": "numberOfCharacters",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "id",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "nickname",
+                    "type": "string"
+                  },
+                  {
+                    "name": "level",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "gfxId",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "color1",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "color2",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "color3",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "accessories",
+                    "type": [
+                      "array",
+                      {
+                        "count": 0,
+                        "type": [
+                          "container",
+                          [
+                            {
+                              "name": "accessory",
+                              "type": "u32"
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                  ,
+                  {
+                    "name": "merchant",
+                    "type": "bool"
+                  },
+                  {
+                    "name": "serverId",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "isDead",
+                    "type": "bool"
+                  },
+                  {
+                    "name": "deathCount",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "levelMax",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
+      "ACCOUNT_SELECT_CHARACTER": ["container", [
+        {
+          "name": "characterId",
+          "type": "u64"
+        }
+      ]],
+      "ACCOUNT_RESTRICTIONS": ["container", []],
+      "ACCOUNT_STATS": ["container", []],
+      "ACCOUNT_NEW_LVL": ["container", []],
+      "ACCOUNT_SERVER_QUEUE": ["container", []],
+      "ACCOUNT_KEY": ["container", [
+        {
+          "name": "key",
+          "type": "string"
+        }
+      ]],
+      "ACCOUNT_REGION_VERSION": ["container", [
+        {
+          "name": "region",
           "type": "u32"
         }
       ]],
-      "SERVERENCRYPTEDHOST": ["container", []],
-      "TICKET": ["container", []],
-      "LISTCHARACTER": ["container", []],
-      "SELECTCHARACTER": ["container", []],
-      "RESTRICTIONS": ["container", []],
-      "STATS": ["container", []],
-      "NEWLVL": ["container", []],
-      "SERVERQUEUE": ["container", []],
-      "KEY": ["container", []],
-      "REGIONVERSION": ["container", []],
-      "CREATE_DIALOG": ["container", []],
-      "QUESTION_DIALOG": ["container", []],
-      "PAUSE_DIALOG": ["container", []],
-      "LEAVE_DIALOG": ["container", []],
-      "CREATE_TUTORIAL": ["container", []],
+      "DIALOG_CREATE": ["container", []],
+      "DIALOG_QUESTION": ["container", []],
+      "DIALOG_PAUSE": ["container", []],
+      "DIALOG_LEAVE": ["container", []],
+      "TUTORIAL_CREATE": ["container", []],
       "OBJECT_DROP": ["container", []],
       "OBJECT_ADD": ["container", []],
       "OBJECT_REMOVE": ["container", []],
@@ -396,30 +538,30 @@
               {
                 "type": "u16",
                 "mappings": {
-                  "0x4847": "GAME",
-                  "0x4843": "CONNECTION",
-                  "0x4166": "QUEUEPOSITION",
-                  "0x416C": "LOGIN",
-                  "0x4164": "PSEUDO",
-                  "0x4163": "COMMUNITY",
-                  "0x4148": "HOST",
-                  "0x4151": "QUESTION",
-                  "0x4178": "SERVERLIST",
-                  "0x4158": "SERVERENCRYPTEDHOST",
-                  "0x4154": "TICKET",
-                  "0x414C": "LISTCHARACTER",
-                  "0x4153": "SELECTCHARACTER",
-                  "0x4152": "RESTRICTIONS",
-                  "0x4173": "STATS",
-                  "0x414E": "NEWLVL",
-                  "0x4171": "SERVERQUEUE",
-                  "0x416B": "KEY",
-                  "0x4156": "REGIONVERSION",
-                  "0x4443": "CREATE_DIALOG",
-                  "0x4451": "QUESTION_DIALOG",
-                  "0x4450": "PAUSE_DIALOG",
-                  "0x4456": "LEAVE_DIALOG",
-                  "0x5443": "CREATE_TUTORIAL",
+                  "0x4847": "HELLO_GAME",
+                  "0x4843": "HELLO_CONNECTION",
+                  "0x4166": "ACCOUNT_QUEUE_POSITION",
+                  "0x416C": "ACCOUNT_LOGIN",
+                  "0x4164": "ACCOUNT_PSEUDO",
+                  "0x4163": "ACCOUNT_COMMUNITY",
+                  "0x4148": "ACCOUNT_HOST",
+                  "0x4151": "ACCOUNT_QUESTION",
+                  "0x4178": "ACCOUNT_SERVER_LIST",
+                  "0x4158": "ACCOUNT_SERVER_ENCRYPTED_HOST",
+                  "0x4154": "ACCOUNT_TICKET",
+                  "0x414C": "ACCOUNT_LIST_CHARACTER",
+                  "0x4153": "ACCOUNT_SELECT_CHARACTER",
+                  "0x4152": "ACCOUNT_RESTRICTIONS",
+                  "0x4173": "ACCOUNT_STATS",
+                  "0x414E": "ACCOUNT_NEW_LVL",
+                  "0x4171": "ACCOUNT_SERVER_QUEUE",
+                  "0x416B": "ACCOUNT_KEY",
+                  "0x4156": "ACCOUNT_REGION_VERSION",
+                  "0x4443": "DIALOG_CREATE",
+                  "0x4451": "DIALOG_QUESTION",
+                  "0x4450": "DIALOG_PAUSE",
+                  "0x4456": "DIALOG_LEAVE",
+                  "0x5443": "TUTORIAL_CREATE",
                   "0x4F44": "OBJECT_DROP",
                   "0x4F41": "OBJECT_ADD",
                   "0x4F52": "OBJECT_REMOVE",
@@ -502,30 +644,30 @@
               {
                 "compareTo": "name",
                 "fields": {
-                  "GAME": "GAME",
-                  "CONNECTION": "CONNECTION",
-                  "QUEUEPOSITION": "QUEUEPOSITION",
-                  "LOGIN": "LOGIN",
-                  "PSEUDO": "PSEUDO",
-                  "COMMUNITY": "COMMUNITY",
-                  "HOST": "HOST",
-                  "QUESTION": "QUESTION",
-                  "SERVERLIST": "SERVERLIST",
-                  "SERVERENCRYPTEDHOST": "SERVERENCRYPTEDHOST",
-                  "TICKET": "TICKET",
-                  "LISTCHARACTER": "LISTCHARACTER",
-                  "SELECTCHARACTER": "SELECTCHARACTER",
-                  "RESTRICTIONS": "RESTRICTIONS",
-                  "STATS": "STATS",
-                  "NEWLVL": "NEWLVL",
-                  "SERVERQUEUE": "SERVERQUEUE",
-                  "KEY": "KEY",
-                  "REGIONVERSION": "REGIONVERSION",
-                  "CREATE_DIALOG": "CREATE_DIALOG",
-                  "QUESTION_DIALOG": "QUESTION_DIALOG",
-                  "PAUSE_DIALOG": "PAUSE_DIALOG",
-                  "LEAVE_DIALOG": "LEAVE_DIALOG",
-                  "CREATE_TUTORIAL": "CREATE_TUTORIAL",
+                  "HELLO_GAME": "HELLO_GAME",
+                  "HELLO_CONNECTION": "HELLO_CONNECTION",
+                  "ACCOUNT_QUEUE_POSITION": "ACCOUNT_QUEUE_POSITION",
+                  "ACCOUNT_LOGIN": "ACCOUNT_LOGIN",
+                  "ACCOUNT_PSEUDO": "ACCOUNT_PSEUDO",
+                  "ACCOUNT_COMMUNITY": "ACCOUNT_COMMUNITY",
+                  "ACCOUNT_HOST": "ACCOUNT_HOST",
+                  "ACCOUNT_QUESTION": "ACCOUNT_QUESTION",
+                  "ACCOUNT_SERVER_LIST": "ACCOUNT_SERVER_LIST",
+                  "ACCOUNT_SERVER_ENCRYPTED_HOST": "ACCOUNT_SERVER_ENCRYPTED_HOST",
+                  "ACCOUNT_TICKET": "ACCOUNT_TICKET",
+                  "ACCOUNT_LIST_CHARACTER": "ACCOUNT_LIST_CHARACTER",
+                  "ACCOUNT_SELECT_CHARACTER": "ACCOUNT_SELECT_CHARACTER",
+                  "ACCOUNT_RESTRICTIONS": "ACCOUNT_RESTRICTIONS",
+                  "ACCOUNT_STATS": "ACCOUNT_STATS",
+                  "ACCOUNT_NEW_LVL": "ACCOUNT_NEW_LVL",
+                  "ACCOUNT_SERVER_QUEUE": "ACCOUNT_SERVER_QUEUE",
+                  "ACCOUNT_KEY": "ACCOUNT_KEY",
+                  "ACCOUNT_REGION_VERSION": "ACCOUNT_REGION_VERSION",
+                  "DIALOG_CREATE": "DIALOG_CREATE",
+                  "DIALOG_QUESTION": "DIALOG_QUESTION",
+                  "DIALOG_PAUSE": "DIALOG_PAUSE",
+                  "DIALOG_LEAVE": "DIALOG_LEAVE",
+                  "TUTORIAL_CREATE": "TUTORIAL_CREATE",
                   "OBJECT_DROP": "OBJECT_DROP",
                   "OBJECT_ADD": "OBJECT_ADD",
                   "OBJECT_REMOVE": "OBJECT_REMOVE",
