@@ -18,7 +18,9 @@
     "void": "native",
     "array": "native",
     "string": "cstring",
-    "restBuffer": "native"
+    "restBuffer": "native",
+    "crestBuffer": "native",
+    "cstringTwo": "native"
   },
   "toServer": {
     "types": {
@@ -66,7 +68,6 @@
           "type": "u32"
         }
       ]],
-      "ACCOUNT_BEGIN_DIALOG": ["container", []],
       "DIALOG_BEGIN": ["container", [
         {
           "name": "npcId",
@@ -90,15 +91,95 @@
         }
       ]],
       "DIALOG_LEAVE": ["container", []],
-      "TUTORIAL_LEAVE": ["container", []],
-      "OBJECT_MOVEMENT": ["container", []],
-      "OBJECT_DROP": ["container", []],
-      "OBJECT_DESTROY": ["container", []],
-      "OBJECT_USE": ["container", []],
-      "OBJECT_SKIN": ["container", []],
+      "TUTORIAL_LEAVE": ["container", [
+        {
+          "name": "result",
+          "type": "u32"
+        },
+        {
+          "name": "cellId",
+          "type": "u32"
+        },
+        {
+          "name": "orientation",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_MOVEMENT": ["container", [
+        {
+          "name": "itemId",
+          "type": "u32"
+        },
+        {
+          "name": "position",
+          "type": "u32"
+        },
+        {
+          "name": "quantity",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_DROP": ["container", [
+        {
+          "name": "itemId",
+          "type": "u32"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_DESTROY": ["container", [
+        {
+          "name": "itemId",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_USE": ["container", [
+        {
+          "name": "itemId",
+          "type": "u32"
+        },
+        {
+          "name": "sprite",
+          "type": "u32"
+        },
+        {
+          "name": "position",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_SKIN": ["container", [
+        {
+          "name": "itemId",
+          "type": "u32"
+        },
+        {
+          "name": "position",
+          "type": "u32"
+        },
+        {
+          "name": "skin",
+          "type": "u32"
+        }
+      ]],
       "FRIEND_LIST": ["container", []],
-      "FRIEND_ADD": ["container", []],
-      "FRIEND_REMOVE": ["container", []],
+      "FRIEND_ADD": ["container", [
+        {
+          "name": "name",
+          "type": "restBuffer"
+        }
+      ]],
+      "FRIEND_REMOVE": ["container", [
+        {
+          "name": "name",
+          "type": "restBuffer"
+        }
+      ]],
       "BASIC_SMILEY": ["container", [
         {
           "name": "id",
@@ -121,21 +202,60 @@
       ]],
       "MOUNT_PLAYER": ["container", []],
       "GAME_INFORMATION": ["container", []],
-      "GAME_CREATE": ["container", []],
+      "GAME_CREATE": ["container", [
+        {
+          "name": "type",
+          "type": "u32"
+        }
+      ]],
       "GAME_END_TURN": ["container", []],
-      "GAME_TURN_OK": ["container", []],
+      "GAME_TURN_OK": ["container", [
+        {
+          "name": "sprite",
+          "type": "restBuffer"
+        }
+      ]],
       "GAME_FREE_SOUL": ["container", []],
-      "GAME_POSITION": ["container", []],
-      "GAME_LEAVE": ["container", []],
-      "GAME_READY": ["container", []],
+      "GAME_POSITION": ["container", [
+        {
+          "name": "position",
+          "type": "u32"
+        }
+      ]],
+      "GAME_LEAVE": ["container", [
+        {
+          "name": "sprite",
+          "type": "restBuffer"
+        }
+      ]],
+      "GAME_READY": ["container", [
+        {
+          "name": "ready",
+          "type": "restBuffer"
+        }
+      ]],
       "GAME_ACTION": ["container", []],
       "GAME_ACTION_ACK": ["container", []],
-      "GUILD_REFUSE": ["container", []],
+      "GUILD_REFUSE": ["container", [
+        {
+          "name": "playerId",
+          "type": "u64"
+        }
+      ]],
       "FIGHT_SPECTATE": ["container", []],
       "FIGHT_GROUP": ["container", []],
       "FIGHT_BLOCK": ["container", []],
       "FIGHT_HELP": ["container", []],
-      "JOB_CHANGE_STATS": ["container", []],
+      "JOB_CHANGE_STATS": ["container", [
+        {
+          "name": "jobId",
+          "type": "u32"
+        },
+        {
+          "name": "TODO",
+          "type": "restBuffer"
+        }
+      ]],
       "CONQUEST_INFO": ["container", []],
       "INFO_MAP": ["container", []],
       "CHAT_CHANNEL": ["container", [
@@ -144,32 +264,155 @@
           "type": "restBuffer"
         }
       ]],
-      "PARTY_INVITE": ["container", []],
-      "PARTY_LEAVE": ["container", []],
-      "PARTY_FOLLOW": ["container", []],
+      "PARTY_INVITE": ["container", [
+        {
+          "name": "name",
+          "type": "restBuffer"
+        }
+      ]],
+      "PARTY_LEAVE": ["container", [
+        {
+          "name": "name",
+          "type": "restBuffer"
+        }
+      ]],
+      "PARTY_FOLLOW": ["container", [
+        {
+          "name": "follow",
+          "type": "u8"
+        },
+        {
+          "name": "playerId",
+          "type": "restBuffer"
+        }
+      ]],
       "PARTY_WHERE": ["container", []],
-      "PARTY_FOLLOW_ALL": ["container", []],
+      "PARTY_FOLLOW_ALL": ["container", [
+        {
+          "name": "follow",
+          "type": "u8"
+        },
+        {
+          "name": "name",
+          "type": "restBuffer"
+        }
+      ]],
       "PARTY_ACCEPT": ["container", []],
       "PARTY_REJECT": ["container", []],
       "EMOTE_USE": ["container", [
         {
-          "name": "emoteIt",
+          "name": "emoteId",
           "type": "u32"
         }
       ]],
-      "EXCHANGE_SHOP": ["container", []],
-      "EXCHANGE_REQUEST": ["container", []],
+      "EXCHANGE_SHOP": ["container", [
+        {
+          "name": "type",
+          "type": "u32"
+        }
+      ]],
+      "EXCHANGE_REQUEST": ["container", [
+        {
+          "name": "exchangeId",
+          "type": "u32"
+        },
+        {
+          "name": "targetId",
+          "type": "u32"
+        },
+        {
+          "name": "cellId",
+          "type": "restBuffer"
+        }
+      ]],
       "EXCHANGE_ACCEPT": ["container", []],
       "EXCHANGE_READY": ["container", []],
-      "EXCHANGE_MOVE": ["container", []],
-      "EXCHANGE_BUY": ["container", []],
-      "EXCHANGE_SELL": ["container", []],
+      "EXCHANGE_MOVE": ["container", [
+        {
+          "name": "items",
+          "type": [
+            "array",
+            {
+              "countType": "varint",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "type",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "itemId",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "amount",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "price",
+                    "type": "u16"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
+      "EXCHANGE_BUY": ["container", [
+        {
+          "name": "itemId",
+          "type": "u16"
+        },
+        {
+          "name": "amount",
+          "type": "u16"
+        }
+      ]],
+      "EXCHANGE_SELL": ["container", [
+        {
+          "name": "itemId",
+          "type": "u16"
+        },
+        {
+          "name": "amount",
+          "type": "u16"
+        }
+      ]],
       "EXCHANGE_DISCONNECT_MERCHANT": ["container", []],
       "EXCHANGE_ASK_DISCONNECT_MERCHANT": ["container", []],
-      "EXCHANGE_SHOP_TYPE": ["container", []],
-      "EXCHANGE_JOB": ["container", []],
-      "EXCHANGE_MOUNT": ["container", []],
-      "EXCHANGE_PARK_MOUNT": ["container", []],
+      "EXCHANGE_SHOP_TYPE": ["container", [
+        {
+          "name": "type",
+          "type": "u16"
+        }
+      ]],
+      "EXCHANGE_JOB": ["container", [
+        {
+          "name": "jobId",
+          "type": "u16"
+        }
+      ]],
+      "EXCHANGE_MOUNT": ["container", [
+        {
+          "name": "exchange",
+          "type": "u16"
+        },
+        {
+          "name": "certificate",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_PARK_MOUNT": ["container", [
+        {
+          "name": "exchange",
+          "type": "u16"
+        },
+        {
+          "name": "mountId",
+          "type": "restBuffer"
+        }
+      ]],
       "EXCHANGE_REPLAY_CRAFT": ["container", []],
       "EXCHANGE_LEAVE": ["container", []],
       "ZAAP_USE": ["container", []],
@@ -367,11 +610,11 @@
       "ACCOUNT_LOGIN": ["container", [
         {
           "name": "time",
-          "type": "u32"
+          "type": "u8"
         },
         {
           "name": "version",
-          "type": "u32"
+          "type": "u8"
         }
       ]],
       "ACCOUNT_PSEUDO": ["container", [
@@ -383,7 +626,7 @@
       "ACCOUNT_COMMUNITY": ["container", [
         {
           "name": "community",
-          "type": "u32"
+          "type": "u16"
         }
       ]],
       "ACCOUNT_HOST": ["container", [
@@ -392,25 +635,25 @@
           "type": [
             "array",
             {
-              "countType": "restBuffer",
+              "countType": "varint",
               "type": [
                 "container",
                 [
                   {
-                    "name": "id",
-                    "type": "u64"
+                    "name": "serverId",
+                    "type": "u16"
                   },
                   {
                     "name": "state",
-                    "type": "u64"
+                    "type": "u16"
                   },
                   {
                     "name": "population",
-                    "type": "u64"
+                    "type": "u16"
                   },
                   {
                     "name": "requireSubscription",
-                    "type": "u64"
+                    "type": "u16"
                   }
                 ]
               ]
@@ -427,7 +670,7 @@
       "ACCOUNT_SERVER_LIST": ["container", [
         {
           "name": "subscriptionDuration",
-          "type": "u64"
+          "type": "u32"
         },
         {
           "name": "characters",
@@ -779,33 +1022,366 @@
       ]],
       "DIALOG_PAUSE": ["container", []],
       "DIALOG_LEAVE": ["container", []],
-      "TUTORIAL_CREATE": ["container", []],
-      "OBJECT_DROP": ["container", []],
-      "OBJECT_ADD": ["container", []],
-      "OBJECT_REMOVE": ["container", []],
-      "OBJECT_QUANTITY": ["container", []],
-      "OBJECT_MOVEMENT": ["container", []],
-      "OBJECT_TOOL": ["container", []],
-      "OBJECT_WEIGHT": ["container", []],
-      "FRIEND_LIST": ["container", []],
+      "TUTORIAL_CREATE": ["container", [
+        {
+          "name": "tutorialId",
+          "type": "u32"
+        },
+        {
+          "name": "longId",
+          "type": "u64"
+        }
+      ]],
+      "OBJECT_DROP": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        }
+      ]],
+      "OBJECT_ADD": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        }
+      ]],
+      "OBJECT_REMOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u64"
+        }
+      ]],
+      "OBJECT_QUANTITY": ["container", [
+        {
+          "name": "itemId",
+          "type": "u64"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_MOVEMENT": ["container", [
+        {
+          "name": "itemId",
+          "type": "u32"
+        },
+        {
+          "name": "position",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_TOOL": ["container", [
+        {
+          "name": "jobId",
+          "type": "u32"
+        }
+      ]],
+      "OBJECT_WEIGHT": ["container", [
+        {
+          "name": "currentWeight",
+          "type": "u32"
+        },
+        {
+          "name": "maxWeight",
+          "type": "u32"
+        }
+      ]],
+      "FRIEND_LIST": ["container", [
+        {
+          "name": "friends",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "account",
+                    "type": "string"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "state",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "name",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "level",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "alignement",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "guild",
+                    "type": "string"
+                  },
+                  {
+                    "name": "sex",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "gfx",
+                    "type": "string"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
       "BASIC_CONFIRM": ["container", []],
-      "MOUNT_XP": ["container", []],
-      "GAME_DATA": ["container", []],
-      "GAME_JOIN": ["container", []],
-      "GAME_START_POSITION": ["container", []],
+      "MOUNT_XP": ["container", [
+        {
+          "name": "xp",
+          "type": "u32"
+        }
+      ]],
+      "GAME_DATA": ["container", [
+        {
+          "name": "mapId",
+          "type": "u32"
+        },
+        {
+          "name": "subId",
+          "type": "u32"
+        },
+        {
+          "name": "key",
+          "type": "restBuffer"
+        }
+      ]],
+      "GAME_JOIN": ["container", [
+        {
+          "name": "state",
+          "type": "u32"
+        },
+        {
+          "name": "cancel",
+          "type": "u32"
+        },
+        {
+          "name": "isDuel",
+          "type": "u32"
+        },
+        {
+          "name": "isSpectator",
+          "type": "u32"
+        },
+        {
+          "name": "startTimer",
+          "type": "u32"
+        },
+        {
+          "name": "fightType",
+          "type": "u32"
+        }
+      ]],
+      "GAME_START_POSITION": ["container", [
+        {
+          "name": "team1",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "position",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "name": "team2",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "position",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "name": "currentTeam",
+          "type": "u32"
+        }
+      ]],
       "GAME_END": ["container", []],
       "GAME_MOVEMENT": ["container", []],
-      "GAME_READY": ["container", []],
-      "GAME_START_PLAY": "GAME_START_PLAY",
-      "GAME_POSITIONS": ["container", []],
-      "GAME_CHALLENGE": ["container", []],
-      "GAME_TURN": ["container", []],
-      "GAME_ACTION": ["container", []],
-      "GAME_TEAM": ["container", []],
-      "GAME_SPAWN": ["container", []],
-      "GUILD_STATS": ["container", []],
-      "GUILD_JOIN": ["container", []],
-      "FIGHT_COUNT": ["container", []],
+      "GAME_READY": ["container", [
+        {
+          "name": "ready",
+          "type": "u16"
+        },
+        {
+          "name": "entityId",
+          "type": "u16"
+        }
+      ]],
+      "GAME_START_PLAY": ["container", []],
+      "GAME_POSITIONS": ["container", [
+        {
+          "name": "positions",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "entityId",
+                    "type": "u64"
+                  },
+                  {
+                    "name": "position",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "unknown",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
+      "GAME_CHALLENGE": ["container", [
+        {
+          "name": "challengeId",
+          "type": "u32"
+        }
+      ]],
+      "GAME_TURN": ["container", [
+        {
+          "name": "entityId",
+          "type": "u64"
+        }
+      ]],
+      "GAME_ACTION": ["container", [
+        {
+          "name": "characterId",
+          "type": "u32"
+        }
+      ]],
+      "GAME_TEAM": ["container", [
+        {
+          "name": "firstId",
+          "type": "u64"
+        },
+        {
+          "name": "team",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "isAdd",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "entityId",
+                    "type": "u64"
+                  },
+                  {
+                    "name": "name",
+                    "type": "string"
+                  },
+                  {
+                    "name": "level",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
+      "GAME_SPAWN": ["container", [
+        {
+          "name": "created",
+          "type": "u16"
+        },
+        {
+          "name": "loc6",
+          "type": "u32"
+        },
+        {
+          "name": "separator",
+          "type": "u16"
+        },
+        {
+          "name": "loc7",
+          "type": "u32"
+        },
+        {
+          "name": "TODO",
+          "type": "restBuffer"
+        }
+      ]],
+      "GUILD_STATS": ["container", [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "backEmblem",
+          "type": "u32"
+        },
+        {
+          "name": "backEmblemColor",
+          "type": "u32"
+        },
+        {
+          "name": "upEmblem",
+          "type": "u32"
+        },
+        {
+          "name": "upEmblemColor",
+          "type": "u32"
+        },
+        {
+          "name": "rights",
+          "type": "u32"
+        }
+      ]],
+      "GUILD_JOIN": ["container", [
+        {
+          "name": "result",
+          "type": "u16"
+        }
+      ]],
+      "FIGHT_COUNT": ["container", [
+        {
+          "name": "count",
+          "type": "u32"
+        }
+      ]],
       "FIGHT_LIST": ["container", []],
       "FIGHT_DETAIL": ["container", []],
       "JOB_SKILLS": ["container", []],
@@ -881,20 +1457,207 @@
         }
       ]],
       "EXCHANGE_CRAFT": ["container", []],
-      "EXCHANGE_LOCAL_MOVE": ["container", []],
-      "EXCHANGE_DISTANT_MOVE": ["container", []],
-      "EXCHANGE_COOP_MOVE": ["container", []],
-      "EXCHANGE_STORAGE_MOVE": ["container", []],
-      "EXCHANGE_SHOP_MOVE": ["container", []],
-      "EXCHANGE_CRAFT_PUBLIC": ["container", []],
-      "EXCHANGE_MOUNT_STORAGE": ["container", []],
+      "EXCHANGE_LOCAL_MOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "u8"
+        },
+        {
+          "name": "isAdd",
+          "type": "u8"
+        },
+        {
+          "name": "itemType",
+          "type": "u32"
+        },
+        {
+          "name": "itemAmount",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_DISTANT_MOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "u8"
+        },
+        {
+          "name": "isAdd",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        },
+        {
+          "name": "typeId",
+          "type": "u32"
+        },
+        {
+          "name": "effects",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_COOP_MOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "u8"
+        },
+        {
+          "name": "isAdd",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        },
+        {
+          "name": "typeId",
+          "type": "u32"
+        },
+        {
+          "name": "effects",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_STORAGE_MOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        },
+        {
+          "name": "location",
+          "type": "u8"
+        },
+        {
+          "name": "isAdd",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        },
+        {
+          "name": "typeId",
+          "type": "u32"
+        },
+        {
+          "name": "effects",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_SHOP_MOVE": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        },
+        {
+          "name": "isAdd",
+          "type": "u8"
+        },
+        {
+          "name": "amount",
+          "type": "u32"
+        },
+        {
+          "name": "typeId",
+          "type": "u32"
+        },
+        {
+          "name": "effects",
+          "type": "string"
+        },
+        {
+          "name": "price",
+          "type": "u32"
+        }
+      ]],
+      "EXCHANGE_CRAFT_PUBLIC": ["container", [
+        {
+          "name": "public",
+          "type": "restBuffer"
+        }
+      ]],
+      "EXCHANGE_MOUNT_STORAGE": ["container", [
+        {
+          "name": "moveType",
+          "type": "u8"
+        }
+      ]],
       "EXCHANGE_MOUNT_POD": ["container", []],
-      "EXCHANGE_SELL": ["container", []],
-      "EXCHANGE_BUY": ["container", []],
-      "EXCHANGE_CRAFT_LOOP": ["container", []],
-      "EXCHANGE_CRAFT_LOOP_END": ["container", []],
-      "EXCHANGE_LEAVE": ["container", []],
-      "ZAAP_CREATE": ["container", []],
+      "EXCHANGE_SELL": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        }
+      ]],
+      "EXCHANGE_BUY": ["container", [
+        {
+          "name": "result",
+          "type": "u8"
+        }
+      ]],
+      "EXCHANGE_CRAFT_LOOP": ["container", [
+        {
+          "name": "index",
+          "type": "u32"
+        }
+      ]],
+      "EXCHANGE_CRAFT_LOOP_END": ["container", [
+        {
+          "name": "result",
+          "type": "u32"
+        }
+      ]],
+      "EXCHANGE_LEAVE": ["container", [
+        {
+          "name": "result",
+          "type": "restBuffer"
+        }
+      ]],
+      "ZAAP_CREATE": ["container", [
+        {
+          "name": "respawn",
+          "type": "u32"
+        },
+        {
+          "name": "zaaps",
+          "type": [
+            "array",
+            {
+              "count": "restBuffer",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "id",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "cost",
+                    "type": "u32"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
       "ZAAP_USE": ["container", []],
       "ZAAPI_CREATE": ["container", []],
       "ZAAP_LEAVE": ["container", []],
@@ -1113,10 +1876,6 @@
                 }
               }
             ]
-          },
-          {
-            "name": "end",
-            "type": "u8"
           }
         ]
       ]
