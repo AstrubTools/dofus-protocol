@@ -33,14 +33,14 @@ pcapSession.on('packet', function (rawPacket) {
   if (packet.payload.payload.saddr.addr.join('.') === IP) { // To client
     let data = packet.payload.payload.payload.data
     if (data === null) return
-    if ((data[0] === 0x3c && data[1] === 0x3f) || data[0] === 0xc3) { // 3c && 3f is trash ad begin login, c3 trash media priv server?
+    if ((data[0] === 0x3c && data[1] === 0x3f) || data[0] === 0xc3 || data[0] === 0xd1) { // 3c && 3f is trash ad begin login, c3 trash media priv server?
       console.log('Ignore trash')
       return
     }
     splitPackets(data.toString('hex')).forEach(p => {
       try {
-        const { name, params } = toClient.parsePacketBuffer('packet', Buffer.from(p, 'hex')).data
-        console.log(name, JSON.stringify(params))
+        const parsed = toClient.parsePacketBuffer('packet', Buffer.from(p, 'hex')).data
+        console.info('toClient : ', JSON.stringify(parsed))
       } catch (error) {
         if (packet !== null) console.log(`failed at data ${data}\npacket ${p}`)
         console.log(error.message)
@@ -50,8 +50,8 @@ pcapSession.on('packet', function (rawPacket) {
   } else if (packet.payload.payload.daddr.addr.join('.') === IP) { // To server
     let data = packet.payload.payload.payload.data
     try {
-      const { name, params } = toServer.parsePacketBuffer('packet', data).data
-      console.log(name, JSON.stringify(params))
+      const parsed = toServer.parsePacketBuffer('packet', data).data
+      console.info('toServer : ', JSON.stringify(parsed))
     } catch (error) {
       if (data !== null) console.log('raw', data.toString('hex'))
       console.log(error.message)

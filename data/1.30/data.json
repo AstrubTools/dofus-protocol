@@ -680,7 +680,7 @@
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
           "name": "ip",
-          "type": "lu32"
+          "type": "u32"
         },
         {
           "name": "port",
