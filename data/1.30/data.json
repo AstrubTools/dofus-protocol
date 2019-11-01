@@ -25,22 +25,17 @@
   "toServer": {
     "types": {
       "ACCOUNT_AUTHENTICATION": ["container", []],
-      "ACCOUNT_SERVER_LIST": ["container", [
-        {
-          "name": "unknown",
-          "type": "u8"
-        }
-      ]],
+      "ACCOUNT_SERVER_LIST": ["container", []],
       "ACCOUNT_ACCESS_SERVER": ["container", [
         {
           "name": "serverId",
-          "type": "u32"
+          "type": "u16"
         }
       ]],
       "ACCOUNT_SET_CHARACTER": ["container", [
         {
           "name": "characterId",
-          "type": "u64"
+          "type": "restBuffer"
         }
       ]],
       "ACCOUNT_GET_GIFTS": ["container", [
@@ -52,7 +47,7 @@
       "ACCOUNT_IDENTITY": ["container", [
         {
           "name": "identity",
-          "type": "string"
+          "type": "restBuffer"
         }
       ]],
       "ACCOUNT_GET_CHARACTERS": ["container", []],
@@ -65,7 +60,7 @@
       "ACCOUNT_REGION_VERSION": ["container", [
         {
           "name": "region",
-          "type": "u32"
+          "type": "restBuffer"
         }
       ]],
       "DIALOG_BEGIN": ["container", [
@@ -415,7 +410,12 @@
       ]],
       "EXCHANGE_REPLAY_CRAFT": ["container", []],
       "EXCHANGE_LEAVE": ["container", []],
-      "ZAAP_USE": ["container", []],
+      "ZAAP_USE": ["container", [
+        {
+          "name": "waypointId",
+          "type": "u16"
+        }
+      ]],
       "ZAAPI_USE": ["container", []],
       "ZAAP_LEAVE": ["container", []],
       "ZAAPI_LEAVE": ["container", []],
@@ -516,7 +516,7 @@
                   "ACCOUNT_ACCESS_SERVER": "ACCOUNT_ACCESS_SERVER",
                   "ACCOUNT_SET_CHARACTER": "ACCOUNT_SET_CHARACTER",
                   "ACCOUNT_GET_GIFTS": "ACCOUNT_GET_GIFTS",
-                  "ACCOUNT__IDENTITY": "ACCOUNT__IDENTITY",
+                  "ACCOUNT_IDENTITY": "ACCOUNT_IDENTITY",
                   "ACCOUNT_GET_CHARACTERS": "ACCOUNT_GET_CHARACTERS",
                   "ACCOUNT_KEY": "ACCOUNT_KEY",
                   "ACCOUNT_REGION_VERSION": "ACCOUNT_REGION_VERSION",
@@ -635,7 +635,7 @@
           "type": [
             "array",
             {
-              "countType": "varint",
+              "count": 1,
               "type": [
                 "container",
                 [
@@ -680,24 +680,15 @@
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
           "name": "ip",
-          "type": ["pstring", {
-            "count": 8,
-            "type": "u8"
-          }]
+          "type": "lu32"
         },
         {
           "name": "port",
-          "type": ["pstring", {
-            "count": 3,
-            "type": "u8"
-          }]
+          "type": "u16"
         },
         {
-          "name": "ticketKey",
-          "type": ["pstring", {
-            "count": 11,
-            "type": "u8"
-          }]
+          "name": "key",
+          "type": "restBuffer"
         }
       ]],
       "ACCOUNT_TICKET": ["container", [
@@ -709,10 +700,18 @@
       "ACCOUNT_LIST_CHARACTER": ["container", [
         {
           "name": "subscriptionTime",
-          "type": "u64"
+          "type": "u32"
+        },
+        {
+          "name": "separator",
+          "type": "u32"
         },
         {
           "name": "numberOfCharacters",
+          "type": "u32"
+        },
+        {
+          "name": "separator",
           "type": "u32"
         },
         {
@@ -729,11 +728,23 @@
                     "type": "u32"
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "nickname",
                     "type": "string"
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "level",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
                     "type": "u32"
                   },
                   {
@@ -741,7 +752,15 @@
                     "type": "u32"
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "color1",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
                     "type": "u32"
                   },
                   {
@@ -749,7 +768,15 @@
                     "type": "u32"
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "color3",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
                     "type": "u32"
                   },
                   {
@@ -757,12 +784,16 @@
                     "type": [
                       "array",
                       {
-                        "count": 0,
+                        "count": 5,
                         "type": [
                           "container",
                           [
                             {
                               "name": "accessory",
+                              "type": "u32"
+                            },
+                            {
+                              "name": "separator",
                               "type": "u32"
                             }
                           ]
@@ -771,11 +802,23 @@
                     ]
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "merchant",
-                    "type": "bool"
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u32"
                   },
                   {
                     "name": "serverId",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
                     "type": "u32"
                   },
                   {
@@ -783,7 +826,15 @@
                     "type": "bool"
                   },
                   {
+                    "name": "separator",
+                    "type": "u32"
+                  },
+                  {
                     "name": "deathCount",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "separator",
                     "type": "u32"
                   },
                   {
@@ -1001,7 +1052,7 @@
       "ACCOUNT_REGION_VERSION": ["container", [
         {
           "name": "region",
-          "type": "u32"
+          "type": "restBuffer"
         }
       ]],
       "DIALOG_CREATE": ["container", [
@@ -1142,17 +1193,20 @@
       "MOUNT_XP": ["container", [
         {
           "name": "xp",
-          "type": "u32"
+          "type": "restBuffer"
         }
       ]],
       "GAME_DATA": ["container", [
         {
           "name": "mapId",
-          "type": "u32"
+          "type": "u8"
         },
         {
           "name": "subId",
-          "type": "u32"
+          "type":  [
+            "option",
+            "u8"
+          ]
         },
         {
           "name": "key",
@@ -1379,17 +1433,90 @@
       "FIGHT_COUNT": ["container", [
         {
           "name": "count",
-          "type": "u32"
+          "type": "u8"
         }
       ]],
       "FIGHT_LIST": ["container", []],
       "FIGHT_DETAIL": ["container", []],
       "JOB_SKILLS": ["container", []],
       "JOB_XP": ["container", []],
-      "JOB_LEVEL": ["container", []],
+      "JOB_LEVEL": ["container", [
+        {
+          "name": "jobId",
+          "type": "u16"
+        },
+        {
+          "name": "level",
+          "type": "u16"
+        }
+      ]],
       "INFO_MESSAGE": ["container", []],
-      "INFO_COMPASS": ["container", []],
-      "INFO_COORDINATE": ["container", []],
+      "INFO_COMPASS": ["container", [
+        {
+          "name": "x",
+          "type": "u16"
+        },
+        {
+          "name": "y",
+          "type": "u16"
+        }
+      ]],
+      "INFO_COORDINATE": ["container", [
+        {
+          "name": "entities",
+          "type": [
+            "array",
+            {
+              "count": "varint",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "x",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "y",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "mapId",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "type",
+                    "type": "u16"
+                  },
+                  {
+                    "name": "separator",
+                    "type": "u8"
+                  },
+                  {
+                    "name": "playerId",
+                    "type": "u32"
+                  },
+                  {
+                    "name": "name",
+                    "type": "restBuffer"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
       "AKS_MESSAGE": ["container", [
         {
           "name": "messages",
@@ -1425,14 +1552,111 @@
           "type": "restBuffer"
         }
       ]],
-      "SPECIALIZATION": ["container", []],
-      "PARTY_INVITE": ["container", []],
-      "PARTY_LEADER": ["container", []],
+      "SPECIALIZATION": ["container", [
+        {
+          "name": "specialization",
+          "type": "restBuffer"
+        }
+      ]],
+      "PARTY_INVITE": ["container", [
+        {
+          "name": "result",
+          "type": "restBuffer"
+        }
+      ]],
+      "PARTY_LEADER": ["container", [
+        {
+          "name": "leaderId",
+          "type": "u32"
+        }
+      ]],
       "PARTY_CREATE": ["container", []],
-      "PARTY_LEAVE": ["container", []],
-      "PARTY_FOLLOW": ["container", []],
-      "PARTY_MOVEMENT": ["container", []],
-      "SPELL": ["container", []],
+      "PARTY_LEAVE": ["container", [
+        {
+          "name": "player",
+          "type": "restBuffer"
+        }
+      ]],
+      "PARTY_FOLLOW": ["container", [
+        {
+          "name": "result",
+          "type": "u16"
+        },
+        {
+          "name": "target",
+          "type": [
+            "switch",
+            {
+              "compareTo": "result",
+              "fields": {
+                "0": "void",
+                "1": "restBuffer"
+              },
+              "default": "void"
+            }
+          ]
+        }
+      ]],
+      "PARTY_MOVEMENT": ["container", [
+        {
+          "name": "move",
+          "type": "u16"
+        },
+        {
+          "name": "TODO",
+          "type": "restBuffer"
+        }
+      ]],
+      "SPELL": ["container", [
+        {
+          "name": "spells",
+          "type": [
+            "array",
+            {
+              "count": "varint",
+              "type": [
+                "container",
+                [
+                  {
+                    "name": "id",
+                    "type": [
+                      "array",
+                      {
+                        "count": "varint",
+                        "type": [
+                          "container",
+                          [
+                            {
+                              "name": "id",
+                              "type": "u16"
+                            },
+                            {
+                              "name": "separator",
+                              "type": "u16"
+                            },
+                            {
+                              "name": "level",
+                              "type": "u16"
+                            },
+                            {
+                              "name": "separator",
+                              "type": "u16"
+                            },
+                            {
+                              "name": "position",
+                              "type": "u16"
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]],
       "SUBAREA": ["container", []],
       "EXCHANGE_LIST": ["container", []],
       "EXCHANGE_CREATE": ["container", []],
@@ -1636,7 +1860,7 @@
           "type": [
             "array",
             {
-              "count": "restBuffer",
+              "count": "varint",
               "type": [
                 "container",
                 [

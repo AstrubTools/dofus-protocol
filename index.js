@@ -1,5 +1,7 @@
 const { defaultVersion, supportedVersions } = require('./version')
 const createClient = require('./lib/client/createClient')
+const dofus = require('./lib/utils/datatypes/dofus')
+const splitPackets = require('./lib/utils/utils')
 
 const protocol = supportedVersions.reduce((acc, version) => {
   acc[version] = {
@@ -12,5 +14,7 @@ module.exports = {
   protocol,
   supportedVersions,
   defaultVersion,
-  createClient
+  createClient,
+  dofus,
+  splitPackets
 }
