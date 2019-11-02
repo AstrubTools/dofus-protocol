@@ -24,7 +24,8 @@
     "string": "cstring",
     "restBuffer": "native",
     "crestBuffer": "native",
-    "cstringTwo": "native"
+    "cstringTwo": "native",
+    "split": "native"
   },
   "toServer": {
     "types": {
@@ -635,29 +636,21 @@
       ]],
       "ACCOUNT_HOST": ["container", [
         {
-          "name": "number",
-          "type": "su8"
-        },
-        {
           "name": "servers",
           "type": [
             "array",
             {
               "count": "number",
               "type": [
-                "container",
+                "split",
                 [
                   {
                     "name": "serverId",
                     "type": "su8"
                   },
                   {
-                    "name": "sep",
-                    "type": "su8"
-                  },
-                  {
                     "name": "state",
-                    "type": "su16"
+                    "type": "su8"
                   },
                   {
                     "name": "population",
@@ -709,13 +702,9 @@
           "type": "restBuffer"
         }
       ]],
-      "ACCOUNT_LIST_CHARACTER": ["container", [
+      "ACCOUNT_LIST_CHARACTER": ["split", [
         {
           "name": "subscriptionTime",
-          "type": "su32"
-        },
-        {
-          "name": "separator",
           "type": "su32"
         },
         {
@@ -723,147 +712,75 @@
           "type": "su32"
         },
         {
-          "name": "separator",
-          "type": "su32"
-        },
-        {
           "name": "characters",
           "type": [
-            "array",
-            {
-              "count": "numberOfCharacters",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "id",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "nickname",
-                    "type": "string"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "level",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "gfxId",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "color1",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "color2",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "color3",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "accessories",
-                    "type": [
-                      "array",
-                      {
-                        "count": 5,
-                        "type": [
-                          "container",
-                          [
-                            {
-                              "name": "accessory",
-                              "type": "su32"
-                            },
-                            {
-                              "name": "separator",
-                              "type": "su32"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "merchant",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "serverId",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "isDead",
-                    "type": "bool"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "deathCount",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "levelMax",
-                    "type": "su32"
-                  }
+            "split",
+            [
+              {
+                "name": "id",
+                "type": "su32"
+              },
+              {
+                "name": "nickname",
+                "type": "string"
+              },
+              {
+                "name": "level",
+                "type": "su32"
+              },
+              {
+                "name": "gfxId",
+                "type": "su32"
+              },
+              {
+                "name": "color1",
+                "type": "su32"
+              },
+              {
+                "name": "color2",
+                "type": "su32"
+              },
+              {
+                "name": "color3",
+                "type": "su32"
+              },
+              {
+                "name": "accessories",
+                "type": [
+                  "split",
+                  [
+                    {
+                      "name": "accessory",
+                      "type": "su32"
+                    }
+                  ]
                 ]
-              ]
-            }
+              },
+              {
+                "name": "merchant",
+                "type": "su32"
+              },
+              {
+                "name": "serverId",
+                "type": "su32"
+              },
+              {
+                "name": "isDead",
+                "type": "bool"
+              },
+              {
+                "name": "deathCount",
+                "type": "su32"
+              },
+              {
+                "name": "levelMax",
+                "type": "su32"
+              }
+            ]
           ]
         }
       ]],
-      "ACCOUNT_SELECT_CHARACTER": ["container", [
-        {
-          "name": "separator",
-          "type": "su8"
-        },
+      "ACCOUNT_SELECT_CHARACTER": ["split", [
         {
           "name": "id",
           "type": "su64"
@@ -903,19 +820,13 @@
         {
           "name": "items",
           "type": [
-            "array",
-            {
-              "countType": "restBuffer",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "item",
-                    "type": "string"
-                  }
-                ]
-              ]
-            }
+            "split",
+            [
+              {
+                "name": "item",
+                "type": "string"
+              }
+            ]
           ]
         }
       ]],
@@ -925,22 +836,14 @@
           "type": "restBuffer"
         }
       ]],
-      "ACCOUNT_STATS": ["container", [
+      "ACCOUNT_STATS": ["split", [
         {
           "name": "xp",
           "type": "su64"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "xpLow",
           "type": "su64"
-        },
-        {
-          "name": "separator",
-          "type": "su8"
         },
         {
           "name": "xpHigh",
@@ -963,40 +866,20 @@
           "type": "restBuffer"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "alignementValue",
           "type": "su32"
-        },
-        {
-          "name": "separator",
-          "type": "su8"
         },
         {
           "name": "rank1",
           "type": "su32"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "rank2",
           "type": "su32"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "rank3",
           "type": "su32"
-        },
-        {
-          "name": "separator",
-          "type": "su8"
         },
         {
           "name": "rank4",
@@ -1007,24 +890,12 @@
           "type": "su32"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "lifeMax",
           "type": "su32"
         },
         {
-          "name": "separator",
-          "type": "su8"
-        },
-        {
           "name": "energy",
           "type": "su32"
-        },
-        {
-          "name": "separator",
-          "type": "su8"
         },
         {
           "name": "energyMax",
@@ -1153,51 +1024,41 @@
         {
           "name": "friends",
           "type": [
-            "array",
-            {
-              "count": "restBuffer",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "account",
-                    "type": "string"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "state",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "name",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "level",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "alignement",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "guild",
-                    "type": "string"
-                  },
-                  {
-                    "name": "sex",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "gfx",
-                    "type": "string"
-                  }
-                ]
-              ]
-            }
+            "split",
+            [
+              {
+                "name": "account",
+                "type": "string"
+              },
+              {
+                "name": "state",
+                "type": "su8"
+              },
+              {
+                "name": "name",
+                "type": "su8"
+              },
+              {
+                "name": "level",
+                "type": "su32"
+              },
+              {
+                "name": "alignement",
+                "type": "su32"
+              },
+              {
+                "name": "guild",
+                "type": "string"
+              },
+              {
+                "name": "sex",
+                "type": "su32"
+              },
+              {
+                "name": "gfx",
+                "type": "string"
+              }
+            ]
           ]
         }
       ]],
@@ -1388,7 +1249,7 @@
           ]
         }
       ]],
-      "GAME_SPAWN": ["container", [
+      "GAME_SPAWN": ["split", [
         {
           "name": "created",
           "type": "su16"
@@ -1396,10 +1257,6 @@
         {
           "name": "loc6",
           "type": "su32"
-        },
-        {
-          "name": "separator",
-          "type": "su16"
         },
         {
           "name": "loc7",
@@ -1477,55 +1334,33 @@
         {
           "name": "entities",
           "type": [
-            "array",
-            {
-              "count": "varint",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "x",
-                    "type": "su16"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "y",
-                    "type": "su16"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "mapId",
-                    "type": "su16"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "type",
-                    "type": "su16"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "playerId",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "name",
-                    "type": "restBuffer"
-                  }
-                ]
-              ]
-            }
+            "split",
+            [
+              {
+                "name": "x",
+                "type": "su16"
+              },
+              {
+                "name": "y",
+                "type": "su16"
+              },
+              {
+                "name": "mapId",
+                "type": "su16"
+              },
+              {
+                "name": "type",
+                "type": "su16"
+              },
+              {
+                "name": "playerId",
+                "type": "su32"
+              },
+              {
+                "name": "name",
+                "type": "restBuffer"
+              }
+            ]
           ]
         }
       ]],
@@ -1623,49 +1458,29 @@
         {
           "name": "spells",
           "type": [
-            "array",
-            {
-              "count": "varint",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "id",
-                    "type": [
-                      "array",
-                      {
-                        "count": "varint",
-                        "type": [
-                          "container",
-                          [
-                            {
-                              "name": "id",
-                              "type": "su16"
-                            },
-                            {
-                              "name": "separator",
-                              "type": "su16"
-                            },
-                            {
-                              "name": "level",
-                              "type": "su16"
-                            },
-                            {
-                              "name": "separator",
-                              "type": "su16"
-                            },
-                            {
-                              "name": "position",
-                              "type": "su16"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
+            "split",
+            [
+              {
+                "name": "id",
+                "type": [
+                  "split",
+                  [
+                    {
+                      "name": "id",
+                      "type": "su16"
+                    },
+                    {
+                      "name": "level",
+                      "type": "su16"
+                    },
+                    {
+                      "name": "position",
+                      "type": "su16"
+                    }
+                  ]
                 ]
-              ]
-            }
+              }
+            ]
           ]
         }
       ]],
@@ -1870,27 +1685,17 @@
         {
           "name": "zaaps",
           "type": [
-            "array",
-            {
-              "count": "varint",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "id",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "separator",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "cost",
-                    "type": "su32"
-                  }
-                ]
-              ]
-            }
+            "split",
+            [
+              {
+                "name": "id",
+                "type": "su32"
+              },
+              {
+                "name": "cost",
+                "type": "su32"
+              }
+            ]
           ]
         }
       ]],
