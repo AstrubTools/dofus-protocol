@@ -22,9 +22,7 @@
     "void": "native",
     "array": "native",
     "string": "cstring",
-    "restBuffer": "native",
-    "crestBuffer": "native",
-    "cstringTwo": "native",
+    "restString": "native",
     "split": "native"
   },
   "toServer": {
@@ -40,7 +38,7 @@
       "ACCOUNT_SET_CHARACTER": ["container", [
         {
           "name": "characterId",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_GET_GIFTS": ["container", [
@@ -52,7 +50,7 @@
       "ACCOUNT_IDENTITY": ["container", [
         {
           "name": "identity",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_GET_CHARACTERS": ["container", []],
@@ -65,7 +63,7 @@
       "ACCOUNT_REGION_VERSION": ["container", [
         {
           "name": "region",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "DIALOG_BEGIN": ["container", [
@@ -76,18 +74,32 @@
       ]],
       "DIALOG_CREATE": ["container", [
         {
+          "name": "separator",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
           "name": "npcId",
-          "type": "su32"
+          "type": "su16"
         }
       ]],
       "DIALOG_RESPONSE": ["container", [
         {
           "name": "questionId",
-          "type": "su32"
+          "type": "su16"
+        },
+        {
+          "name": "separator",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
         },
         {
           "name": "responseId",
-          "type": "su32"
+          "type": "su16"
         }
       ]],
       "DIALOG_LEAVE": ["container", []],
@@ -171,13 +183,13 @@
       "FRIEND_ADD": ["container", [
         {
           "name": "name",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "FRIEND_REMOVE": ["container", [
         {
           "name": "name",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "BASIC_SMILEY": ["container", [
@@ -197,7 +209,7 @@
         },
         {
           "name": "extra",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "MOUNT_PLAYER": ["container", []],
@@ -212,7 +224,7 @@
       "GAME_TURN_OK": ["container", [
         {
           "name": "sprite",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "GAME_FREE_SOUL": ["container", []],
@@ -225,17 +237,31 @@
       "GAME_LEAVE": ["container", [
         {
           "name": "sprite",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "GAME_READY": ["container", [
         {
           "name": "ready",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "GAME_ACTION": ["container", []],
-      "GAME_ACTION_ACK": ["container", []],
+      "GAME_ACTION_ACK": ["container", [
+        {
+          "name": "time",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "result",
+          "type": ["bitfield", [
+            { "name": "id", "size": 4, "signed": false }
+          ]]
+        }
+      ]],
       "GUILD_REFUSE": ["container", [
         {
           "name": "playerId",
@@ -253,7 +279,7 @@
         },
         {
           "name": "TODO",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "CONQUEST_INFO": ["container", []],
@@ -261,19 +287,19 @@
       "CHAT_CHANNEL": ["container", [
         {
           "name": "extra",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_INVITE": ["container", [
         {
           "name": "name",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_LEAVE": ["container", [
         {
           "name": "name",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_FOLLOW": ["container", [
@@ -283,7 +309,7 @@
         },
         {
           "name": "playerId",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_WHERE": ["container", []],
@@ -294,7 +320,7 @@
         },
         {
           "name": "name",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_ACCEPT": ["container", []],
@@ -322,7 +348,7 @@
         },
         {
           "name": "cellId",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_ACCEPT": ["container", []],
@@ -400,7 +426,7 @@
         },
         {
           "name": "certificate",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_PARK_MOUNT": ["container", [
@@ -410,7 +436,7 @@
         },
         {
           "name": "mountId",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_REPLAY_CRAFT": ["container", []],
@@ -625,51 +651,37 @@
       "ACCOUNT_PSEUDO": ["container", [
         {
           "name": "pseudo",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_COMMUNITY": ["container", [
         {
           "name": "community",
-          "type": "su16"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_HOST": ["container", [
         {
-          "name": "servers",
-          "type": [
-            "array",
-            {
-              "count": "number",
-              "type": [
-                "split",
-                [
-                  {
-                    "name": "serverId",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "state",
-                    "type": "su8"
-                  },
-                  {
-                    "name": "population",
-                    "type": "su16"
-                  },
-                  {
-                    "name": "requireSubscription",
-                    "type": "su8"
-                  }
-                ]
-              ]
-            }
-          ]
+          "name": "serverId",
+          "type": "su8"
+        },
+        {
+          "name": "state",
+          "type": "su8"
+        },
+        {
+          "name": "population",
+          "type": "su16"
+        },
+        {
+          "name": "requireSubscription",
+          "type": "su8"
         }
       ]],
       "ACCOUNT_QUESTION": ["container", [
         {
           "name": "question",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_SERVER_LIST": ["container", [
@@ -678,28 +690,32 @@
           "type": "su32"
         },
         {
+          "name": "pipe",
+          "type": "u8"
+        },
+        {
           "name": "characters",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
           "name": "ip",
-          "type": "su32"
+          "type": "u32"
         },
         {
           "name": "port",
-          "type": "su16"
+          "type": "u16"
         },
         {
           "name": "key",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_TICKET": ["container", [
         {
           "name": "ticket",
-          "type": "restBuffer"
+          "type": "su16"
         }
       ]],
       "ACCOUNT_LIST_CHARACTER": ["split", [
@@ -833,7 +849,7 @@
       "ACCOUNT_RESTRICTIONS": ["container", [
         {
           "name": "restrictions",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_STATS": ["split", [
@@ -863,7 +879,7 @@
         },
         {
           "name": "fakeAlignement",
-          "type": "restBuffer"
+          "type": "restString"
         },
         {
           "name": "alignementValue",
@@ -911,7 +927,7 @@
         },
         {
           "name": "extras",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_NEW_LVL": ["container", [
@@ -935,23 +951,44 @@
       "ACCOUNT_REGION_VERSION": ["container", [
         {
           "name": "region",
-          "type": "restBuffer"
+          "type": "su8"
         }
       ]],
       "DIALOG_CREATE": ["container", [
         {
-          "name": "id",
-          "type": "su64"
+          "name": "time",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "separator",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "npcId",
+          "type": "su16"
         }
       ]],
       "DIALOG_QUESTION": ["container", [
         {
-          "name": "question",
+          "name": "questionId",
           "type": "su32"
         },
         {
-          "name": "extra",
-          "type": "restBuffer"
+          "name": "separator",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "responseId",
+          "type": "su32"
         }
       ]],
       "DIALOG_PAUSE": ["container", []],
@@ -1066,24 +1103,62 @@
       "MOUNT_XP": ["container", [
         {
           "name": "xp",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "GAME_DATA": ["container", [
         {
-          "name": "mapId",
-          "type": "su8"
+          "name": "type",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
         },
         {
-          "name": "subId",
-          "type":  [
-            "option",
-            "su8"
+          "name": "data",
+          "type": [
+            "switch",
+            {
+              "compareTo": "type",
+              "fields": {
+                "M": ["container", [
+                  {
+                    "name": "mapId",
+                    "type": "su8"
+                  },
+                  {
+                    "name": "subId",
+                    "type":  [
+                      "option",
+                      "su8"
+                    ]
+                  },
+                  {
+                    "name": "key",
+                    "type": "restString"
+                  }
+                ]],
+                "D": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]],
+                "K": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]]
+              },
+              "default": ["container", [
+                {
+                  "name": "default",
+                  "type": "restString"
+                }
+              ]]
+            }
           ]
-        },
-        {
-          "name": "key",
-          "type": "restBuffer"
         }
       ]],
       "GAME_JOIN": ["container", [
@@ -1118,7 +1193,7 @@
           "type": [
             "array",
             {
-              "count": "restBuffer",
+              "count": "restString",
               "type": [
                 "container",
                 [
@@ -1136,7 +1211,7 @@
           "type": [
             "array",
             {
-              "count": "restBuffer",
+              "count": "restString",
               "type": [
                 "container",
                 [
@@ -1173,7 +1248,7 @@
           "type": [
             "array",
             {
-              "count": "restBuffer",
+              "count": "restString",
               "type": [
                 "container",
                 [
@@ -1209,8 +1284,62 @@
       ]],
       "GAME_ACTION": ["container", [
         {
-          "name": "characterId",
-          "type": "su32"
+          "name": "movementType",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "data",
+          "type": [
+            "switch",
+            {
+              "compareTo": "movementType",
+              "fields": {
+                "0": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]],
+                "1": ["container", [
+                  {
+                    "name": "separator",
+                    "type": ["pstring", {
+                      "count": 1,
+                      "type": "u8"
+                    }]
+                  },
+                  {
+                    "name": "characterId",
+                    "type": ["bitfield", [
+                      { "name": "characterId", "size": 4, "signed": false }
+                    ]]
+                  },
+                  {
+                    "name": "separator2",
+                    "type": ["pstring", {
+                      "count": 1,
+                      "type": "u8"
+                    }]
+                  }
+                ]],
+                "2": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]]
+              },
+              "default": ["container", [
+                {
+                  "name": "default",
+                  "type": "restString"
+                }
+              ]]
+            }
+          ]
         }
       ]],
       "GAME_TEAM": ["container", [
@@ -1223,7 +1352,7 @@
           "type": [
             "array",
             {
-              "count": "restBuffer",
+              "count": "restString",
               "type": [
                 "container",
                 [
@@ -1264,7 +1393,7 @@
         },
         {
           "name": "TODO",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "GUILD_STATS": ["container", [
@@ -1358,16 +1487,22 @@
               },
               {
                 "name": "name",
-                "type": "restBuffer"
+                "type": "restString"
               }
             ]
           ]
         }
       ]],
+      "INFO_UNKNOWN1": ["container", [
+        {
+          "name": "unknown",
+          "type": "restString"
+        }
+      ]],
       "AKS_MESSAGE": ["container", [
         {
           "name": "messages",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "CHAT_MESSAGE": ["container", [
@@ -1389,26 +1524,26 @@
         },
         {
           "name": "extra",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "CHAT_SERVER": ["container", []],
       "CHAT_CHANNEL": ["container", [
         {
           "name": "extra",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "SPECIALIZATION": ["container", [
         {
           "name": "specialization",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_INVITE": ["container", [
         {
           "name": "result",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_LEADER": ["container", [
@@ -1421,7 +1556,7 @@
       "PARTY_LEAVE": ["container", [
         {
           "name": "player",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "PARTY_FOLLOW": ["container", [
@@ -1437,7 +1572,7 @@
               "compareTo": "result",
               "fields": {
                 "0": "void",
-                "1": "restBuffer"
+                "1": "restString"
               },
               "default": "void"
             }
@@ -1451,7 +1586,7 @@
         },
         {
           "name": "TODO",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "SPELL": ["container", [
@@ -1527,7 +1662,7 @@
         },
         {
           "name": "itemAmount",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_DISTANT_MOVE": ["container", [
@@ -1553,7 +1688,7 @@
         },
         {
           "name": "effects",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_COOP_MOVE": ["container", [
@@ -1579,7 +1714,7 @@
         },
         {
           "name": "effects",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_STORAGE_MOVE": ["container", [
@@ -1605,7 +1740,7 @@
         },
         {
           "name": "effects",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_SHOP_MOVE": ["container", [
@@ -1637,7 +1772,7 @@
       "EXCHANGE_CRAFT_PUBLIC": ["container", [
         {
           "name": "public",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "EXCHANGE_MOUNT_STORAGE": ["container", [
@@ -1674,7 +1809,7 @@
       "EXCHANGE_LEAVE": ["container", [
         {
           "name": "result",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ZAAP_CREATE": ["container", [
@@ -1771,6 +1906,7 @@
                   "0x496D": "INFO_MESSAGE",
                   "0x4943": "INFO_COMPASS",
                   "0x4948": "INFO_COORDINATE",
+                  "0x4972": "INFO_UNKNOWN1",
                   "0x4D4F": "AKS_MESSAGE",
                   "0x634D": "CHAT_MESSAGE",
                   "0x6373": "CHAT_SERVER",
@@ -1877,6 +2013,7 @@
                   "INFO_MESSAGE": "INFO_MESSAGE",
                   "INFO_COMPASS": "INFO_COMPASS",
                   "INFO_COORDINATE": "INFO_COORDINATE",
+                  "INFO_UNKNOWN1": "INFO_UNKNOWN1",
                   "AKS_MESSAGE": "AKS_MESSAGE",
                   "CHAT_MESSAGE": "CHAT_MESSAGE",
                   "CHAT_SERVER": "CHAT_SERVER",

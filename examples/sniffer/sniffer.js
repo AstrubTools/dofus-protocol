@@ -33,12 +33,13 @@ split.on('data', data => {
 toClientParser.on('data', ({ data, buffer }) => {
   try {
     console.info('toClient : ', JSON.stringify(data))
-    console.log('raw', 'toClient', buffer)
+    console.log('raw', 'toClient : ', buffer.toString('ascii'))
   } catch (err) {
     console.log(err)
-    console.log('raw', 'toClient', buffer)
+    // console.log('raw', 'toClient', buffer.toString('ascii'))
   }
 })
+toClientParser.on('error', err => console.log('toClient error : ', err.message))
 
 // const IP = '34.251.172.139' // Official dofus retro
 const IP = '190.115.26.126' // Amakna server
@@ -60,8 +61,9 @@ pcapSession.on('packet', function (rawPacket) {
     try {
       const parsed = toServer.parsePacketBuffer('packet', data).data
       console.info('toServer : ', JSON.stringify(parsed))
+      console.log('raw toServer : ', data.toString('ascii'))
     } catch (error) {
-      if (data !== null) console.log('raw', data.toString('hex'))
+      // console.log('raw toServer', data.toString('ascii'))
       console.log(error.message)
     }
     tcpTracker.track_packet(packet)
