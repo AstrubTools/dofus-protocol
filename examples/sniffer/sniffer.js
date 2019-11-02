@@ -1,4 +1,4 @@
-const { defaultVersion, splitPackets, protocol, dofus } = require('../..')
+const { defaultVersion, protocol, dofus, split } = require('../..')
 
 if (process.argv.length !== 3) {
   console.log('Usage : node sniffer.js <networkInterface>')
@@ -15,6 +15,7 @@ const tcpTracker = new pcap.TCPTracker()
 
 const pcapSession = pcap.createSession(networkInterface, 'ip proto \\tcp')
 const ProtoDef = require('protodef').ProtoDef
+const FullPacketParser = require('protodef').Parser
 
 const toServer = new ProtoDef(false)
 toServer.addProtocol(protocol[version].data, ['toServer'])
@@ -23,6 +24,21 @@ toServer.addTypes(dofus)
 const toClient = new ProtoDef(false)
 toClient.addProtocol(protocol[version].data, ['toClient'])
 toClient.addTypes(dofus)
+const toClientParser = new FullPacketParser(toClient, 'packet')
+
+split.on('data', data => {
+  toClientParser.write(data)
+})
+
+toClientParser.on('data', ({ data, buffer }) => {
+  try {
+    console.info('toClient : ', JSON.stringify(data))
+    console.log('raw', 'toClient', buffer)
+  } catch (err) {
+    console.log(err)
+    console.log('raw', 'toClient', buffer)
+  }
+})
 
 // const IP = '34.251.172.139' // Official dofus retro
 const IP = '190.115.26.126' // Amakna server
@@ -37,15 +53,7 @@ pcapSession.on('packet', function (rawPacket) {
       console.log('Ignore trash')
       return
     }
-    splitPackets(data.toString('hex')).forEach(p => {
-      try {
-        const parsed = toClient.parsePacketBuffer('packet', Buffer.from(p, 'hex')).data
-        console.info('toClient : ', JSON.stringify(parsed))
-      } catch (error) {
-        if (packet !== null) console.log(`failed at data ${data}\npacket ${p}`)
-        console.log(error.message)
-      }
-    })
+    split.write(data)
     tcpTracker.track_packet(packet)
   } else if (packet.payload.payload.daddr.addr.join('.') === IP) { // To server
     let data = packet.payload.payload.payload.data

@@ -2,9 +2,13 @@
   "types": {
     "cstring": "native",
     "u16": "native",
+    "su16": "native",
     "u8": "native",
+    "su8": "native",
     "u64": "native",
+    "su64": "native",
     "u32": "native",
+    "su32": "native",
     "lu16": "native",
     "lu8": "native",
     "lu64": "native",
@@ -29,7 +33,7 @@
       "ACCOUNT_ACCESS_SERVER": ["container", [
         {
           "name": "serverId",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "ACCOUNT_SET_CHARACTER": ["container", [
@@ -66,100 +70,100 @@
       "DIALOG_BEGIN": ["container", [
         {
           "name": "npcId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "DIALOG_CREATE": ["container", [
         {
           "name": "npcId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "DIALOG_RESPONSE": ["container", [
         {
           "name": "questionId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "responseId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "DIALOG_LEAVE": ["container", []],
       "TUTORIAL_LEAVE": ["container", [
         {
           "name": "result",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "cellId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "orientation",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_MOVEMENT": ["container", [
         {
           "name": "itemId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "quantity",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_DROP": ["container", [
         {
           "name": "itemId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_DESTROY": ["container", [
         {
           "name": "itemId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_USE": ["container", [
         {
           "name": "itemId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "sprite",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_SKIN": ["container", [
         {
           "name": "itemId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "skin",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "FRIEND_LIST": ["container", []],
@@ -178,7 +182,7 @@
       "BASIC_SMILEY": ["container", [
         {
           "name": "id",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "BASIC_MESSAGE": ["container", [
@@ -200,7 +204,7 @@
       "GAME_CREATE": ["container", [
         {
           "name": "type",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_END_TURN": ["container", []],
@@ -214,7 +218,7 @@
       "GAME_POSITION": ["container", [
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_LEAVE": ["container", [
@@ -234,7 +238,7 @@
       "GUILD_REFUSE": ["container", [
         {
           "name": "playerId",
-          "type": "u64"
+          "type": "su64"
         }
       ]],
       "FIGHT_SPECTATE": ["container", []],
@@ -244,7 +248,7 @@
       "JOB_CHANGE_STATS": ["container", [
         {
           "name": "jobId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "TODO",
@@ -274,7 +278,7 @@
       "PARTY_FOLLOW": ["container", [
         {
           "name": "follow",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "playerId",
@@ -285,7 +289,7 @@
       "PARTY_FOLLOW_ALL": ["container", [
         {
           "name": "follow",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "name",
@@ -297,23 +301,23 @@
       "EMOTE_USE": ["container", [
         {
           "name": "emoteId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_SHOP": ["container", [
         {
           "name": "type",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_REQUEST": ["container", [
         {
           "name": "exchangeId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "targetId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "cellId",
@@ -334,19 +338,19 @@
                 [
                   {
                     "name": "type",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "itemId",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "amount",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "price",
-                    "type": "u16"
+                    "type": "su16"
                   }
                 ]
               ]
@@ -357,21 +361,21 @@
       "EXCHANGE_BUY": ["container", [
         {
           "name": "itemId",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "amount",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "EXCHANGE_SELL": ["container", [
         {
           "name": "itemId",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "amount",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "EXCHANGE_DISCONNECT_MERCHANT": ["container", []],
@@ -379,19 +383,19 @@
       "EXCHANGE_SHOP_TYPE": ["container", [
         {
           "name": "type",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "EXCHANGE_JOB": ["container", [
         {
           "name": "jobId",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "EXCHANGE_MOUNT": ["container", [
         {
           "name": "exchange",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "certificate",
@@ -401,7 +405,7 @@
       "EXCHANGE_PARK_MOUNT": ["container", [
         {
           "name": "exchange",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "mountId",
@@ -413,7 +417,7 @@
       "ZAAP_USE": ["container", [
         {
           "name": "waypointId",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "ZAAPI_USE": ["container", []],
@@ -610,11 +614,11 @@
       "ACCOUNT_LOGIN": ["container", [
         {
           "name": "time",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "version",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "ACCOUNT_PSEUDO": ["container", [
@@ -626,34 +630,42 @@
       "ACCOUNT_COMMUNITY": ["container", [
         {
           "name": "community",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "ACCOUNT_HOST": ["container", [
+        {
+          "name": "number",
+          "type": "su8"
+        },
         {
           "name": "servers",
           "type": [
             "array",
             {
-              "count": 1,
+              "count": "number",
               "type": [
                 "container",
                 [
                   {
                     "name": "serverId",
-                    "type": "u16"
+                    "type": "su8"
+                  },
+                  {
+                    "name": "sep",
+                    "type": "su8"
                   },
                   {
                     "name": "state",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "population",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "requireSubscription",
-                    "type": "u16"
+                    "type": "su8"
                   }
                 ]
               ]
@@ -670,7 +682,7 @@
       "ACCOUNT_SERVER_LIST": ["container", [
         {
           "name": "subscriptionDuration",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "characters",
@@ -680,11 +692,11 @@
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
           "name": "ip",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "port",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "key",
@@ -700,19 +712,19 @@
       "ACCOUNT_LIST_CHARACTER": ["container", [
         {
           "name": "subscriptionTime",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "numberOfCharacters",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "characters",
@@ -725,11 +737,11 @@
                 [
                   {
                     "name": "id",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "nickname",
@@ -737,47 +749,47 @@
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "level",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "gfxId",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "color1",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "color2",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "color3",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "accessories",
@@ -790,11 +802,11 @@
                           [
                             {
                               "name": "accessory",
-                              "type": "u32"
+                              "type": "su32"
                             },
                             {
                               "name": "separator",
-                              "type": "u32"
+                              "type": "su32"
                             }
                           ]
                         ]
@@ -803,23 +815,23 @@
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "merchant",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "serverId",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "isDead",
@@ -827,19 +839,19 @@
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "deathCount",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "levelMax",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
@@ -850,11 +862,11 @@
       "ACCOUNT_SELECT_CHARACTER": ["container", [
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "id",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "nickname",
@@ -862,31 +874,31 @@
         },
         {
           "name": "level",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "guild",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "sex",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "gfxId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "color1",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "color2",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "color3",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "items",
@@ -916,35 +928,35 @@
       "ACCOUNT_STATS": ["container", [
         {
           "name": "xp",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "xpLow",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "xpHigh",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "kamas",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "bonusPoints",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "bonusPointsSpell",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "fakeAlignement",
@@ -952,79 +964,79 @@
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "alignementValue",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "rank1",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "rank2",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "rank3",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "rank4",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "life",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "lifeMax",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "energy",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "energyMax",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "initiative",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "prospection",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "extras",
@@ -1034,13 +1046,13 @@
       "ACCOUNT_NEW_LVL": ["container", [
         {
           "name": "newLvl",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "ACCOUNT_SERVER_QUEUE": ["container", [
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "ACCOUNT_KEY": ["container", [
@@ -1058,13 +1070,13 @@
       "DIALOG_CREATE": ["container", [
         {
           "name": "id",
-          "type": "u64"
+          "type": "su64"
         }
       ]],
       "DIALOG_QUESTION": ["container", [
         {
           "name": "question",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "extra",
@@ -1076,65 +1088,65 @@
       "TUTORIAL_CREATE": ["container", [
         {
           "name": "tutorialId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "longId",
-          "type": "u64"
+          "type": "su64"
         }
       ]],
       "OBJECT_DROP": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "OBJECT_ADD": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "OBJECT_REMOVE": ["container", [
         {
           "name": "result",
-          "type": "u64"
+          "type": "su64"
         }
       ]],
       "OBJECT_QUANTITY": ["container", [
         {
           "name": "itemId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_MOVEMENT": ["container", [
         {
           "name": "itemId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "position",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_TOOL": ["container", [
         {
           "name": "jobId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "OBJECT_WEIGHT": ["container", [
         {
           "name": "currentWeight",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "maxWeight",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "FRIEND_LIST": ["container", [
@@ -1153,23 +1165,23 @@
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "state",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "name",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "level",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "alignement",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "guild",
@@ -1177,7 +1189,7 @@
                   },
                   {
                     "name": "sex",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "gfx",
@@ -1199,13 +1211,13 @@
       "GAME_DATA": ["container", [
         {
           "name": "mapId",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "subId",
           "type":  [
             "option",
-            "u8"
+            "su8"
           ]
         },
         {
@@ -1216,27 +1228,27 @@
       "GAME_JOIN": ["container", [
         {
           "name": "state",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "cancel",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "isDuel",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "isSpectator",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "startTimer",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "fightType",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_START_POSITION": ["container", [
@@ -1251,7 +1263,7 @@
                 [
                   {
                     "name": "position",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
@@ -1269,7 +1281,7 @@
                 [
                   {
                     "name": "position",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
@@ -1278,7 +1290,7 @@
         },
         {
           "name": "currentTeam",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_END": ["container", []],
@@ -1286,11 +1298,11 @@
       "GAME_READY": ["container", [
         {
           "name": "ready",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "entityId",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "GAME_START_PLAY": ["container", []],
@@ -1306,15 +1318,15 @@
                 [
                   {
                     "name": "entityId",
-                    "type": "u64"
+                    "type": "su64"
                   },
                   {
                     "name": "position",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "unknown",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
@@ -1325,25 +1337,25 @@
       "GAME_CHALLENGE": ["container", [
         {
           "name": "challengeId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_TURN": ["container", [
         {
           "name": "entityId",
-          "type": "u64"
+          "type": "su64"
         }
       ]],
       "GAME_ACTION": ["container", [
         {
           "name": "characterId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GAME_TEAM": ["container", [
         {
           "name": "firstId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "team",
@@ -1356,11 +1368,11 @@
                 [
                   {
                     "name": "isAdd",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "entityId",
-                    "type": "u64"
+                    "type": "su64"
                   },
                   {
                     "name": "name",
@@ -1368,7 +1380,7 @@
                   },
                   {
                     "name": "level",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
@@ -1379,19 +1391,19 @@
       "GAME_SPAWN": ["container", [
         {
           "name": "created",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "loc6",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "separator",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "loc7",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "TODO",
@@ -1405,35 +1417,35 @@
         },
         {
           "name": "backEmblem",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "backEmblemColor",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "upEmblem",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "upEmblemColor",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "rights",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "GUILD_JOIN": ["container", [
         {
           "name": "result",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "FIGHT_COUNT": ["container", [
         {
           "name": "count",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "FIGHT_LIST": ["container", []],
@@ -1443,22 +1455,22 @@
       "JOB_LEVEL": ["container", [
         {
           "name": "jobId",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "level",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "INFO_MESSAGE": ["container", []],
       "INFO_COMPASS": ["container", [
         {
           "name": "x",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "y",
-          "type": "u16"
+          "type": "su16"
         }
       ]],
       "INFO_COORDINATE": ["container", [
@@ -1473,39 +1485,39 @@
                 [
                   {
                     "name": "x",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "y",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "mapId",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "type",
-                    "type": "u16"
+                    "type": "su16"
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "playerId",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "name",
@@ -1526,11 +1538,11 @@
       "CHAT_MESSAGE": ["container", [
         {
           "name": "chatId",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "playerId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "nickname",
@@ -1567,7 +1579,7 @@
       "PARTY_LEADER": ["container", [
         {
           "name": "leaderId",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "PARTY_CREATE": ["container", []],
@@ -1580,7 +1592,7 @@
       "PARTY_FOLLOW": ["container", [
         {
           "name": "result",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "target",
@@ -1600,7 +1612,7 @@
       "PARTY_MOVEMENT": ["container", [
         {
           "name": "move",
-          "type": "u16"
+          "type": "su16"
         },
         {
           "name": "TODO",
@@ -1628,23 +1640,23 @@
                           [
                             {
                               "name": "id",
-                              "type": "u16"
+                              "type": "su16"
                             },
                             {
                               "name": "separator",
-                              "type": "u16"
+                              "type": "su16"
                             },
                             {
                               "name": "level",
-                              "type": "u16"
+                              "type": "su16"
                             },
                             {
                               "name": "separator",
-                              "type": "u16"
+                              "type": "su16"
                             },
                             {
                               "name": "position",
-                              "type": "u16"
+                              "type": "su16"
                             }
                           ]
                         ]
@@ -1663,40 +1675,40 @@
       "EXCHANGE_REQUEST": ["container", [
         {
           "name": "playerId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "targetId",
-          "type": "u64"
+          "type": "su64"
         },
         {
           "name": "exchange",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_READY": ["container", [
         {
           "name": "extra",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_CRAFT": ["container", []],
       "EXCHANGE_LOCAL_MOVE": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "location",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "isAdd",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "itemType",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "itemAmount",
@@ -1706,23 +1718,23 @@
       "EXCHANGE_DISTANT_MOVE": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "location",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "isAdd",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "typeId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "effects",
@@ -1732,23 +1744,23 @@
       "EXCHANGE_COOP_MOVE": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "location",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "isAdd",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "typeId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "effects",
@@ -1758,23 +1770,23 @@
       "EXCHANGE_STORAGE_MOVE": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "location",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "isAdd",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "typeId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "effects",
@@ -1784,19 +1796,19 @@
       "EXCHANGE_SHOP_MOVE": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "isAdd",
-          "type": "u8"
+          "type": "su8"
         },
         {
           "name": "amount",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "typeId",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "effects",
@@ -1804,7 +1816,7 @@
         },
         {
           "name": "price",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_CRAFT_PUBLIC": ["container", [
@@ -1816,32 +1828,32 @@
       "EXCHANGE_MOUNT_STORAGE": ["container", [
         {
           "name": "moveType",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "EXCHANGE_MOUNT_POD": ["container", []],
       "EXCHANGE_SELL": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "EXCHANGE_BUY": ["container", [
         {
           "name": "result",
-          "type": "u8"
+          "type": "su8"
         }
       ]],
       "EXCHANGE_CRAFT_LOOP": ["container", [
         {
           "name": "index",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_CRAFT_LOOP_END": ["container", [
         {
           "name": "result",
-          "type": "u32"
+          "type": "su32"
         }
       ]],
       "EXCHANGE_LEAVE": ["container", [
@@ -1853,7 +1865,7 @@
       "ZAAP_CREATE": ["container", [
         {
           "name": "respawn",
-          "type": "u32"
+          "type": "su32"
         },
         {
           "name": "zaaps",
@@ -1866,15 +1878,15 @@
                 [
                   {
                     "name": "id",
-                    "type": "u32"
+                    "type": "su32"
                   },
                   {
                     "name": "separator",
-                    "type": "u8"
+                    "type": "su8"
                   },
                   {
                     "name": "cost",
-                    "type": "u32"
+                    "type": "su32"
                   }
                 ]
               ]
