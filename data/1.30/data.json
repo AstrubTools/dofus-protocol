@@ -23,7 +23,7 @@
     "array": "native",
     "string": "cstring",
     "restString": "native",
-    "split": "native"
+    "stringSplit": "native"
   },
   "toServer": {
     "types": {
@@ -60,12 +60,7 @@
           "type": "string"
         }
       ]],
-      "ACCOUNT_REGION_VERSION": ["container", [
-        {
-          "name": "region",
-          "type": "restString"
-        }
-      ]],
+      "ACCOUNT_REGION_VERSION": ["container", []],
       "DIALOG_BEGIN": ["container", [
         {
           "name": "npcId",
@@ -217,7 +212,7 @@
       "GAME_CREATE": ["container", [
         {
           "name": "type",
-          "type": "su32"
+          "type": "su8"
         }
       ]],
       "GAME_END_TURN": ["container", []],
@@ -246,7 +241,50 @@
           "type": "restString"
         }
       ]],
-      "GAME_ACTION": ["container", []],
+      "GAME_ACTION": ["container", [
+        {
+          "name": "actionType",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "data",
+          "type": [
+            "switch",
+            {
+              "compareTo": "actionType",
+              "fields": {
+                "0": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]],
+                "1": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]],
+                "2": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]]
+              },
+              "default": ["container", [
+                {
+                  "name": "default",
+                  "type": "restString"
+                }
+              ]]
+            }
+          ]
+        }
+      ]],
       "GAME_ACTION_ACK": ["container", [
         {
           "name": "time",
@@ -450,6 +488,29 @@
       "ZAAPI_USE": ["container", []],
       "ZAAP_LEAVE": ["container", []],
       "ZAAPI_LEAVE": ["container", []],
+      "UNKNOWN1": ["container", [
+        {
+          "name": "TODO",
+          "type": "restString"
+        }
+      ]],
+      "UNKNOWN2": ["container", []],
+      "UNKNOWN3": ["container", [
+        {
+          "name": "TODO",
+          "type": "restString"
+        }
+      ]],
+      "SPELL_LEVEL_UP": ["container", [
+        {
+          "name": "spellId",
+          "type": "su8"
+        },
+        {
+          "name": "spellLevel",
+          "type": "su8"
+        }
+      ]],
       "packet": [
         "container",
         [
@@ -469,6 +530,7 @@
                   "0x414C": "ACCOUNT_GET_CHARACTERS",
                   "0x416B": "ACCOUNT_KEY",
                   "0x4156": "ACCOUNT_REGION_VERSION",
+                  "0x4244": "UNKNOWN2",
                   "0x4442": "DIALOG_BEGIN",
                   "0x4443": "DIALOG_CREATE",
                   "0x4452": "DIALOG_RESPONSE",
@@ -527,10 +589,13 @@
                   "0x4566": "EXCHANGE_PARK_MOUNT",
                   "0x454C": "EXCHANGE_REPLAY_CRAFT",
                   "0x4556": "EXCHANGE_LEAVE",
+                  "0x5342": "SPELL_LEVEL_UP",
                   "0x5755": "ZAAP_USE",
                   "0x5775": "ZAAPI_USE",
                   "0x5756": "ZAAP_LEAVE",
-                  "0x5776": "ZAAPI_LEAVE"
+                  "0x5776": "ZAAPI_LEAVE",
+                  "0x7170": "UNKNOWN3",
+                  "0x7270": "UNKNOWN1"
                 }
               }
             ]
@@ -612,7 +677,11 @@
                   "ZAAP_USE": "ZAAP_USE",
                   "ZAAPI_USE": "ZAAPI_USE",
                   "ZAAP_LEAVE": "ZAAP_LEAVE",
-                  "ZAAPI_LEAVE": "ZAAPI_LEAVE"
+                  "ZAAPI_LEAVE": "ZAAPI_LEAVE",
+                  "UNKNOWN1": "UNKNOWN1",
+                  "UNKNOWN2": "UNKNOWN2",
+                  "UNKNOWN3": "UNKNOWN3",
+                  "SPELL_LEVEL_UP": "SPELL_LEVEL_UP"
                 }
               }
             ]
@@ -650,7 +719,7 @@
       ]],
       "ACCOUNT_PSEUDO": ["container", [
         {
-          "name": "pseudo",
+          "name": "nickname",
           "type": "restString"
         }
       ]],
@@ -660,7 +729,7 @@
           "type": "restString"
         }
       ]],
-      "ACCOUNT_HOST": ["container", [
+      "ACCOUNT_HOST": ["stringSplit", [
         {
           "name": "serverId",
           "type": "su8"
@@ -687,7 +756,10 @@
       "ACCOUNT_SERVER_LIST": ["container", [
         {
           "name": "subscriptionDuration",
-          "type": "su32"
+          "type": ["pstring", {
+            "count": 2,
+            "type": "u8"
+          }]
         },
         {
           "name": "pipe",
@@ -701,11 +773,14 @@
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
           "name": "ip",
-          "type": "u32"
+          "type": ["array", {
+            "count": 4,
+            "type": "u8"
+          }]
         },
         {
           "name": "port",
-          "type": "u16"
+          "type": "u8"
         },
         {
           "name": "key",
@@ -718,7 +793,7 @@
           "type": "su16"
         }
       ]],
-      "ACCOUNT_LIST_CHARACTER": ["split", [
+      "ACCOUNT_LIST_CHARACTER": ["stringSplit", [
         {
           "name": "subscriptionTime",
           "type": "su32"
@@ -730,7 +805,7 @@
         {
           "name": "characters",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "id",
@@ -763,7 +838,7 @@
               {
                 "name": "accessories",
                 "type": [
-                  "split",
+                  "stringSplit",
                   [
                     {
                       "name": "accessory",
@@ -796,7 +871,7 @@
           ]
         }
       ]],
-      "ACCOUNT_SELECT_CHARACTER": ["split", [
+      "ACCOUNT_SELECT_CHARACTER": ["stringSplit", [
         {
           "name": "id",
           "type": "su64"
@@ -836,7 +911,7 @@
         {
           "name": "items",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "item",
@@ -852,7 +927,7 @@
           "type": "restString"
         }
       ]],
-      "ACCOUNT_STATS": ["split", [
+      "ACCOUNT_STATS": ["stringSplit", [
         {
           "name": "xp",
           "type": "su64"
@@ -1061,7 +1136,7 @@
         {
           "name": "friends",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "account",
@@ -1279,12 +1354,30 @@
       "GAME_TURN": ["container", [
         {
           "name": "entityId",
-          "type": "su64"
+          "type": "su8"
+        },
+        {
+          "name": "separator",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "turnNumber",
+          "type": "su8"
         }
       ]],
       "GAME_ACTION": ["container", [
         {
-          "name": "movementType",
+          "name": "actionType",
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
+        },
+        {
+          "name": "separator",
           "type": ["pstring", {
             "count": 1,
             "type": "u8"
@@ -1295,7 +1388,7 @@
           "type": [
             "switch",
             {
-              "compareTo": "movementType",
+              "compareTo": "actionType",
               "fields": {
                 "0": ["container", [
                   {
@@ -1303,29 +1396,30 @@
                     "type": "restString"
                   }
                 ]],
-                "1": ["container", [
+                "1": ["stringSplit", [
                   {
-                    "name": "separator",
-                    "type": ["pstring", {
-                      "count": 1,
+                    "name": "result",
+                    "type": "su8"
+                  },
+                  {
+                    "name": "TODO1",
+                    "type": ["array", {
+                      "count": 5,
                       "type": "u8"
                     }]
                   },
                   {
-                    "name": "characterId",
-                    "type": ["bitfield", [
-                      { "name": "characterId", "size": 4, "signed": false }
-                    ]]
-                  },
-                  {
-                    "name": "separator2",
-                    "type": ["pstring", {
-                      "count": 1,
-                      "type": "u8"
-                    }]
+                    "name": "TODO2",
+                    "type": "restString"
                   }
                 ]],
                 "2": ["container", [
+                  {
+                    "name": "TODO",
+                    "type": "restString"
+                  }
+                ]],
+                "S": ["container", [
                   {
                     "name": "TODO",
                     "type": "restString"
@@ -1378,7 +1472,7 @@
           ]
         }
       ]],
-      "GAME_SPAWN": ["split", [
+      "GAME_SPAWN": ["stringSplit", [
         {
           "name": "created",
           "type": "su16"
@@ -1463,7 +1557,7 @@
         {
           "name": "entities",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "x",
@@ -1593,12 +1687,12 @@
         {
           "name": "spells",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "id",
                 "type": [
-                  "split",
+                  "stringSplit",
                   [
                     {
                       "name": "id",
@@ -1820,7 +1914,7 @@
         {
           "name": "zaaps",
           "type": [
-            "split",
+            "stringSplit",
             [
               {
                 "name": "id",

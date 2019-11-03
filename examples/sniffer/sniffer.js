@@ -15,7 +15,6 @@ const tcpTracker = new pcap.TCPTracker()
 
 const pcapSession = pcap.createSession(networkInterface, 'ip proto \\tcp')
 const ProtoDef = require('protodef').ProtoDef
-const FullPacketParser = require('protodef').Parser
 
 const toServer = new ProtoDef(false)
 toServer.addProtocol(protocol[version].data, ['toServer'])
@@ -24,22 +23,16 @@ toServer.addTypes(dofus)
 const toClient = new ProtoDef(false)
 toClient.addProtocol(protocol[version].data, ['toClient'])
 toClient.addTypes(dofus)
-const toClientParser = new FullPacketParser(toClient, 'packet')
 
 split.on('data', data => {
-  toClientParser.write(data)
-})
-
-toClientParser.on('data', ({ data, buffer }) => {
+  console.log('raw', 'toClient : ', data.toString('ascii'))
   try {
-    console.info('toClient : ', JSON.stringify(data))
-    console.log('raw', 'toClient : ', buffer.toString('ascii'))
-  } catch (err) {
-    console.log(err)
-    // console.log('raw', 'toClient', buffer.toString('ascii'))
+    const parsed = toClient.parsePacketBuffer('packet', data).data
+    console.info('toClient : ', JSON.stringify(parsed))
+  } catch (error) {
+    console.log(error.message)
   }
 })
-toClientParser.on('error', err => console.log('toClient error : ', err.message))
 
 // const IP = '34.251.172.139' // Official dofus retro
 const IP = '190.115.26.126' // Amakna server
@@ -55,7 +48,6 @@ pcapSession.on('packet', function (rawPacket) {
       return
     }
     split.write(data)
-    tcpTracker.track_packet(packet)
   } else if (packet.payload.payload.daddr.addr.join('.') === IP) { // To server
     let data = packet.payload.payload.payload.data
     try {
@@ -63,7 +55,7 @@ pcapSession.on('packet', function (rawPacket) {
       console.info('toServer : ', JSON.stringify(parsed))
       console.log('raw toServer : ', data.toString('ascii'))
     } catch (error) {
-      // console.log('raw toServer', data.toString('ascii'))
+      if (data) console.log('raw toServer', data.toString('ascii'))
       console.log(error.message)
     }
     tcpTracker.track_packet(packet)
