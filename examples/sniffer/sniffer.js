@@ -1,15 +1,13 @@
-const { defaultVersion, protocol, dofus, Splitter } = require('../..')
+const { defaultVersion, protocol, dofus, Splitter, logger } = require('../..')
 
-if (process.argv.length !== 4) {
-  console.log('Usage : node sniffer.js <networkInterface> <dev>')
+if (process.argv.length !== 3) {
+  console.log('Usage : node sniffer.js <networkInterface>')
   process.exit(1)
 }
 // If the version correspond to a supported version else use default
 const version = defaultVersion
 
 const networkInterface = process.argv[2]
-
-const dev = process.argv[3]
 
 const pcap = require('pcap')
 
@@ -28,30 +26,16 @@ toClient.addTypes(dofus)
 toClient.addProtocol(protocol[version].data, ['toClient'])
 const splitterToClient = new Splitter(/\r?\0/)
 
-function display (data, isToServer) {
-  const s = isToServer ? 'toServer : ' : 'toClient : '
-  console.log(`~`.repeat(10))
-  try {
-    const parsed = isToServer ? toServer.parsePacketBuffer('packet', data).data : toClient.parsePacketBuffer('packet', data).data
-    console.info(s, JSON.stringify(parsed))
-  } catch (error) {
-    console.log(error.message)
-  }
-  console.log(`raw ${s} ${data.toString('ascii')}`)
-  console.log(`~`.repeat(10), '\n')
-}
-
 splitterToServer.on('data', data => {
-  display(data, true)
+  logger(data, true, toServer)
 })
 splitterToClient.on('data', data => {
-  display(data, false)
+  logger(data, false, toClient)
 })
 
 const ipOfficial = '34.251.172.139' // Official dofus retro
 const ipPrivate = '190.115.26.126' // Amakna server
-const ip = dev ? ipPrivate : ipOfficial
-
+const ip = ipPrivate
 pcapSession.on('packet', function (rawPacket) {
   const packet = pcap.decode.packet(rawPacket)
   let data = packet.payload.payload.payload.data

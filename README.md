@@ -8,5 +8,23 @@ Network protocol for dofus : create client and servers for dofus 1.30 (and later
 ## Installation
 
 ```bash
-npm install dofus-protocol
+npm i
+```
+
+### Sniffer
+
+```bash
+cd examples/sniffer && npm i
+```
+
+## Usage
+
+Yes node-pcap need root
+
+```bash
+sudo node examples/sniffer/sniffer.js [network interface(ifconfig)] [true = official server, false = private amakna server(good for debug)]
+```
+
+```bash
+node examples/simpleBot.js
 ```

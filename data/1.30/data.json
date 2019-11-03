@@ -32,7 +32,7 @@
       "ACCOUNT_ACCESS_SERVER": ["container", [
         {
           "name": "serverId",
-          "type": "su16"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_SET_CHARACTER": ["container", [
@@ -41,10 +41,16 @@
           "type": "restString"
         }
       ]],
+      "ACCOUNT_TICKET": ["container", [
+        {
+          "name": "ticket",
+          "type": "restString"
+        }
+      ]],
       "ACCOUNT_GET_GIFTS": ["container", [
         {
           "name": "language",
-          "type": "string"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_IDENTITY": ["container", [
@@ -57,7 +63,7 @@
       "ACCOUNT_KEY": ["container", [
         {
           "name": "key",
-          "type": "string"
+          "type": "restBuffer"
         }
       ]],
       "ACCOUNT_REGION_VERSION": ["container", []],
@@ -525,6 +531,7 @@
                   "0x4178": "ACCOUNT_SERVER_LIST",
                   "0x4158": "ACCOUNT_ACCESS_SERVER",
                   "0x4153": "ACCOUNT_SET_CHARACTER",
+                  "0x4154": "ACCOUNT_TICKET",
                   "0x4167": "ACCOUNT_GET_GIFTS",
                   "0x4169": "ACCOUNT_IDENTITY",
                   "0x414C": "ACCOUNT_GET_CHARACTERS",
@@ -611,6 +618,7 @@
                   "ACCOUNT_SERVER_LIST": "ACCOUNT_SERVER_LIST",
                   "ACCOUNT_ACCESS_SERVER": "ACCOUNT_ACCESS_SERVER",
                   "ACCOUNT_SET_CHARACTER": "ACCOUNT_SET_CHARACTER",
+                  "ACCOUNT_TICKET": "ACCOUNT_TICKET",
                   "ACCOUNT_GET_GIFTS": "ACCOUNT_GET_GIFTS",
                   "ACCOUNT_IDENTITY": "ACCOUNT_IDENTITY",
                   "ACCOUNT_GET_CHARACTERS": "ACCOUNT_GET_CHARACTERS",
@@ -727,20 +735,28 @@
       ]],
       "ACCOUNT_HOST": ["stringSplit", [
         {
-          "name": "serverId",
-          "type": "su8"
-        },
-        {
-          "name": "state",
-          "type": "su8"
-        },
-        {
-          "name": "population",
-          "type": "su16"
-        },
-        {
-          "name": "requireSubscription",
-          "type": "su8"
+          "name": "servers",
+          "type": [
+            "stringSplit",
+            [
+              {
+                "name": "serverId",
+                "type": "su8"
+              },
+              {
+                "name": "state",
+                "type": "su8"
+              },
+              {
+                "name": "population",
+                "type": "su16"
+              },
+              {
+                "name": "requireSubscription",
+                "type": "su8"
+              }
+            ]
+          ]
         }
       ]],
       "ACCOUNT_QUESTION": ["container", [
@@ -762,21 +778,28 @@
           "type": "u8"
         },
         {
-          "name": "characters",
+          "name": "servers",
           "type": "restString"
         }
       ]],
       "ACCOUNT_SERVER_ENCRYPTED_HOST": ["container", [
         {
+          "name": "unk",
+          "type": "su8"
+        },
+        {
           "name": "ip",
-          "type": ["array", {
-            "count": 4,
+          "type": ["pstring", {
+            "count": 8,
             "type": "u8"
           }]
         },
         {
           "name": "port",
-          "type": "u8"
+          "type": ["pstring", {
+            "count": 3,
+            "type": "u8"
+          }]
         },
         {
           "name": "key",
