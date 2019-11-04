@@ -27,15 +27,23 @@ toClient.addProtocol(protocol[version].data, ['toClient'])
 const splitterToClient = new Splitter(/\r?\0/)
 
 splitterToServer.on('data', data => {
-  logger(data, true, toServer)
+  try {
+    logger(data, true, toServer)
+  } catch (error) {
+    console.log(error.message, data.toString())
+  }
 })
 splitterToClient.on('data', data => {
-  logger(data, false, toClient)
+  try {
+    logger(data, false, toClient)
+  } catch (error) {
+    console.log(error.message, data.toString())
+  }
 })
 
 const ipOfficial = '34.251.172.139' // Official dofus retro
 const ipPrivate = '190.115.26.126' // Amakna server
-const ip = ipOfficial
+const ip = ipPrivate
 pcapSession.on('packet', function (rawPacket) {
   const packet = pcap.decode.packet(rawPacket)
   let data = packet.payload.payload.payload.data

@@ -24,9 +24,9 @@ let res = p.read('AH1;1;10;1',
             'params': [
               {
                 'name': 'serverId',
-                'type': ['restToSeparator', [
+                'type': ['restToSeparator', 
                   { 'separator': ';' }
-                ]]
+                ]
               },
               {
                 'name': 'state',
@@ -64,9 +64,9 @@ p.write({
     'params': [
       {
         'name': 'serverId',
-        'type': ['restToSeparator', [
+        'type': ['restToSeparator',
           { 'separator': ';' }
-        ]]
+        ]
       },
       {
         'name': 'state',
@@ -102,9 +102,9 @@ p.write({
     'params': [
       {
         'name': 'serverId',
-        'type': ['restToSeparator', [
+        'type': ['restToSeparator', 
           { 'separator': ';' }
-        ]]
+        ]
       },
       {
         'name': 'state',
@@ -127,10 +127,29 @@ assert.deepStrictEqual(o, { s: '71;0;52;0' })
 p.addProtocol(protocol[defaultVersion].data, ['toClient'])
 // console.log(p.parsePacketBuffer('packet', Buffer.from([0x41, 0x48, 0x31, 0x3b, 0x31, 0x3b, 0x31, 0x30, 0x3b, 0x31])))
 
-res = p.parsePacketBuffer('packet', Buffer.from('AXK34=019=>ag764a36'))
+res = p.read(Buffer.from([0x41, 0x58, 0x4b, 0x3b, 0x3e, 0x37, 0x33, 0x31, 0x3a, 0x37, 0x3e, 0x62, 0x77, 0x30, 0x33, 0x36, 0x38, 0x39, 0x34, 0x31]),
+  2,
+  ['container', [
+    {
+      'name': 'unk',
+      'type': 'su8'
+    },
+    {
+      'name': 'ip',
+      'type': 'cryptedIp'
+    },
+    {
+      'name': 'port',
+      'type': 'cryptedPort'
+    },
+    {
+      'name': 'key',
+      'type': 'restString'
+    }
+  ]])
 console.log(res)
-assert.deepStrictEqual(res.data.params.ip, '52.208.25.222')
-assert.deepStrictEqual(res.data.params.port, 443)
+assert.deepStrictEqual(res.value.ip, '190.115.26.126')
+assert.deepStrictEqual(res.value.port, 5556)
 
 res = p.read('AH601;1;75;1|605;1;75;1|609;1;75;1|604;1;75;1|608;1;75;1|603;1;75;1|607;1;75;1|611;1;75;1|602;1;75;1|606;1;75;1|610;1;75;1',
   2,
@@ -142,9 +161,9 @@ res = p.read('AH601;1;75;1|605;1;75;1|609;1;75;1|604;1;75;1|608;1;75;1|603;1;75;
           'params': [
             {
               'name': 'serverId',
-              'type': ['restToSeparator', [
+              'type': ['restToSeparator', 
                 { 'separator': ';' }
-              ]]
+              ]
             },
             {
               'name': 'state',

@@ -32,33 +32,23 @@
       "ACCOUNT_ADD_CHARACTER": ["scontainer", { "separator": "|", "params": [
         {
           "name": "name",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "class",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "sex",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "color1",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "color2",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "color3",
@@ -68,9 +58,7 @@
       "ACCOUNT_DELETE_CHARACTER": ["scontainer", { "separator": "|", "params": [
         {
           "name": "characterId",
-          "type": ["restToSeparator", [
-            { "separator": "|" }
-          ]]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "secretAnswer",
@@ -113,7 +101,7 @@
       "ACCOUNT_KEY": ["container", [
         {
           "name": "key",
-          "type": "restBuffer"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_REGION_VERSION": ["container", []],
@@ -268,7 +256,7 @@
       "GAME_CREATE": ["container", [
         {
           "name": "type",
-          "type": "su8"
+          "type": "restString"
         }
       ]],
       "GAME_DATA": ["container", [
@@ -365,9 +353,7 @@
                 "E": ["scontainer", { "separator": "|", "params": [
                   {
                     "name": "actionId",
-                    "type": ["restToSeparator", [
-                      { "separator": "|" }
-                    ]]
+                    "type": ["restToSeparator", { "separator": "|" } ]
                   },
                   {
                     "name": "subId",
@@ -801,7 +787,17 @@
           }]
         }
         ]],
-      "ACCOUNT_QUEUE_POSITION": ["container", []],
+      "ACCOUNT_QUEUE_POSITION": ["container", [
+        {
+          "name": "unk",
+          "type": ["sarray", { "separator": "|",
+            "type": ["option", ["pstring", {
+              "count": 1,
+              "type": "u8"
+            }]]
+          }]
+        }
+      ]],
       "ACCOUNT_LOGIN": ["container", [
         {
           "name": "time",
@@ -824,29 +820,30 @@
           "type": "restString"
         }
       ]],
-      "ACCOUNT_HOST": ["scontainer", [
+      "ACCOUNT_HOST": ["container", [
         {
           "name": "servers",
-          "type": [
-            "scontainer",
-            [
-              {
-                "name": "serverId",
-                "type": "su8"
-              },
-              {
-                "name": "state",
-                "type": "su8"
-              },
-              {
-                "name": "population",
-                "type": "su16"
-              },
-              {
-                "name": "requireSubscription",
-                "type": "su8"
-              }
-            ]
+          "type": ["sarray", { "separator": "|",
+            "type": ["scontainer", { "separator": ";",
+              "params": [
+                {
+                  "name": "serverId",
+                  "type": ["restToSeparator", { "separator": ";" } ]
+                },
+                {
+                  "name": "state",
+                  "type": "su8"
+                },
+                {
+                  "name": "population",
+                  "type": "su16"
+                },
+                {
+                  "name": "requireSubscription",
+                  "type": "su8"
+                }
+              ] }
+            ] }
           ]
         }
       ]],
@@ -858,18 +855,7 @@
       ]],
       "ACCOUNT_SERVER_LIST": ["container", [
         {
-          "name": "subscriptionDuration",
-          "type": ["pstring", {
-            "count": 2,
-            "type": "u8"
-          }]
-        },
-        {
-          "name": "pipe",
-          "type": "u8"
-        },
-        {
-          "name": "servers",
+          "name": "unk",
           "type": "restString"
         }
       ]],
@@ -887,7 +873,7 @@
           "type": "cryptedPort"
         },
         {
-          "name": "key",
+          "name": "ticket",
           "type": "restString"
         }
       ]],
@@ -899,130 +885,16 @@
       ]],
       "ACCOUNT_LIST_CHARACTER": ["scontainer", [
         {
-          "name": "subscriptionTime",
-          "type": "su32"
-        },
-        {
-          "name": "numberOfCharacters",
-          "type": "su32"
-        },
-        {
-          "name": "characters",
-          "type": [
-            "scontainer",
-            [
-              {
-                "name": "id",
-                "type": "su32"
-              },
-              {
-                "name": "nickname",
-                "type": "string"
-              },
-              {
-                "name": "level",
-                "type": "su32"
-              },
-              {
-                "name": "gfxId",
-                "type": "su32"
-              },
-              {
-                "name": "color1",
-                "type": "su32"
-              },
-              {
-                "name": "color2",
-                "type": "su32"
-              },
-              {
-                "name": "color3",
-                "type": "su32"
-              },
-              {
-                "name": "accessories",
-                "type": [
-                  "scontainer",
-                  [
-                    {
-                      "name": "accessory",
-                      "type": "su32"
-                    }
-                  ]
-                ]
-              },
-              {
-                "name": "merchant",
-                "type": "su32"
-              },
-              {
-                "name": "serverId",
-                "type": "su32"
-              },
-              {
-                "name": "isDead",
-                "type": "bool"
-              },
-              {
-                "name": "deathCount",
-                "type": "su32"
-              },
-              {
-                "name": "levelMax",
-                "type": "su32"
-              }
-            ]
-          ]
+          "name": "data",
+          "type": "restString"
         }
       ]],
-      "ACCOUNT_SELECT_CHARACTER": ["scontainer", [
+      "ACCOUNT_SELECT_CHARACTER": ["container", [
         {
-          "name": "id",
-          "type": "su64"
-        },
-        {
-          "name": "nickname",
-          "type": "string"
-        },
-        {
-          "name": "level",
-          "type": "su32"
-        },
-        {
-          "name": "guild",
-          "type": "su32"
-        },
-        {
-          "name": "sex",
-          "type": "su32"
-        },
-        {
-          "name": "gfxId",
-          "type": "su32"
-        },
-        {
-          "name": "color1",
-          "type": "su8"
-        },
-        {
-          "name": "color2",
-          "type": "su8"
-        },
-        {
-          "name": "color3",
-          "type": "su8"
-        },
-        {
-          "name": "items",
-          "type": [
-            "scontainer",
-            [
-              {
-                "name": "item",
-                "type": "string"
-              }
-            ]
-          ]
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "ACCOUNT_RESTRICTIONS": ["container", [
@@ -1033,80 +905,10 @@
       ]],
       "ACCOUNT_STATS": ["scontainer", [
         {
-          "name": "xp",
-          "type": "su64"
-        },
-        {
-          "name": "xpLow",
-          "type": "su64"
-        },
-        {
-          "name": "xpHigh",
-          "type": "su64"
-        },
-        {
-          "name": "kamas",
-          "type": "su32"
-        },
-        {
-          "name": "bonusPoints",
-          "type": "su32"
-        },
-        {
-          "name": "bonusPointsSpell",
-          "type": "su32"
-        },
-        {
-          "name": "fakeAlignement",
-          "type": "restString"
-        },
-        {
-          "name": "alignementValue",
-          "type": "su32"
-        },
-        {
-          "name": "rank1",
-          "type": "su32"
-        },
-        {
-          "name": "rank2",
-          "type": "su32"
-        },
-        {
-          "name": "rank3",
-          "type": "su32"
-        },
-        {
-          "name": "rank4",
-          "type": "su32"
-        },
-        {
-          "name": "life",
-          "type": "su32"
-        },
-        {
-          "name": "lifeMax",
-          "type": "su32"
-        },
-        {
-          "name": "energy",
-          "type": "su32"
-        },
-        {
-          "name": "energyMax",
-          "type": "su32"
-        },
-        {
-          "name": "initiative",
-          "type": "su32"
-        },
-        {
-          "name": "prospection",
-          "type": "su32"
-        },
-        {
-          "name": "extras",
-          "type": "restString"
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "ACCOUNT_NEW_LVL": ["container", [
@@ -1124,7 +926,7 @@
       "ACCOUNT_KEY": ["container", [
         {
           "name": "key",
-          "type": "string"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_REGION_VERSION": ["container", [
@@ -1303,18 +1105,15 @@
                 "M": ["container", [
                   {
                     "name": "mapId",
-                    "type": "su8"
+                    "type": ["restToSeparator", { "separator": "|" }]
                   },
                   {
                     "name": "subId",
-                    "type":  [
-                      "option",
-                      "su8"
-                    ]
+                    "type": ["restToSeparator", { "separator": "|" }]
                   },
                   {
                     "name": "key",
-                    "type": "restString"
+                    "type": ["restToSeparator", { "separator": "|" }]
                   }
                 ]],
                 "D": ["container", [
@@ -1409,7 +1208,14 @@
         }
       ]],
       "GAME_END": ["container", []],
-      "GAME_MOVEMENT": ["container", []],
+      "GAME_MOVEMENT": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": ";",
+            "type": ["restToSeparator", { "separator": ";" }]
+          }]
+        }
+      ]],
       "GAME_READY": ["container", [
         {
           "name": "ready",
@@ -1646,7 +1452,17 @@
           "type": "su16"
         }
       ]],
-      "INFO_MESSAGE": ["container", []],
+      "INFO_MESSAGE": ["scontainer",  
+        { 
+          "separator": ";",
+          "params": [
+            {
+              "name": "unknown",
+              "type": ["restToSeparator", { "separator": ";" }]
+            }
+          ]
+        }
+      ],
       "INFO_COMPASS": ["container", [
         {
           "name": "x",
@@ -1705,24 +1521,10 @@
       ]],
       "CHAT_MESSAGE": ["container", [
         {
-          "name": "chatId",
-          "type": "su8"
-        },
-        {
-          "name": "playerId",
-          "type": "su64"
-        },
-        {
-          "name": "nickname",
-          "type": "string"
-        },
-        {
-          "name": "message",
-          "type": "string"
-        },
-        {
-          "name": "extra",
-          "type": "restString"
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "CHAT_SERVER": ["container", []],
@@ -1789,35 +1591,20 @@
       ]],
       "SPELL": ["container", [
         {
-          "name": "spells",
-          "type": [
-            "scontainer",
-            [
-              {
-                "name": "id",
-                "type": [
-                  "scontainer",
-                  [
-                    {
-                      "name": "id",
-                      "type": "su16"
-                    },
-                    {
-                      "name": "level",
-                      "type": "su16"
-                    },
-                    {
-                      "name": "position",
-                      "type": "su16"
-                    }
-                  ]
-                ]
-              }
-            ]
-          ]
+          "name": "data",
+          "type": ["sarray", { "separator": "~",
+            "type": ["restToSeparator", { "separator": "~" }]
+          }]
         }
       ]],
-      "SUBAREA": ["container", []],
+      "SUBAREA": ["container", [
+        {
+          "name": "unk",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
       "EXCHANGE_LIST": ["container", []],
       "EXCHANGE_CREATE": ["container", []],
       "EXCHANGE_REQUEST": ["container", [

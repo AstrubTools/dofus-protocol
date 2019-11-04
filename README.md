@@ -22,9 +22,9 @@ cd examples/sniffer && npm i
 Yes node-pcap need root
 
 ```bash
-sudo node examples/sniffer/sniffer.js [network interface(ifconfig)] [true = official server, false = private amakna server(good for debug)]
+sudo node examples/sniffer/sniffer.js [network interface(ifconfig)]
 ```
 
 ```bash
-node examples/simpleBot.js
+node examples/simpleBot.js -u [my_username] -p [my_password] [-d [delay_between_packets] default: 0]
 ```
