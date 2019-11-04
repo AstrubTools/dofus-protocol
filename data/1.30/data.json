@@ -23,10 +23,60 @@
     "array": "native",
     "string": "cstring",
     "restString": "native",
-    "stringSplit": "native"
+    "scontainer": "native",
+    "cryptedIp": "native",
+    "cryptedPort": "native"
   },
   "toServer": {
     "types": {
+      "ACCOUNT_ADD_CHARACTER": ["scontainer", { "separator": "|", "params": [
+        {
+          "name": "name",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "class",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "sex",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "color1",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "color2",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "color3",
+          "type": "restString"
+        }
+      ]}],
+      "ACCOUNT_DELETE_CHARACTER": ["scontainer", { "separator": "|", "params": [
+        {
+          "name": "characterId",
+          "type": ["restToSeparator", [
+            { "separator": "|" }
+          ]]
+        },
+        {
+          "name": "secretAnswer",
+          "type": "restString"
+        }
+      ]}],
       "ACCOUNT_AUTHENTICATION": ["container", []],
       "ACCOUNT_SERVER_LIST": ["container", []],
       "ACCOUNT_ACCESS_SERVER": ["container", [
@@ -221,6 +271,12 @@
           "type": "su8"
         }
       ]],
+      "GAME_DATA": ["container", [
+        {
+          "name": "mapId",
+          "type": "restString"
+        }
+      ]],
       "GAME_END_TURN": ["container", []],
       "GAME_TURN_OK": ["container", [
         {
@@ -232,10 +288,10 @@
       "GAME_POSITION": ["container", [
         {
           "name": "position",
-          "type": "su32"
+          "type": "restString"
         }
       ]],
-      "GAME_LEAVE": ["container", [
+      "GAME_QUIT": ["container", [
         {
           "name": "sprite",
           "type": "restString"
@@ -293,17 +349,46 @@
       ]],
       "GAME_ACTION_ACK": ["container", [
         {
-          "name": "time",
+          "name": "type",
           "type": ["pstring", {
             "count": 1,
             "type": "u8"
           }]
         },
         {
-          "name": "result",
-          "type": ["bitfield", [
-            { "name": "id", "size": 4, "signed": false }
-          ]]
+          "name": "data",
+          "type": [
+            "switch",
+            {
+              "compareTo": "type",
+              "fields": {
+                "E": ["scontainer", { "separator": "|", "params": [
+                  {
+                    "name": "actionId",
+                    "type": ["restToSeparator", [
+                      { "separator": "|" }
+                    ]]
+                  },
+                  {
+                    "name": "subId",
+                    "type": "restString"
+                  }
+                ]}],
+                "K": ["container", [
+                  {
+                    "name": "actionId",
+                    "type": "restString"
+                  }
+                ]]
+              },
+              "default": ["container", [
+                {
+                  "name": "default",
+                  "type": "restString"
+                }
+              ]]
+            }
+          ]
         }
       ]],
       "GUILD_REFUSE": ["container", [
@@ -527,6 +612,8 @@
               {
                 "type": "u16",
                 "mappings": {
+                  "0x4141": "ACCOUNT_ADD_CHARACTER",
+                  "0x4144": "ACCOUNT_DELETE_CHARACTER",
                   "0x4166": "ACCOUNT_AUTHENTICATION",
                   "0x4178": "ACCOUNT_SERVER_LIST",
                   "0x4158": "ACCOUNT_ACCESS_SERVER",
@@ -556,11 +643,12 @@
                   "0x5272": "MOUNT_PLAYER",
                   "0x4749": "GAME_INFORMATION",
                   "0x4743": "GAME_CREATE",
+                  "0x4744": "GAME_DATA",
                   "0x4774": "GAME_END_TURN",
                   "0x4754": "GAME_TURN_OK",
                   "0x47FL": "GAME_FREE_SOUL",
                   "0x4770": "GAME_POSITION",
-                  "0x4756": "GAME_LEAVE",
+                  "0x4756": "GAME_QUIT",
                   "0x4752": "GAME_READY",
                   "0x4741": "GAME_ACTION",
                   "0x474B": "GAME_ACTION_ACK",
@@ -614,6 +702,8 @@
               {
                 "compareTo": "name",
                 "fields": {
+                  "ACCOUNT_ADD_CHARACTER": "ACCOUNT_ADD_CHARACTER",
+                  "ACCOUNT_DELETE_CHARACTER": "ACCOUNT_DELETE_CHARACTER",
                   "ACCOUNT_AUTHENTICATION": "ACCOUNT_AUTHENTICATION",
                   "ACCOUNT_SERVER_LIST": "ACCOUNT_SERVER_LIST",
                   "ACCOUNT_ACCESS_SERVER": "ACCOUNT_ACCESS_SERVER",
@@ -642,11 +732,12 @@
                   "MOUNT_PLAYER": "MOUNT_PLAYER",
                   "GAME_INFORMATION": "GAME_INFORMATION",
                   "GAME_CREATE": "GAME_CREATE",
+                  "GAME_DATA": "GAME_DATA",
                   "GAME_END_TURN": "GAME_END_TURN",
                   "GAME_TURN_OK": "GAME_TURN_OK",
                   "GAME_FREE_SOUL": "GAME_FREE_SOUL",
                   "GAME_POSITION": "GAME_POSITION",
-                  "GAME_LEAVE": "GAME_LEAVE",
+                  "GAME_QUIT": "GAME_QUIT",
                   "GAME_READY": "GAME_READY",
                   "GAME_ACTION": "GAME_ACTION",
                   "GAME_ACTION_ACK": "GAME_ACTION_ACK",
@@ -733,11 +824,11 @@
           "type": "restString"
         }
       ]],
-      "ACCOUNT_HOST": ["stringSplit", [
+      "ACCOUNT_HOST": ["scontainer", [
         {
           "name": "servers",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "serverId",
@@ -789,17 +880,11 @@
         },
         {
           "name": "ip",
-          "type": ["pstring", {
-            "count": 8,
-            "type": "u8"
-          }]
+          "type": "cryptedIp"
         },
         {
           "name": "port",
-          "type": ["pstring", {
-            "count": 3,
-            "type": "u8"
-          }]
+          "type": "cryptedPort"
         },
         {
           "name": "key",
@@ -812,7 +897,7 @@
           "type": "su16"
         }
       ]],
-      "ACCOUNT_LIST_CHARACTER": ["stringSplit", [
+      "ACCOUNT_LIST_CHARACTER": ["scontainer", [
         {
           "name": "subscriptionTime",
           "type": "su32"
@@ -824,7 +909,7 @@
         {
           "name": "characters",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "id",
@@ -857,7 +942,7 @@
               {
                 "name": "accessories",
                 "type": [
-                  "stringSplit",
+                  "scontainer",
                   [
                     {
                       "name": "accessory",
@@ -890,7 +975,7 @@
           ]
         }
       ]],
-      "ACCOUNT_SELECT_CHARACTER": ["stringSplit", [
+      "ACCOUNT_SELECT_CHARACTER": ["scontainer", [
         {
           "name": "id",
           "type": "su64"
@@ -930,7 +1015,7 @@
         {
           "name": "items",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "item",
@@ -946,7 +1031,7 @@
           "type": "restString"
         }
       ]],
-      "ACCOUNT_STATS": ["stringSplit", [
+      "ACCOUNT_STATS": ["scontainer", [
         {
           "name": "xp",
           "type": "su64"
@@ -1155,7 +1240,7 @@
         {
           "name": "friends",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "account",
@@ -1415,7 +1500,7 @@
                     "type": "restString"
                   }
                 ]],
-                "1": ["stringSplit", [
+                "1": ["scontainer", [
                   {
                     "name": "result",
                     "type": "su8"
@@ -1491,7 +1576,7 @@
           ]
         }
       ]],
-      "GAME_SPAWN": ["stringSplit", [
+      "GAME_SPAWN": ["scontainer", [
         {
           "name": "created",
           "type": "su16"
@@ -1576,7 +1661,7 @@
         {
           "name": "entities",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "x",
@@ -1706,12 +1791,12 @@
         {
           "name": "spells",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "id",
                 "type": [
-                  "stringSplit",
+                  "scontainer",
                   [
                     {
                       "name": "id",
@@ -1933,7 +2018,7 @@
         {
           "name": "zaaps",
           "type": [
-            "stringSplit",
+            "scontainer",
             [
               {
                 "name": "id",
