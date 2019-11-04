@@ -30,31 +30,32 @@ splitterToServer.on('data', data => {
   try {
     logger(data, true, toServer)
   } catch (error) {
-    console.log(error.message, data.toString())
+    console.log(error.message, 'toServer : ', data.toString())
   }
 })
 splitterToClient.on('data', data => {
   try {
-    logger(data, false, toClient)
+    let parsed = logger(data, false, toClient)
+    // Now sniffing game server
+    if (parsed.name === 'ACCOUNT_SERVER_ENCRYPTED_HOST') {
+      gameIp = parsed.params.ip
+    }
   } catch (error) {
-    console.log(error.message, data.toString())
+    console.log(error.message, 'toClient : ', data.toString())
   }
 })
-
+let gameIp
 const ipOfficial = '34.251.172.139' // Official dofus retro
 const ipPrivate = '190.115.26.126' // Amakna server
-const ip = ipPrivate
+let ip = ipOfficial
 pcapSession.on('packet', function (rawPacket) {
   const packet = pcap.decode.packet(rawPacket)
   let data = packet.payload.payload.payload.data
   if (!data) return
-  if (packet.payload.payload.saddr.addr.join('.') === ip) { // To client
-    if ((data[0] === 0x3c && data[1] === 0x3f) || data[0] === 0xc3 || data[0] === 0xd1) { // 3c && 3f is trash ad begin login, c3 trash media priv server?
-      return
-    }
+  if (packet.payload.payload.saddr.addr.join('.') === ip || packet.payload.payload.saddr.addr.join('.') === gameIp) { // To client
     splitterToClient.write(data)
     tcpTracker.track_packet(packet)
-  } else if (packet.payload.payload.daddr.addr.join('.') === ip) { // To server
+  } else if (packet.payload.payload.daddr.addr.join('.') === ip || packet.payload.payload.daddr.addr.join('.') === gameIp) { // To server
     splitterToServer.write(data)
     tcpTracker.track_packet(packet)
   }
