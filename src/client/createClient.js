@@ -72,9 +72,13 @@ async function createClient (host, port, account, password, version, delay) {
           client.write('ACCOUNT_GET_GIFTS', {
             language: 'en'
           })
+          /*
+          // Idk why sending this makes not receiving ACCOUNT_LIST_CHARACTER
+          // Even though it's sent on the sniffer ?
           client.write('ACCOUNT_IDENTITY', {
-            identity: getRandomNetworkKey() // 'CLEWjNIzm66uspXF'
+            identity: 'CLEWjNIzm66uspXF' // getRandomNetworkKey() // 'CLEWjNIzm66uspXF'
           })
+          */
           client.write('ACCOUNT_GET_CHARACTERS', {
           })
           client.write('ACCOUNT_AUTHENTICATION', {
@@ -87,10 +91,13 @@ async function createClient (host, port, account, password, version, delay) {
       client.on('ACCOUNT_LIST_CHARACTER', (data) => {
         console.log('Got the list of characters !')
         clearInterval(client.retry)
-        console.log(data.find(e => e.find(r => r === charName)))
+        // console.log(data)
+
+        client.character = data.data.find(e => e.find(r => r === charName))
+        if (!client.character) throw new Error('Unable to find this character !')
         client.retry = setIntervalAndExecute(() => {
           client.write('ACCOUNT_SET_CHARACTER', {
-            characterId: '84212'
+            characterId: client.character[0] // Can we do it better (named params ...) ? [0] is char id
           })
           client.write('ACCOUNT_AUTHENTICATION', {
           })
@@ -100,7 +107,9 @@ async function createClient (host, port, account, password, version, delay) {
         })
       })
       client.on('ACCOUNT_SELECT_CHARACTER', (data) => {
+        console.log('~'.repeat(10))
         console.log('IN GAME READY TO BOT')
+        console.log('~'.repeat(10))
         clearInterval(client.retry)
         resolve()
       })
