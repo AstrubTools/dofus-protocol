@@ -19,7 +19,11 @@ async function start () {
   const dev = true
   const port = dev ? 887 : 443
   const ip = dev ? '190.115.26.126' : '34.251.172.139'
-  await createClient(ip, port, username, password, defaultVersion, delay)
+  let client = await createClient(ip, port, username, password, defaultVersion, delay)
+  // TODO improve the promise chaining ...
+  await client.loginToAccount().catch(console.log)
+  await client.loginToServer().catch(console.log)
+  await client.pickCharacter('Uwoba').catch(console.log)
 }
 
 start()

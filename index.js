@@ -1,8 +1,10 @@
 const { defaultVersion, supportedVersions } = require('./version')
-const createClient = require('./lib/client/createClient')
-const dofus = require('./lib/utils/datatypes/dofus')
-const Splitter = require('./lib/transforms/framing')
-const { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute } = require('./lib/utils/utils')
+const createClient = require('./src/client/createClient')
+const Server = require('./src/server/server')
+const createServer = require('./src/server/createServer')
+const dofus = require('./src/utils/datatypes/dofus')
+const Splitter = require('./src/transforms/framing')
+const { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute } = require('./src/utils/utils')
 
 const protocol = supportedVersions.reduce((acc, version) => {
   acc[version] = {
@@ -16,6 +18,8 @@ module.exports = {
   supportedVersions,
   defaultVersion,
   createClient,
+  Server,
+  createServer,
   dofus,
   Splitter,
   decryptIp,

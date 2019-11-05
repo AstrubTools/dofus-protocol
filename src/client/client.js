@@ -23,12 +23,11 @@ class Client extends EventEmitter {
   }
 
   connect (host, port, switching) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.host = host
       this.port = port
       console.log(`Attempting to connect to ${host}:${port} ...`)
       this.setSocket(net.createConnection({ port: this.port, host: this.host }, () => {
-        this.emit('connect')
         console.log(`Connected to ${host}:${port} !`)
         resolve()
       }), switching)
@@ -37,7 +36,7 @@ class Client extends EventEmitter {
 
   setSocket (socket, switching) {
     this.socket = socket
-    if (!switching) { // If switching server, no need to reset the splitter
+    if (!switching) { // If switching server, no need to re-set the splitter
       this.splitterToClient.on('data', data => {
         try {
           let parsed = logger(data, false, this.protoToClient)

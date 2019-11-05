@@ -67,9 +67,20 @@ function getRandomNetworkKey () {
   return check + checksum(check)
 }
 
-function setIntervalAndExecute (fn, t) {
+function setIntervalAndExecute (fn, t, stopAfter, failedCallback) {
   fn()
-  return (setInterval(fn, t))
+  let attempt = 1
+  return (setInterval(() => {
+    ++attempt
+    if (attempt > stopAfter) {
+      failedCallback()
+      console.log(`Failed to execute after ${attempt} attempt, aborting`)
+    }
+    console.log('~'.repeat(10))
+    console.log(`Attempt n°${attempt}, aborting after ${stopAfter} attempts`)
+    console.log('~'.repeat(10))
+    fn()
+  }, t))
 }
 
 module.exports = { ascii_to_hexa, ascii_to_int, decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute }

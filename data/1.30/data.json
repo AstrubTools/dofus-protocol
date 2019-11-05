@@ -798,10 +798,7 @@
       "HELLO_CONNECTION": ["container", [
         {
           "name": "key",
-          "type": ["pstring", {
-            "count": 32,
-            "type": "u8"
-          }]
+          "type": "restString"
         }
         ]],
       "ACCOUNT_QUEUE_POSITION": ["container", [
