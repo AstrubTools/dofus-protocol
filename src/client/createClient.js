@@ -29,6 +29,7 @@ async function createClient (host, port, account, password, version, delay) {
         resolve()
       })
       await client.connect(host, port) // 'Lobby'
+      client.emit('clientReady', client)
     })
   }
 
@@ -107,11 +108,30 @@ async function createClient (host, port, account, password, version, delay) {
         })
       })
       client.on('ACCOUNT_SELECT_CHARACTER', (data) => {
-        console.log('~'.repeat(10))
-        console.log('IN GAME READY TO BOT')
-        console.log('~'.repeat(10))
         clearInterval(client.retry)
-        resolve()
+        client.retry = setIntervalAndExecute(() => {
+          client.write('GAME_CREATE', {
+            type: '1'
+          })
+        }, 4000, 5, () => {
+          clearInterval(client.retry)
+          reject(new Error('Failed to create game'))
+        })
+      })
+      client.on('GAME_CREATE', (data) => {
+        clearInterval(client.retry)
+        if (data.unk.find(e => e === '1')) {
+          console.log('~'.repeat(10))
+          console.log('IN GAME READY TO BOT')
+          console.log('~'.repeat(10))
+          // TODO: finish login sequence (compare with sniffer)
+          // client.write('BASIC_UNKNOWN1', {})
+          // client.write('BASIC_UNKNOWN1', {})
+          // client.write('GAME_INFORMATION', {})
+          resolve()
+        } else {
+          reject(Error('Server refused to create game'))
+        }
       })
       await client.socket.end() // Closing last connection (when switching between servers)
       await client.connect(client.gameHost, client.gamePort, true) // Game

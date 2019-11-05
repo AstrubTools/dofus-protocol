@@ -35,17 +35,21 @@ node examples/simpleBot.js -u [my_username] -p [my_password] [-d [delay_between_
 
 ### Proxy
 
+Add IP table rule
+
 ```bash
 sysctl -w net.ipv4.conf.[YOUR_NETWORK_INTERFACE].route_localnet=1
-iptables -t nat -I PREROUTING -p tcp -d 190.115.26.126 --dport 887 -j DNAT --to-destination 127.0.0.1:34555
+sudo iptables -t nat -A OUTPUT -p tcp --dport 887 -d 190.115.26.127 -j DNAT --to-destination 127.0.0.1:34555
 ```
 
-Windows
+Remove all non default IP table rule
 
-as admin terminal
-
-notepad C:\WINDOWS\SYSTEM32\DRIVERS\ETC\hosts
-
-add
-
-190.115.26.126 127.0.0.1
+```bash
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -P OUTPUT ACCEPT
+sudo iptables -t nat -F
+sudo iptables -t mangle -F
+sudo iptables -F
+sudo iptables -X
+```

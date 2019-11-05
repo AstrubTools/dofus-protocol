@@ -1,6 +1,5 @@
 const net = require('net')
 
-
 const EventEmitter = require('events').EventEmitter
 const Client = require('../client/client')
 class Server extends EventEmitter {

@@ -21,21 +21,17 @@ async function createProxy (host, port, externalHost, version) {
   const server = await createServer(host, port, externalHost, version)
   server.on('connection', async clientServer => {
     console.log('new client', clientServer.socket.address())
-
-    const client = await createClient({
-      host: host,
-      username,
-      password,
-      version: version
+    const client = await createClient(host, port, username, password, version, 0)
+    client.on('clientReady', clientClient => {
+      clientClient.socket.on('data', data => clientServer.socket.write(data))
     })
-
-    client.socket.on('data', data => clientServer.socket.write(data))
-
-    // await client.selectCharacter(character)
-
+    await client.loginToAccount().catch(console.log)
+    await client.loginToServer().catch(console.log)
+    await client.pickCharacter('Uwoba').catch(console.log)
     clientServer.socket.on('data', data => client.socket.write(data))
     console.log('Has joined the game')
   })
+
   return server
 }
 
