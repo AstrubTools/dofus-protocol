@@ -15,10 +15,10 @@ const host = '127.0.0.1'
 const ipOfficial = '34.251.172.139' // Official dofus retro
 const ipPrivate = '190.115.26.126' // Amakna server
 const externalHost = ipPrivate
-const port = 887
+const port = 34555 // 887
 
-function createProxy (host, port, externalHost, version) {
-  const server = createServer(host, port, externalHost, version)
+async function createProxy (host, port, externalHost, version) {
+  const server = await createServer(host, port, externalHost, version)
   server.on('connection', async clientServer => {
     console.log('new client', clientServer.socket.address())
 
