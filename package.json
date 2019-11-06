@@ -27,6 +27,7 @@
   "dependencies": {
     "bit-buffer": "^0.2.4",
     "csvtojson": "^2.0.8",
+    "express": "^4.17.1",
     "once-promise": "^2.0.0",
     "protodef": "^1.6.10"
   },

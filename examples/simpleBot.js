@@ -1,5 +1,8 @@
 const { createClient } = require('..')
 const { defaultVersion } = require('..')
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
 
 var ArgumentParser = require('argparse').ArgumentParser
 var parser = new ArgumentParser({
@@ -22,9 +25,25 @@ async function start () {
   const ip = dev ? '190.115.26.126' : '34.251.172.139'
   let client = await createClient(ip, port, username, password, defaultVersion, delay)
   // TODO improve the promise chaining ...
+  client.listenToInformation()
   await client.loginToAccount().catch(console.log)
   await client.loginToServer().catch(console.log)
   await client.pickCharacter(character).catch(console.log)
+
+  app.use(bodyParser.json()); // for parsing application/json
+  // app.use(bodyParser.urlencoded({extended: false})); // for parsing application/x-www-form-urlencoded
+
+  // For debugging toServer
+  app.post('/', (req, res) => {
+    console.log(req.body) // req data
+    res.send('POST request!!!')
+    // client.write(req.body)
+  })
+
+  let postPort = 8001
+  app.listen(postPort, () => {
+    console.log('Server is up and running on port number ' + postPort)
+  })
 }
 
 start()

@@ -1,3 +1,5 @@
+const { onMovement, onTurn, onExchangeCreate } = require('./packetParser')
+
 const ZKARRAY = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
   's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
@@ -41,8 +43,22 @@ function logger (data, isToServer, proto) {
   console.log(`~`.repeat(10))
   parsed = proto.parsePacketBuffer('packet', data).data
   console.log(s, JSON.stringify(parsed))
-  if (parsed.name === 'ACCOUNT_SERVER_ENCRYPTED_HOST') {
-    console.log(`Ready to connect to ${parsed.params.ip}:${parsed.params.port}`)
+  switch (parsed.name) { // Btw be care its both toclient & toserver so if calling parsing function can break
+    case 'ACCOUNT_SERVER_ENCRYPTED_HOST':
+      console.log(`Ready to connect to ${parsed.params.ip}:${parsed.params.port}`)
+      break
+    case 'SPELL':
+      console.log(`My spells ${parsed.params.data.filter(e => e !== '').map(e => `skill n°${e[0]} - level: ${e[1]} - ?: ${e[2]}\n`)}`)
+      break
+    case 'GAME_MOVEMENT':
+      console.log(`Game movement: ${JSON.stringify(onMovement(parsed.params.data, false))}`)
+      break
+    case 'GAME_TURN':
+      console.log(`Game turn: ${JSON.stringify(onTurn(parsed.params.data))}`)
+      break
+    case 'EXCHANGE_CREATE':
+      console.log(`Exchange create: ${JSON.stringify(onExchangeCreate(parsed.params.data))}`)
+      break
   }
   console.log(`raw ${s} ${data.toString('ascii')}`)
   console.log(`~`.repeat(10), '\n')

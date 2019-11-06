@@ -113,34 +113,20 @@
       ]],
       "DIALOG_CREATE": ["container", [
         {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "npcId",
-          "type": "su16"
+          "type": "restString"
         }
       ]],
-      "DIALOG_RESPONSE": ["container", [
+      "DIALOG_RESPONSE": ["scontainer", {"separator": "|", "params": [
         {
           "name": "questionId",
-          "type": "su16"
-        },
-        {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "responseId",
-          "type": "su16"
+          "type": "restString"
         }
-      ]],
+      ]}],
       "DIALOG_LEAVE": ["container", []],
       "TUTORIAL_LEAVE": ["container", [
         {
@@ -240,11 +226,11 @@
       "BASIC_MESSAGE": ["container", [
         {
           "name": "target",
-          "type": "string"
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "message",
-          "type": "string"
+          "type": ["restToSeparator", { "separator": "|" } ]
         },
         {
           "name": "extra",
@@ -293,46 +279,8 @@
       ]],
       "GAME_ACTION": ["container", [
         {
-          "name": "actionType",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "data",
-          "type": [
-            "switch",
-            {
-              "compareTo": "actionType",
-              "fields": {
-                "0": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "1": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "2": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]]
-              },
-              "default": ["container", [
-                {
-                  "name": "default",
-                  "type": "restString"
-                }
-              ]]
-            }
-          ]
+          "type": "restString"
         }
       ]],
       "GAME_ACTION_ACK": ["container", [
@@ -452,20 +400,16 @@
           "type": "su32"
         }
       ]],
-      "EXCHANGE_REQUEST": ["container", [
+      "EXCHANGE_REQUEST": ["scontainer", {"separator": "|", "params": [
         {
-          "name": "exchangeId",
-          "type": "su32"
+          "name": "exchangeType",
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
-          "name": "targetId",
-          "type": "su32"
-        },
-        {
-          "name": "cellId",
+          "name": "targetAndCell",
           "type": "restString"
         }
-      ]],
+      ]}],
       "EXCHANGE_ACCEPT": ["container", []],
       "EXCHANGE_READY": ["container", []],
       "EXCHANGE_MOVE": ["container", [
@@ -571,14 +515,7 @@
           "type": "restString"
         }
       ]],
-      "BASIC_UNKNOWN1": ["container", [
-        {
-          "name": "data",
-          "type": ["sarray", { "separator": "|",
-            "type": ["restToSeparator", { "separator": "|" }]
-          }]
-        }
-      ]],
+      "BASIC_UNKNOWN1": ["container", []],
       "UNKNOWN3": ["container", [
         {
           "name": "TODO",
@@ -601,7 +538,14 @@
           "type": "restString"
         }
       ]],
-      "BASIC_UNKNOWN2": ["container", []],
+      "BASIC_UNKNOWN2": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
       "packet": [
         "container",
         [
@@ -783,7 +727,8 @@
                   "BASIC_UNKNOWN1": "BASIC_UNKNOWN1",
                   "UNKNOWN3": "UNKNOWN3",
                   "SPELL_LEVEL_UP": "SPELL_LEVEL_UP",
-                  "PARTY_UNKNOWN1": "PARTY_UNKNOWN1"
+                  "PARTY_UNKNOWN1": "PARTY_UNKNOWN1",
+                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2"
                 }
               }
             ]
@@ -803,8 +748,10 @@
         ]],
       "ACCOUNT_QUEUE_POSITION": ["container", [
         {
-          "name": "unk",
-          "type": "restString"
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "ACCOUNT_LOGIN": ["container", [
@@ -933,13 +880,13 @@
       "ACCOUNT_NEW_LVL": ["container", [
         {
           "name": "newLvl",
-          "type": "su32"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_SERVER_QUEUE": ["container", [
         {
           "name": "position",
-          "type": "su32"
+          "type": "restString"
         }
       ]],
       "ACCOUNT_KEY": ["container", [
@@ -963,32 +910,16 @@
           }]
         },
         {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "npcId",
-          "type": "su16"
+          "type": "restString"
         }
       ]],
       "DIALOG_QUESTION": ["container", [
         {
-          "name": "questionId",
-          "type": "su32"
-        },
-        {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
           }]
-        },
-        {
-          "name": "responseId",
-          "type": "su32"
         }
       ]],
       "DIALOG_PAUSE": ["container", []],
@@ -1012,7 +943,9 @@
       "OBJECT_ADD": ["container", [
         {
           "name": "result",
-          "type": "su8"
+          "type": ["sarray", { "separator": "~",
+            "type": ["restToSeparator", { "separator": "~" }]
+          }]
         }
       ]],
       "OBJECT_REMOVE": ["container", [
@@ -1111,170 +1044,86 @@
       ]],
       "GAME_DATA": ["container", [
         {
-          "name": "type",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "data",
-          "type": [
-            "switch",
-            {
-              "compareTo": "type",
-              "fields": {
-                "M": ["container", [
-                  {
-                    "name": "mapId",
-                    "type": ["restToSeparator", { "separator": "|" }]
-                  },
-                  {
-                    "name": "subId",
-                    "type": ["restToSeparator", { "separator": "|" }]
-                  },
-                  {
-                    "name": "key",
-                    "type": ["restToSeparator", { "separator": "|" }]
-                  }
-                ]],
-                "D": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "K": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]]
-              },
-              "default": ["container", [
-                {
-                  "name": "default",
-                  "type": "restString"
-                }
-              ]]
-            }
-          ]
+          "type": "restString"
         }
       ]],
-      "GAME_JOIN": ["container", [
+      "GAME_JOIN": ["scontainer", { "separator": "|", "params": [
         {
           "name": "state",
-          "type": "su32"
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "cancel",
-          "type": "su32"
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "isDuel",
-          "type": "su32"
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "isSpectator",
-          "type": "su32"
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "startTimer",
-          "type": "su32"
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "fightType",
-          "type": "su32"
+          "type": "restString"
         }
-      ]],
-      "GAME_START_POSITION": ["container", [
+      ]}],
+      "GAME_START_POSITION": ["scontainer", {"separator": "|", "params": [
         {
           "name": "team1",
-          "type": [
-            "array",
-            {
-              "count": "restString",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "position",
-                    "type": "su32"
-                  }
-                ]
-              ]
-            }
-          ]
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "team2",
-          "type": [
-            "array",
-            {
-              "count": "restString",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "position",
-                    "type": "su32"
-                  }
-                ]
-              ]
-            }
-          ]
+          "type": ["restToSeparator", { "separator": "|" }]
         },
         {
           "name": "currentTeam",
-          "type": "su32"
+          "type": "restString"
+        }
+      ]}],
+      "GAME_END": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
-      "GAME_END": ["container", []],
       "GAME_MOVEMENT": ["container", [
         {
           "name": "data",
-          "type": ["sarray", { "separator": ";",
-            "type": ["restToSeparator", { "separator": ";" }]
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
           }]
         }
       ]],
       "GAME_READY": ["container", [
         {
           "name": "ready",
-          "type": "su16"
+          "type": ["pstring", {
+            "count": 1,
+            "type": "u8"
+          }]
         },
         {
-          "name": "entityId",
-          "type": "su16"
+          "name": "sprite",
+          "type": "restString"
         }
       ]],
       "GAME_START_PLAY": ["container", []],
       "GAME_POSITIONS": ["container", [
         {
           "name": "positions",
-          "type": [
-            "array",
-            {
-              "count": "restString",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "entityId",
-                    "type": "su64"
-                  },
-                  {
-                    "name": "position",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "unknown",
-                    "type": "su32"
-                  }
-                ]
-              ]
-            }
-          ]
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "GAME_CHALLENGE": ["container", [
@@ -1285,76 +1134,14 @@
       ]],
       "GAME_TURN": ["container", [
         {
-          "name": "entityId",
-          "type": "su8"
-        },
-        {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
-          "name": "turnNumber",
-          "type": "su8"
+          "name": "data",
+          "type": "restString"
         }
       ]],
       "GAME_ACTION": ["container", [
         {
-          "name": "actionType",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
-          "name": "separator",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "data",
-          "type": [
-            "switch",
-            {
-              "compareTo": "actionType",
-              "fields": {
-                "0": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "1": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "2": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]],
-                "S": ["container", [
-                  {
-                    "name": "TODO",
-                    "type": "restString"
-                  }
-                ]]
-              },
-              "default": ["container", [
-                {
-                  "name": "default",
-                  "type": "restString"
-                }
-              ]]
-            }
-          ]
+          "type": "restString"
         }
       ]],
       "GAME_TEAM": ["container", [
@@ -1393,22 +1180,12 @@
           ]
         }
       ]],
-      "GAME_SPAWN": ["scontainer", [
+      "GAME_SPAWN": ["container", [
         {
-          "name": "created",
-          "type": "su16"
-        },
-        {
-          "name": "loc6",
-          "type": "su32"
-        },
-        {
-          "name": "loc7",
-          "type": "su32"
-        },
-        {
-          "name": "TODO",
-          "type": "restString"
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "GUILD_STATS": ["container", [
@@ -1466,7 +1243,7 @@
       "INFO_MESSAGE": ["container",  
         {
           "name": "data",
-          "type": "restString"
+          "type": "restBuffer"
         }
       ],
       "INFO_COMPASS": ["container", [
@@ -1598,8 +1375,10 @@
       "SPELL": ["container", [
         {
           "name": "data",
-          "type": ["sarray", { "separator": "~",
-            "type": ["restToSeparator", { "separator": "~" }]
+          "type": ["sarray", { "separator": ";",
+            "type": ["sarray", { "separator": "~",
+              "type": ["restToSeparator", { "separator": "~" }]
+            }]
           }]
         }
       ]],
@@ -1612,7 +1391,14 @@
         }
       ]],
       "EXCHANGE_LIST": ["container", []],
-      "EXCHANGE_CREATE": ["container", []],
+      "EXCHANGE_CREATE": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
       "EXCHANGE_REQUEST": ["container", [
         {
           "name": "playerId",
@@ -1885,6 +1671,48 @@
         }
       ]],
       "BASIC_UNKNOWN1": ["container", []],
+      "INFO_UNKNOWN2": ["container", [
+        {
+          "name": "data",
+          "type": "restString"
+        }
+      ]],
+      "BASIC_UNKNOWN2": ["container", [
+        {
+          "name": "data",
+          "type": "restString"
+        }
+      ]],
+      "BASIC_UNKNOWN3": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
+      "TUTORIAL_UNKNOWN1": ["container", [
+        {
+          "name": "data",
+          "type": "restString"
+        }
+      ]],
+      "SUBAREA_UNKNOWN1": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
+      "SUBAREA_UNKNOWN2": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
       "packet": [
         "container",
         [
@@ -1919,8 +1747,9 @@
                   "0x4451": "DIALOG_QUESTION",
                   "0x4450": "DIALOG_PAUSE",
                   "0x4456": "DIALOG_LEAVE",
-                  "0x4630": "UNKNOWN4",
+                  "0x464F": "UNKNOWN4",
                   "0x5443": "TUTORIAL_CREATE",
+                  "0x5454": "TUTORIAL_UNKNOWN1",
                   "0x4F44": "OBJECT_DROP",
                   "0x4F41": "OBJECT_ADD",
                   "0x4F51": "OBJECT_QUANTITY",
@@ -1932,6 +1761,8 @@
                   "0x4F77": "OBJECT_WEIGHT",
                   "0x464C": "FRIEND_LIST",
                   "0x424E": "BASIC_CONFIRM",
+                  "0x4244": "BASIC_UNKNOWN3",
+                  "0x4254": "BASIC_UNKNOWN2",
                   "0x4270": "BASIC_UNKNOWN1",
                   "0x5278": "MOUNT_XP",
                   "0x4743": "GAME_CREATE",
@@ -1959,6 +1790,7 @@
                   "0x496D": "INFO_MESSAGE",
                   "0x4943": "INFO_COMPASS",
                   "0x4948": "INFO_COORDINATE",
+                  "0x494C": "INFO_UNKNOWN2",
                   "0x4972": "INFO_UNKNOWN1",
                   "0x4D4F": "AKS_MESSAGE",
                   "0x634D": "CHAT_MESSAGE",
@@ -1974,6 +1806,8 @@
                   "0x504D": "PARTY_MOVEMENT",
                   "0x5052": "PARTY_REJECT",
                   "0x534C": "SPELL",
+                  "0x614d": "SUBAREA_UNKNOWN1",
+                  "0x616d": "SUBAREA_UNKNOWN2",
                   "0x616C": "SUBAREA",
                   "0x454C": "EXCHANGE_LIST",
                   "0x4543": "EXCHANGE_CREATE",
@@ -2117,7 +1951,13 @@
                   "OBJECT_UNKNOWN1": "OBJECT_UNKNOWN1",
                   "OBJECT_UNKNOWN2": "OBJECT_UNKNOWN2",
                   "PARTY_UNKNOWN1": "PARTY_UNKNOWN1",
-                  "BASIC_UNKNOWN1": "BASIC_UNKNOWN1"
+                  "BASIC_UNKNOWN1": "BASIC_UNKNOWN1",
+                  "INFO_UNKNOWN2": "INFO_UNKNOWN2",
+                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2",
+                  "BASIC_UNKNOWN3": "BASIC_UNKNOWN3",
+                  "TUTORIAL_UNKNOWN1": "TUTORIAL_UNKNOWN1",
+                  "SUBAREA_UNKNOWN1": "SUBAREA_UNKNOWN1",
+                  "SUBAREA_UNKNOWN2": "SUBAREA_UNKNOWN2"
                 }
               }
             ]
