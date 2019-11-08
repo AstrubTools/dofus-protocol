@@ -142,20 +142,20 @@
           "type": "su32"
         }
       ]],
-      "OBJECT_MOVEMENT": ["container", [
+      "OBJECT_MOVEMENT": ["scontainer", {"separator": "|", "params": [
         {
           "name": "itemId",
-          "type": "su32"
+          "type": "su64"
         },
         {
           "name": "position",
-          "type": "su32"
+          "type": "su8"
         },
         {
           "name": "quantity",
-          "type": "su32"
+          "type": "restString"
         }
-      ]],
+      ]}],
       "OBJECT_DROP": ["container", [
         {
           "name": "itemId",
@@ -219,7 +219,7 @@
       ]],
       "BASIC_SMILEY": ["container", [
         {
-          "name": "id",
+          "name": "smileyId",
           "type": "su32"
         }
       ]],
@@ -265,12 +265,7 @@
           "type": "restString"
         }
       ]],
-      "GAME_QUIT": ["container", [
-        {
-          "name": "sprite",
-          "type": "restString"
-        }
-      ]],
+      "GAME_QUIT": ["container", []],
       "GAME_READY": ["container", [
         {
           "name": "ready",
@@ -546,6 +541,20 @@
           }]
         }
       ]],
+      "OBJECT_FEED": ["scontainer", {"separator":  "|", "params": [
+        {
+          "name": "targetId",
+          "type": "su64"
+        },
+        {
+          "name": "position",
+          "type": "su8"
+        },
+        {
+          "name": "fedItemId",
+          "type": "su64"
+        }
+      ]}],
       "packet": [
         "container",
         [
@@ -576,6 +585,7 @@
                   "0x4F4D": "OBJECT_MOVEMENT",
                   "0x4F44": "OBJECT_DROP",
                   "0x4F64": "OBJECT_DESTROY",
+                  "0x4F66": "OBJECT_FEED",
                   "0x4F55": "OBJECT_USE",
                   "0x4F53": "OBJECT_SKIN",
                   "0x464C": "FRIEND_LIST",
@@ -588,12 +598,12 @@
                   "0x5272": "MOUNT_PLAYER",
                   "0x4749": "GAME_INFORMATION",
                   "0x4743": "GAME_CREATE",
+                  "0x4751": "GAME_QUIT",
                   "0x4744": "GAME_DATA",
                   "0x4774": "GAME_END_TURN",
                   "0x4754": "GAME_TURN_OK",
                   "0x47FL": "GAME_FREE_SOUL",
                   "0x4770": "GAME_POSITION",
-                  "0x4756": "GAME_QUIT",
                   "0x4752": "GAME_READY",
                   "0x4741": "GAME_ACTION",
                   "0x474B": "GAME_ACTION_ACK",
@@ -728,7 +738,8 @@
                   "UNKNOWN3": "UNKNOWN3",
                   "SPELL_LEVEL_UP": "SPELL_LEVEL_UP",
                   "PARTY_UNKNOWN1": "PARTY_UNKNOWN1",
-                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2"
+                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2",
+                  "OBJECT_FEED": "OBJECT_FEED"
                 }
               }
             ]
@@ -964,16 +975,16 @@
           "type": "su32"
         }
       ]],
-      "OBJECT_MOVEMENT": ["container", [
+      "OBJECT_MOVEMENT": ["scontainer", {"separator": "|", "params": [
         {
           "name": "itemId",
-          "type": "su32"
+          "type": "su64"
         },
         {
           "name": "position",
-          "type": "su32"
+          "type": "restString"
         }
-      ]],
+      ]}],
       "OBJECT_TOOL": ["container", [
         {
           "name": "jobId",
@@ -983,11 +994,11 @@
       "OBJECT_WEIGHT": ["scontainer", {"separator": "|", "params": [
         {
           "name": "currentWeight",
-          "type": ["restToSeparator", { "separator": "|" }]
+          "type": "su16"
         },
         {
           "name": "maxWeight",
-          "type": "restString"
+          "type": "su32"
         }
       ]}],
       "FRIEND_LIST": ["container", [
@@ -1146,38 +1157,10 @@
       ]],
       "GAME_TEAM": ["container", [
         {
-          "name": "firstId",
-          "type": "su64"
-        },
-        {
-          "name": "team",
-          "type": [
-            "array",
-            {
-              "count": "restString",
-              "type": [
-                "container",
-                [
-                  {
-                    "name": "isAdd",
-                    "type": "su32"
-                  },
-                  {
-                    "name": "entityId",
-                    "type": "su64"
-                  },
-                  {
-                    "name": "name",
-                    "type": "string"
-                  },
-                  {
-                    "name": "level",
-                    "type": "su32"
-                  }
-                ]
-              ]
-            }
-          ]
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
         }
       ]],
       "GAME_SPAWN": ["container", [
@@ -1226,7 +1209,14 @@
           "type": "su8"
         }
       ]],
-      "FIGHT_LIST": ["container", []],
+      "FIGHT_LIST": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": ";",
+            "type": ["restToSeparator", { "separator": ";" }]
+          }]
+        }
+      ]],
       "FIGHT_DETAIL": ["container", []],
       "JOB_SKILLS": ["container", []],
       "JOB_XP": ["container", []],
@@ -1713,6 +1703,14 @@
           }]
         }
       ]],
+      "EXCHANGE_SHOP_TYPE": ["container", [
+        {
+          "name": "data",
+          "type": ["sarray", { "separator": "|",
+            "type": ["restToSeparator", { "separator": "|" }]
+          }]
+        }
+      ]],
       "packet": [
         "container",
         [
@@ -1825,6 +1823,7 @@
                   "0x4553": "EXCHANGE_SELL",
                   "0x4542": "EXCHANGE_BUY",
                   "0x4541": "EXCHANGE_CRAFT_LOOP",
+                  "0x4548": "EXCHANGE_SHOP_TYPE",
                   "0x4561": "EXCHANGE_CRAFT_LOOP_END",
                   "0x4556": "EXCHANGE_LEAVE",
                   "0x5743": "ZAAP_CREATE",
@@ -1957,7 +1956,8 @@
                   "BASIC_UNKNOWN3": "BASIC_UNKNOWN3",
                   "TUTORIAL_UNKNOWN1": "TUTORIAL_UNKNOWN1",
                   "SUBAREA_UNKNOWN1": "SUBAREA_UNKNOWN1",
-                  "SUBAREA_UNKNOWN2": "SUBAREA_UNKNOWN2"
+                  "SUBAREA_UNKNOWN2": "SUBAREA_UNKNOWN2",
+                  "EXCHANGE_SHOP_TYPE": "EXCHANGE_SHOP_TYPE"
                 }
               }
             ]

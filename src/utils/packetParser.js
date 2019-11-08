@@ -189,19 +189,17 @@ function onMovement (data, isFighting) {
             // TODO: could improve this, even if its alreeady nice info
             movementData.playerId = _loc10_[3]
             movementData.playerName = _loc10_[4]
-            movementData.color1 = _loc10_[10] // TODO: index has been incremented of 1 from source code idk why it was broken
-            movementData.color2 = _loc10_[11]
-            movementData.color3 = _loc10_[12]
-            movementData.accessories = _loc10_[13]
-            movementData.aura = _loc10_[14]
-            movementData.emote = _loc10_[15]
-            movementData.emoteTimer = _loc10_[16]
-            movementData.guildName = _loc10_[17]
-            movementData.emblem = _loc10_[18]
-            movementData.restrictions = _loc10_[19]
-            if (_loc10_[19].indexOf(',') !== -1) {
-
-            } else {
+            movementData.color1 = _loc10_[9]
+            movementData.color2 = _loc10_[10]
+            movementData.color3 = _loc10_[11]
+            movementData.accessories = _loc10_[12]
+            movementData.aura = _loc10_[13]
+            movementData.emote = _loc10_[14]
+            movementData.emoteTimer = _loc10_[15]
+            movementData.guildName = _loc10_[16]
+            movementData.emblem = _loc10_[17]
+            movementData.restrictions = _loc10_[18]
+            if (_loc10_[18].indexOf(',') === -1) {
               let _loc66_ = Number(_loc10_[19])
               if (!isNaN(_loc66_)) {
                 movementData.mount = Number(_loc21_) // new dofus.datacenter.Mount(_loc66_, Number(_loc21_))
@@ -230,7 +228,7 @@ function onTurn (data) {
       obj.turns = separatorSplitted
       break
     case 'M': // Middle
-      let data = {}
+      // let data = {}
       let _loc5_ = 0
       while (_loc5_ < separatorSplitted.length) {
         let _loc6_ = separatorSplitted[_loc5_].split(';')
@@ -241,7 +239,7 @@ function onTurn (data) {
           let _loc10_ = Number(_loc6_[3])
           let _loc11_ = Number(_loc6_[4])
           let _loc14_ = Number(_loc6_[7])
-          data[_loc7_] = true
+          // data[_loc7_] = true
           if (!_loc8_) {
             obj.LP = _loc9_
             obj.LPmax = _loc14_
@@ -380,4 +378,233 @@ function onExchangeCreate (data) {
   return obj
 }
 
-module.exports = { onMovement, onTurn, onExchangeCreate }
+function onExchangeShop (data) {
+  let obj = {}
+  obj.category = data[0].substr(1) // For example looking bones in ressource shop
+  switch (data[0][0]) {
+    case 'L': // EHL47|2509;382;2463;407;2451;375;2465;366;383;2336
+      obj.itemsId = data[1].split(';') // For example tofu beak, gobball hoof ...
+      break
+    case 'P':
+      // IDK (EHP375|400)
+      break
+    case 'l': // EHl375|16634526;;500;; // When looking price if single result item (tofu beak ...)
+      obj.items = data.splice(1).map(e => {
+        let item = {}
+        let itemData = e.split(';')
+        item.itemId = itemData[0]
+        item.stats = itemData[1]
+        item.unitPrice = itemData[2]
+        item.tenPrice = itemData[3]
+        item.hundredPrice = itemData[4]
+        return item
+      })
+      break
+  }
+  return obj
+}
+
+function onAccountStats (data) {
+  let i = data[0].split(',')
+  let obj = {}
+  obj.xp = i[0]
+  obj.xpLow = i[1]
+  obj.xpHigh = i[2]
+  obj.kamas = data[1]
+  obj.bonusPoints = data[2]
+  obj.bonusPointsSpell = data[3]
+  i = data[4].split(',')
+  let _loc6_ = 0
+  if (i[0].split('').indexOf('~')) {
+    let _loc7_ = i[0].split('~')
+    obj.haveFakeAlignment = _loc7_[0] !== _loc7_[1]
+    i[0] = _loc7_[0]
+    _loc6_ = Number(_loc7_[1])
+  }
+  let _loc8_ = Number(i[0])
+  let _loc9_ = Number(i[1])
+  obj.alignment = _loc8_// new dofus.datacenter.Alignment(_loc8_, _loc9_)
+  obj.fakeAlignment = _loc9_// new dofus.datacenter.Alignment(_loc6_, _loc9_)
+  let _loc10_ = Number(i[2])
+  let _loc11_ = Number(i[3])
+  let _loc12_ = Number(i[4])
+  let _loc13_ = i[5] == '1'
+  // let _loc14_ = client.rank.disgrace // Whats this
+  obj.rank = [_loc10_, _loc11_, _loc12_, _loc13_] // new dofus.datacenter.Rank(_loc10_, _loc11_, _loc12_, _loc13_)
+  i = data[5].split(',')
+  obj.LP = i[0]
+  obj.LPmax = i[1]
+  i = data[6].split(',')
+  obj.Energy = i[0]
+  obj.EnergyMax = i[1]
+  obj.Initiative = data[7]
+  obj.Discernment = data[8]
+  let _loc15_ = []
+  let _loc16_ = 3
+  while (_loc16_ > -1) {
+    _loc15_[_loc16_] = []
+    _loc16_ = _loc16_ - 1
+  }
+  let _loc17_ = 9
+  while (_loc17_ < 51) {
+    i = data[_loc17_].split(',')
+    let _loc18_ = Number(i[0])
+    let _loc19_ = Number(i[1])
+    let _loc20_ = Number(i[2])
+    let _loc21_ = Number(i[3])
+    switch (_loc17_) {
+      case 9:
+        _loc15_[0].push({ id: _loc17_, o: 7, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'Star' })
+        if (!obj.isFighting) {
+          obj.AP = _loc18_ + _loc19_ + _loc20_
+        }
+        break
+      case 10:
+        _loc15_[0].push({ id: _loc17_, o: 8, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconMP' })
+        if (!obj.isFighting) {
+          obj.MP = _loc18_ + _loc19_ + _loc20_
+        }
+        break
+      case 11:
+        _loc15_[0].push({ id: _loc17_, o: 3, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconEarthBonus' })
+        obj.Force = _loc18_
+        obj.ForceXtra = _loc19_ + _loc20_
+        break
+      case 12:
+        _loc15_[0].push({ id: _loc17_, o: 1, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconVita' })
+        obj.Vitality = _loc18_
+        obj.VitalityXtra = _loc19_ + _loc20_
+        break
+      case 13:
+        _loc15_[0].push({ id: _loc17_, o: 2, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWisdom' })
+        obj.Wisdom = _loc18_
+        obj.WisdomXtra = _loc19_ + _loc20_
+        break
+      case 14:
+        _loc15_[0].push({ id: _loc17_, o: 5, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWaterBonus' })
+        obj.Chance = _loc18_
+        obj.ChanceXtra = _loc19_ + _loc20_
+        break
+      case 15:
+        _loc15_[0].push({ id: _loc17_, o: 6, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconAirBonus' })
+        obj.Agility = _loc18_
+        obj.AgilityXtra = _loc19_ + _loc20_
+        obj.AgilityTotal = _loc18_ + _loc19_ + _loc20_ + _loc21_
+        break
+      case 16:
+        _loc15_[0].push({ id: _loc17_, o: 4, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconFireBonus' })
+        obj.Intelligence = _loc18_
+        obj.IntelligenceXtra = _loc19_ + _loc20_
+        break
+      case 17:
+        _loc15_[0].push({ id: _loc17_, o: 9, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        obj.RangeModerator = _loc18_ + _loc19_ + _loc20_
+        break
+      case 18:
+        _loc15_[0].push({ id: _loc17_, o: 10, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        obj.MaxSummonedCreatures = _loc18_ + _loc19_ + _loc20_
+        break
+      case 19:
+        _loc15_[1].push({ id: _loc17_, o: 1, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 20:
+        _loc15_[1].push({ id: _loc17_, o: 2, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 21:
+        _loc15_[1].push({ id: _loc17_, o: 3, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 22:
+        _loc15_[1].push({ id: _loc17_, o: 4, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 23:
+        _loc15_[1].push({ id: _loc17_, o: 7, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 24:
+        _loc15_[1].push({ id: _loc17_, o: 5, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 25:
+        _loc15_[1].push({ id: _loc17_, o: 6, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 26:
+        _loc15_[1].push({ id: _loc17_, o: 8, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 27:
+        _loc15_[1].push({ id: _loc17_, o: 9, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        obj.CriticalHitBonus = _loc18_ + _loc19_ + _loc20_ + _loc21_
+        break
+      case 28:
+        _loc15_[1].push({ id: _loc17_, o: 10, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_ })
+        break
+      case 29:
+        _loc15_[1].push({ id: _loc17_, o: 11, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'Star' })
+        break
+      case 30:
+        _loc15_[1].push({ id: _loc17_, o: 12, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconMP' })
+        break
+      case 31:
+        _loc15_[2].push({ id: _loc17_, o: 1, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconNeutral' })
+        break
+      case 32:
+        _loc15_[2].push({ id: _loc17_, o: 2, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconNeutral' })
+        break
+      case 33:
+        _loc15_[3].push({ id: _loc17_, o: 11, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconNeutral' })
+        break
+      case 34:
+        _loc15_[3].push({ id: _loc17_, o: 12, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconNeutral' })
+        break
+      case 35:
+        _loc15_[2].push({ id: _loc17_, o: 3, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconEarth' })
+        break
+      case 36:
+        _loc15_[2].push({ id: _loc17_, o: 4, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconEarth' })
+        break
+      case 37:
+        _loc15_[3].push({ id: _loc17_, o: 13, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconEarth' })
+        break
+      case 38:
+        _loc15_[3].push({ id: _loc17_, o: 14, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconEarth' })
+        break
+      case 39:
+        _loc15_[2].push({ id: _loc17_, o: 7, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWater' })
+        break
+      case 40:
+        _loc15_[2].push({ id: _loc17_, o: 8, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWater' })
+        break
+      case 41:
+        _loc15_[3].push({ id: _loc17_, o: 17, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWater' })
+        break
+      case 42:
+        _loc15_[3].push({ id: _loc17_, o: 18, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconWater' })
+        break
+      case 43:
+        _loc15_[2].push({ id: _loc17_, o: 9, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconAir' })
+        break
+      case 44:
+        _loc15_[2].push({ id: _loc17_, o: 10, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconAir' })
+        break
+      case 45:
+        _loc15_[3].push({ id: _loc17_, o: 19, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconAir' })
+        break
+      case 46:
+        _loc15_[3].push({ id: _loc17_, o: 20, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconAir' })
+        break
+      case 47:
+        _loc15_[2].push({ id: _loc17_, o: 5, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconFire' })
+        break
+      case 48:
+        _loc15_[2].push({ id: _loc17_, o: 6, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconFire' })
+        break
+      case 49:
+        _loc15_[3].push({ id: _loc17_, o: 15, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconFire' })
+        break
+      case 50:
+        _loc15_[3].push({ id: _loc17_, o: 16, s: _loc18_, i: _loc19_, d: _loc20_, b: _loc21_, p: 'IconFire' })
+    }
+    _loc17_ = _loc17_ + 1
+  }
+  obj.FullStats = _loc15_
+  return obj
+}
+
+module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats }

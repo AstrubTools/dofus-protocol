@@ -35,13 +35,9 @@ function sizeOfRestBuffer (value) {
 }
 
 function readRestString (buffer, offset) {
-  // Dofus client end packets with 0x0A00 ~.~
-  // const isClient = buffer.slice(-2, -1).equals(Buffer.from([0x0A]))
-  const newBuffer = buffer.slice(offset)
-  if (!newBuffer) { throw new Error(`Check your custom types`) }
   return {
-    value: newBuffer.toString('ascii'),
-    size: buffer.length - offset
+    value: (buffer ? buffer.slice(offset) : '').toString('ascii'),
+    size: buffer ? buffer.length - offset : 0
   }
 }
 
@@ -57,7 +53,7 @@ function sizeOfRestString (value) {
 function readSU8 (buffer, offset) {
   if (offset + 1 > buffer.length) { throw new PartialReadError() }
   return {
-    value: parseInt(buffer),
+    value: parseInt(buffer.slice(offset, offset + 1)),
     size: 1
   }
 }
@@ -74,7 +70,7 @@ function sizeOfSU8 (value) {
 function readSU16 (buffer, offset) {
   if (offset + 2 > buffer.length) { throw new PartialReadError() }
   return {
-    value: parseInt(buffer),
+    value: parseInt(buffer.slice(offset, offset + 2)),
     size: 2
   }
 }
@@ -91,7 +87,7 @@ function sizeOfSU16 (value) {
 function readSU32 (buffer, offset) {
   if (offset + 4 > buffer.length) { throw new PartialReadError() }
   return {
-    value: parseInt(buffer),
+    value: parseInt(buffer.slice(offset, offset + 4)),
     size: 4
   }
 }
@@ -108,7 +104,7 @@ function sizeOfSU32 (value) {
 function readSU64 (buffer, offset) {
   if (offset + 8 > buffer.length) { throw new PartialReadError() }
   return {
-    value: parseInt(buffer),
+    value: parseInt(buffer.slice(offset, offset + 8)),
     size: 8
   }
 }

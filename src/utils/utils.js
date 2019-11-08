@@ -1,17 +1,9 @@
-const { onMovement, onTurn, onExchangeCreate } = require('./packetParser')
+const { onMovement, onTurn, onExchangeCreate, onExchangeShop } = require('./packetParser')
 
 const ZKARRAY = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
   's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
   '2', '3', '4', '5', '6', '7', '8', '9', '-', '_']
-
-function ascii_to_hexa (ascii) {
-  return parseInt(ascii.toString(16).split('').map(e => Number(e.charCodeAt(0))).join(''), 16)
-}
-
-function ascii_to_int (ascii) {
-  return parseInt(ascii.toString().split('').map(e => Number(e.charCodeAt(0))).join(''), 10)
-}
 
 function decryptIp (ipCrypt) {
   let ip = []
@@ -59,6 +51,11 @@ function logger (data, isToServer, proto) {
     case 'EXCHANGE_CREATE':
       console.log(`Exchange create: ${JSON.stringify(onExchangeCreate(parsed.params.data))}`)
       break
+    case 'EXCHANGE_SHOP_TYPE':
+      if (!isToServer) { // its for toclient
+        console.log(`Exchange shop: ${JSON.stringify(onExchangeShop(parsed.params.data))}`)
+      }
+      break
   }
   console.log(`raw ${s} ${data.toString('ascii')}`)
   console.log(`~`.repeat(10), '\n')
@@ -92,11 +89,14 @@ function setIntervalAndExecute (fn, t, stopAfter, failedCallback) {
       failedCallback()
       console.log(`Failed to execute after ${attempt} attempt, aborting`)
     }
-    console.log('~'.repeat(10))
-    console.log(`Attempt n°${attempt}, aborting after ${stopAfter} attempts`)
-    console.log('~'.repeat(10))
     fn()
   }, t))
 }
 
-module.exports = { ascii_to_hexa, ascii_to_int, decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute }
+// More production-designed than logger()
+// POST a log under sessionid
+function log (message, sessionId, logLevel) {
+  // fetch(`apiurl/logs/${sessionId}`, { message, logLevel })
+}
+
+module.exports = { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute, log }
