@@ -5,7 +5,7 @@ const { getRandomNetworkKey, setIntervalAndExecute } = require('../utils/utils')
 const { onMovement, OnExchangeShop, onAccountStats } = require('../utils/packetParser')
 
 // Connect to battlenet
-async function createClient (host, port, account, password, version, delay) {
+async function createClient ({ host, port, account, password, version, delay }) {
   const client = new Client(version)
   client.delay = delay
   client.account = account

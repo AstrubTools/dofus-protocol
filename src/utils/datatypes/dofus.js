@@ -243,6 +243,7 @@ function readRestToSeparator (buffer, offset, typeArgs) {
   }
 }
 
+// TODO: if parent is not sarray or scontainer, will break and need to write manually separator
 function writeRestToSeparator (value, o, offset) {
   o.s += value
   return offset + value.length

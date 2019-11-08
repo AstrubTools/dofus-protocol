@@ -23,18 +23,14 @@ async function start () {
   const dev = true
   const port = dev ? 887 : 443
   const ip = dev ? '190.115.26.126' : '34.251.172.139'
-  let client = await createClient(ip, port, username, password, defaultVersion, delay)
+  let client = await createClient({ ip, port, username, password, defaultVersion, delay })
   // TODO improve the promise chaining ...
   // client.listenToInformation()
 
-  await client.loginToAccount().catch(console.log)
-  await client.loginToServer().catch(console.log)
-  await client.pickCharacter(character).catch(console.log)
-  /*
-  setInterval(() => {
-    client.say('NOOOB')
-  }, 3000)
-  */
+  await client.loginToAccount()
+  await client.loginToServer()
+  await client.pickCharacter(character)
+
   /*
   app.use(bodyParser.json()); // for parsing application/json
   // app.use(bodyParser.urlencoded({extended: false})); // for parsing application/x-www-form-urlencoded

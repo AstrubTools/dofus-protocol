@@ -1,6 +1,6 @@
-const { onMovement, onTurn, onExchangeCreate, onExchangeShop } = require('./packetParser')
+const { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, OnAction } = require('./packetParser')
 
-const ZKARRAY = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+const HASH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
   's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
   '2', '3', '4', '5', '6', '7', '8', '9', '-', '_']
@@ -23,9 +23,9 @@ function decryptPort (chars) {
   // if (chars.length !== 3) { throw new Error('Port must be encrypted in 3 chars') }
   let port = 0
   for (let i = 0; i < 2; i++) {
-    port += Number(Math.pow(64, 2 - i) * ZKARRAY.findIndex(e => e === chars[i]))
+    port += Number(Math.pow(64, 2 - i) * HASH.findIndex(e => e === chars[i]))
   }
-  port += ZKARRAY.findIndex(e => e === chars[2])
+  port += HASH.findIndex(e => e === chars[2])
   return port
 }
 
@@ -56,6 +56,12 @@ function logger (data, isToServer, proto) {
         console.log(`Exchange shop: ${JSON.stringify(onExchangeShop(parsed.params.data))}`)
       }
       break
+    case 'ACCOUNT_STATS':
+      console.log(`ACCOUNT_STATS: ${JSON.stringify(onAccountStats(parsed.params.data))}`)
+      break
+    case 'GAME_ACTION':
+      console.log(`GAME_ACTION: ${JSON.stringify(OnAction(parsed.params.data, false, 60069832))}`)
+      break
   }
   console.log(`raw ${s} ${data.toString('ascii')}`)
   console.log(`~`.repeat(10), '\n')
@@ -74,7 +80,7 @@ function getRandomNetworkKey () {
   let size = Math.floor(Math.round(Math.random() * 20) + 10)
   let s = []
   for (let i = 0; i < size; i++) {
-    s.push(ZKARRAY[(Math.floor(Math.random() * ZKARRAY.length))])
+    s.push(HASH[(Math.floor(Math.random() * HASH.length))])
   }
   let check = checksum(s.join('')) + s.join('')
   return check + checksum(check)
@@ -99,4 +105,4 @@ function log (message, sessionId, logLevel) {
   // fetch(`apiurl/logs/${sessionId}`, { message, logLevel })
 }
 
-module.exports = { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute, log }
+module.exports = { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute, log, HASH }

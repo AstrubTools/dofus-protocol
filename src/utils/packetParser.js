@@ -1,11 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////
-/// ////////////////////////////////////////////////////////////////////////////
-/// ////////////////////////////// WARNING PEGI 18 CODE ////////////////////////
-/// ///////////////// YOU CAN LOSE THE SIGHT BY LOOKING AT THIS CODE////////////
-/// //////////////////////// COPY PASTED FROM DOFUS SOURCE CODE ////////////////
-/// ////////////////////////////////////////////////////////////////////////////
-/// ////////////////////////////////////////////////////////////////////////////
-
+const { uncompressCells, uncompressCellId } = require('./map')
 function onMovement (data, isFighting) {
   let movementData = {}
   return data.filter(e => e.length !== 0 && e.charAt(0) !== '-').map(i => {
@@ -189,6 +182,7 @@ function onMovement (data, isFighting) {
             // TODO: could improve this, even if its alreeady nice info
             movementData.playerId = _loc10_[3]
             movementData.playerName = _loc10_[4]
+            movementData.cell = _loc10_[0]
             movementData.color1 = _loc10_[9]
             movementData.color2 = _loc10_[10]
             movementData.color3 = _loc10_[11]
@@ -393,7 +387,7 @@ function onExchangeShop (data) {
         let item = {}
         let itemData = e.split(';')
         item.itemId = itemData[0]
-        item.stats = itemData[1]
+        item.stats = parseEffects(itemData[1])
         item.unitPrice = itemData[2]
         item.tenPrice = itemData[3]
         item.hundredPrice = itemData[4]
@@ -402,6 +396,17 @@ function onExchangeShop (data) {
       break
   }
   return obj
+}
+
+function parseEffects (compressedData) {
+  return compressedData.split(',').map(e => {
+    let _loc5_ = e.split('#')
+    _loc5_[0] = parseInt(_loc5_[0], 16)
+    _loc5_[1] = _loc5_[1] !== '0' ? parseInt(_loc5_[1], 16) : undefined
+    _loc5_[2] = _loc5_[2] !== '0' ? parseInt(_loc5_[2], 16) : undefined
+    _loc5_[3] = _loc5_[3] !== '0' ? parseInt(_loc5_[3], 16) : undefined
+    return _loc5_
+  })
 }
 
 function onAccountStats (data) {
@@ -607,4 +612,20 @@ function onAccountStats (data) {
   return obj
 }
 
-module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats }
+function OnAction (data, isFighting, playerId) {
+  let _loc3_ = data.indexOf(';')
+  data = data.substring(_loc3_ + 1)
+  _loc3_ = data.indexOf(';')
+  let _loc5_ = Number(data.substring(0, _loc3_))
+  let truc
+  switch (_loc5_) { // For case list see https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/game/actions/GameActions.java#L18
+    case 1:
+      truc = []
+      for (let i = 0; i < data.length(); i += 3) {
+        truc.push(uncompressCellId(data.substring(i + 1, i + 3)))
+      }
+      break
+  }
+  return truc
+}
+module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, OnAction }
