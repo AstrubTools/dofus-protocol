@@ -1,6 +1,7 @@
 'use strict'
 
 const { sendCount, calcCount, tryDoc } = require('protodef').utils
+const { HASH } = require('../utils')
 
 module.exports = {
   restBuffer: [readRestBuffer, writeRestBuffer, sizeOfRestBuffer],
@@ -168,11 +169,6 @@ function sizeOfSContainer (value, typeArgs, context) {
   return size
 }
 
-const ZKARRAY = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-  's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-  'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
-  '2', '3', '4', '5', '6', '7', '8', '9', '-', '_']
-
 function readCryptedIp (buffer, offset) {
   if (offset + 8 > buffer.length) { throw new PartialReadError() }
   let ip = []
@@ -208,9 +204,9 @@ function readCryptedPort (buffer, offset) {
   let port = 0
   let s = buffer.slice(offset).toString()
   for (let i = 0; i < 2; i++) {
-    port += Number(Math.pow(64, 2 - i) * ZKARRAY.findIndex(e => e === s[i]))
+    port += Number(Math.pow(64, 2 - i) * HASH.findIndex(e => e === s[i]))
   }
-  port += ZKARRAY.findIndex(e => e === s[2])
+  port += HASH.findIndex(e => e === s[2])
   return {
     value: port,
     size: 3
@@ -220,10 +216,10 @@ function readCryptedPort (buffer, offset) {
 function writeCryptedPort (value, o, offset) {
   let s = ''
   for (let i = 2; i > 0; i--) {
-    s += ZKARRAY[value >> (6 * i)]
+    s += HASH[value >> (6 * i)]
     value &= (Math.pow(64, i) - 1)
   }
-  s += ZKARRAY[value]
+  s += HASH[value]
   o.s = s
   return 3
 }

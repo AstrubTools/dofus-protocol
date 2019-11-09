@@ -612,20 +612,30 @@ function onAccountStats (data) {
   return obj
 }
 
-function OnAction (data, isFighting, playerId) {
+function onAction (data, isFighting, playerId) {
   let _loc3_ = data.indexOf(';')
   data = data.substring(_loc3_ + 1)
   _loc3_ = data.indexOf(';')
   let _loc5_ = Number(data.substring(0, _loc3_))
-  let truc
+  let obj = {}
   switch (_loc5_) { // For case list see https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/game/actions/GameActions.java#L18
     case 1:
-      truc = []
-      for (let i = 0; i < data.length(); i += 3) {
-        truc.push(uncompressCellId(data.substring(i + 1, i + 3)))
+      let split = data.split(';')
+      let compressedCells = split[split.length - 1]
+      obj.cells = []
+      for (let i = 0; i < compressedCells.length; i += 3) {
+        obj.cells.push(uncompressCellId(compressedCells.substr(i + 1, i + 3)))
       }
       break
   }
-  return truc
+  return obj
 }
-module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, OnAction }
+
+function onAccountSelectCharacter (data) {
+  let obj = {}
+  obj.id = data[1]
+  obj.name = data[2]
+  obj.stats = parseEffects(data[10])
+  return obj
+}
+module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter }

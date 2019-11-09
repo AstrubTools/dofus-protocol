@@ -5,6 +5,7 @@ const createServer = require('./src/server/createServer')
 const dofus = require('./src/utils/datatypes/dofus')
 const Splitter = require('./src/transforms/framing')
 const { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute } = require('./src/utils/utils')
+const { compressCellId } = require('./src/utils/map')
 const { onMovement, onExchangeShop, onAccountStats } = require('./src/utils/packetParser')
 
 const protocol = supportedVersions.reduce((acc, version) => {
@@ -30,5 +31,6 @@ module.exports = {
   setIntervalAndExecute,
   onMovement,
   onExchangeShop,
-  onAccountStats
+  onAccountStats,
+  compressCellId
 }

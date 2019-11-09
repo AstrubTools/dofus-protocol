@@ -1,5 +1,4 @@
-const { createClient } = require('..')
-const { defaultVersion } = require('..')
+const { createClient, defaultVersion, compressCellId } = require('..')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -22,15 +21,21 @@ async function start () {
   // IP '34.251.172.139' retro '190.115.26.126' priv
   const dev = true
   const port = dev ? 887 : 443
-  const ip = dev ? '190.115.26.126' : '34.251.172.139'
-  let client = await createClient({ ip, port, username, password, defaultVersion, delay })
-  // TODO improve the promise chaining ...
-  // client.listenToInformation()
+  const host = dev ? '190.115.26.126' : '34.251.172.139'
+  let client = await createClient({ host, port, username, password, version: defaultVersion, delay })
+
+  client.listenToInformation()
 
   await client.loginToAccount()
   await client.loginToServer()
   await client.pickCharacter(character)
-
+  /*
+  setInterval(() => {
+    client.write('GAME_ACTION', {
+      data: `001${compressCellId(Math.random() * 200)}`
+    })
+  }, 5000)
+  */
   /*
   app.use(bodyParser.json()); // for parsing application/json
   // app.use(bodyParser.urlencoded({extended: false})); // for parsing application/x-www-form-urlencoded

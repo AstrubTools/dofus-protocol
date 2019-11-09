@@ -184,6 +184,12 @@ async function createClient ({ host, port, account, password, version, delay }) 
         }
       }
     })
+    client.on('GAME_DATA', (data) => {
+      if (data.type === 'M') {
+        let mapKey = data.data.data[data.data.data.length]
+        client.data.mapKey = mapKey
+      }
+    })
   }
   client.sendAction = (actionType, params) => {
     client.write('GAME_ACTION', {

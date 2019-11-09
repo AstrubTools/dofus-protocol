@@ -1,4 +1,4 @@
-const { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, OnAction } = require('./packetParser')
+const { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter } = require('./packetParser')
 
 const HASH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
   's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -60,7 +60,16 @@ function logger (data, isToServer, proto) {
       console.log(`ACCOUNT_STATS: ${JSON.stringify(onAccountStats(parsed.params.data))}`)
       break
     case 'GAME_ACTION':
-      console.log(`GAME_ACTION: ${JSON.stringify(OnAction(parsed.params.data, false, 60069832))}`)
+      console.log(`GAME_ACTION: ${JSON.stringify(onAction(parsed.params.data, false, 60069832))}`)
+      break
+    case 'ACCOUNT_SELECT_CHARACTER':
+      console.log(`ACCOUNT_SELECT_CHARACTER: ${JSON.stringify(onAccountSelectCharacter(parsed.params.data))}`)
+      break
+    case 'GAME_DATA':
+      if (parsed.params.type === 'M') {
+        let mapKey = parsed.params.data.data[parsed.params.data.data.length - 1]
+        console.log(`Map key ${mapKey}`)
+      }
       break
   }
   console.log(`raw ${s} ${data.toString('ascii')}`)
@@ -105,4 +114,69 @@ function log (message, sessionId, logLevel) {
   // fetch(`apiurl/logs/${sessionId}`, { message, logLevel })
 }
 
-module.exports = { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute, log, HASH }
+function prepareKey (key) {
+  let s = []
+  for (let i = 0; i < key.length; i += 2) {
+    s.push(parseInt(key.substring(i, i + 2), 16))
+  }
+  return decode(s.join(''))
+}
+
+function decipherData (data, preparedKey, checksum) {
+  let s = []
+  for (let i = 0; i < data.length; i += 2) {
+    let a = parseInt(data.substring(i, i + 2), 16)
+    let b = preparedKey.charAt((i / 2 + checksum) % preparedKey.length)
+    s.push(a ^ b)
+  }
+  return decode(s.join())
+}
+
+function decode (s) {
+  if (s.indexOf('%') === -1 && s.indexOf('+') === -1) { return s }
+
+  let len = s.length
+  let sb
+  let c
+
+  for (let i = 0; i < len; i++) {
+    c = s.charAt(i)
+    if (c === '%' && i + 2 < len && s.charAt(i + 1) !== '%') {
+      if (s.charAt(i + 1) === 'u' && i + 5 < len) {
+        // unicode hex sequence
+        try {
+          sb.push(parseInt(s.substring(i + 2, i + 4), 16))
+          i += 2
+        } catch (e) {
+          sb.push('%')
+        }
+      } else {
+        try {
+          s.push(parseInt(s.substring(i + 1, i + 3), 16))
+          i += 2
+        } catch (e) {
+          sb.push('%')
+        }
+      }
+      continue
+    }
+
+    if (c === '+') {
+      sb.push(' ')
+    } else {
+      sb.push(c)
+    }
+  }
+  return sb.join('')
+}
+
+module.exports = { decryptIp,
+  decryptPort,
+  logger,
+  getRandomNetworkKey,
+  setIntervalAndExecute,
+  log,
+  HASH,
+  decipherData,
+  prepareKey,
+  checksum }
