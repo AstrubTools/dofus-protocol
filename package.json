@@ -25,9 +25,10 @@
   },
   "homepage": "https://github.com/louis030195/dofus-protocol#readme",
   "dependencies": {
+    "argparse": "^1.0.10",
     "bit-buffer": "^0.2.4",
-    "csvtojson": "^2.0.8",
     "express": "^4.17.1",
+    "node-dofus-data": "0.0.1",
     "node-fetch": "^2.6.0",
     "once-promise": "^2.0.0",
     "protodef": "^1.6.10"
@@ -36,7 +37,6 @@
     "ignore": []
   },
   "devDependencies": {
-    "argparse": "^1.0.10",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "protodef-validator": "^1.2.2",

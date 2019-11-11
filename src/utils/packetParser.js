@@ -1,4 +1,7 @@
-const { uncompressCells, uncompressCellId } = require('./map')
+
+const { uncompressCells, uncompressCellId, downloadMap, prepareKey, decipherData, checksum } = require('./map')
+const dofusData = require('node-dofus-data')('official_130')
+
 function onMovement (data, isFighting) {
   let movementData = {}
   return data.filter(e => e.length !== 0 && e.charAt(0) !== '-').map(i => {
@@ -612,20 +615,66 @@ function onAccountStats (data) {
   return obj
 }
 
-function onAction (data, isFighting, playerId) {
-  let _loc3_ = data.indexOf(';')
-  data = data.substring(_loc3_ + 1)
-  _loc3_ = data.indexOf(';')
-  let _loc5_ = Number(data.substring(0, _loc3_))
+// https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/ProtocolRegistry.java#L168
+function onAction (data) {
+  if (data.length === 1) {
+    return { type: data }
+  }
   let obj = {}
-  switch (_loc5_) { // For case list see https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/game/actions/GameActions.java#L18
-    case 1:
-      let split = data.split(';')
+  let split
+  let type
+  if (data.indexOf(';')) {
+    split = data.split(';')
+    obj.id = parseInt(split[2])
+    type = parseInt(split[1])
+  } else if (data.indexOf('|')) {
+    split = data.split('|')
+    obj.id = parseInt(split[1])
+    type = parseInt(split[0])
+  }
+  switch (type) { // For case list see https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/game/actions/GameActions.java#L18
+    case dofusData.gameAction.unknown:
+      break
+    case dofusData.gameAction.server.error:
+      break
+    case dofusData.gameAction.move:
       let compressedCells = split[split.length - 1]
       obj.cells = []
       for (let i = 0; i < compressedCells.length; i += 3) {
         obj.cells.push(uncompressCellId(compressedCells.substr(i + 1, i + 3)))
       }
+      break
+    case dofusData.gameAction.server.lifeChange:
+      obj.lifeChange = ''
+      break
+    case dofusData.gameAction.server.paChange:
+      obj.paUsed = split[3].split(',')[1]
+      break
+    case dofusData.gameAction.server.kill:
+      obj.kill = ''
+      break
+    case dofusData.gameAction.server.tacle:
+      obj.tacle = ''
+      break
+    case dofusData.gameAction.server.pmChange:
+      obj.pmUsed = split[3].split(',')[1]
+      break
+    case dofusData.gameAction.server.summon:
+      obj.summon = ''
+      break
+    case dofusData.gameAction.server.spell:
+      obj.spellLaunched = ''
+      break
+    case dofusData.gameAction.server.harvestTime:
+      split = split[3].split(',')
+      obj.resourceId = split[0]
+      obj.harvestTime = split[1]
+      break
+    case dofusData.gameAction.server.duelServerAsk:
+      obj.duelServerAsk = ''
+      break
+    case dofusData.gameAction.server.fightJoinError:
+      obj.fightJoinError = ''
       break
   }
   return obj
@@ -638,4 +687,28 @@ function onAccountSelectCharacter (data) {
   obj.stats = parseEffects(data[10])
   return obj
 }
-module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter }
+
+async function onGameData (data) {
+  let obj = {}
+  let split = data.split('|')
+  switch (split[0]) {
+    case 'M':
+      let key = prepareKey(split[2])
+      await downloadMap(split[0], split[1])
+        .then(res => res.text())
+        .then(cellData => decipherData(cellData, key, parseInt(checksum(key).toString(), 16) * 2))
+        .then(decipheredMap => uncompressCells(decipheredMap))
+        .then(e => { obj.map = e })
+      break
+    case 'F':
+      obj = split.map(e => {
+        let split = e.split(';')
+        return { objectId: split[0], objectType: split[1], unknown: split[2] }
+      })
+      break
+    case 'K':
+      break
+  }
+  return obj
+}
+module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter, onGameData }

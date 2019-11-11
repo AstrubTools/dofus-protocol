@@ -1,5 +1,4 @@
-const { uncompressCells, downloadMap, parseDate } = require('../src/utils/map')
-const { prepareKey, decipherData, checksum } = require('../src/utils/utils')
+const { checksum, uncompressCells, downloadMap, parseDate, prepareKey, decipherData } = require('../src/utils/map')
 
 console.log(parseDate('0905131019'))
 async function decipherMap () {

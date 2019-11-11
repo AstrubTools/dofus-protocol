@@ -5,6 +5,16 @@ const HASH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', '
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
   '2', '3', '4', '5', '6', '7', '8', '9', '-', '_']
 
+const teleportTexturesSpritesId = [ 1030, 1029, 1764, 2298, 745 ]
+
+const HEX_CHAR = '0123456789ABCDEF'
+
+function checksum (s) {
+  let v = 0
+  for (let c in s) v += c & 15
+  return HEX_CHAR[v & 15]
+}
+
 function compressCellId (cellId) {
   return '' + HASH.findIndex(e => e === (cellId & 0xFC0) >> 6) + HASH.findIndex(e => e === cellId & 0x3F)
 }
@@ -69,7 +79,10 @@ function uncompressCell (i, data, active) {
   let layerObject2Flip = (data[index + 7] & 4) >> 2 === 1
   let layerObject2Interactive = (data[index + 7] & 2) >> 1 === 1
   let layerObject2Num = ((data[index] & 2) << 12) + ((data[index + 7] & 1) << 12) + (data[index + 8] << 6) + data[index + 9]
+  // console.log(teleportTexturesSpritesId.find(e => e === layerObject1Num), teleportTexturesSpritesId.find(e => e === layerObject2Num))
   return { id,
+    isTeleport: teleportTexturesSpritesId.find(e => e === layerObject1Num) ||
+      teleportTexturesSpritesId.find(e => e === layerObject2Num),
     active,
     lineOfSight,
     layerGroundRot,
@@ -101,4 +114,68 @@ function parseDate (date) {
   return dateTime
 }
 
-module.exports = { compressCells, compressCellId, uncompressCells, uncompressCellId, downloadMap, parseDate }
+function prepareKey (key) {
+  let s = []
+  for (let i = 0; i < key.length; i += 2) {
+    s.push(parseInt(key.substring(i, i + 2), 16))
+  }
+  return decode(s.join(''))
+}
+
+function decipherData (data, preparedKey, checksum) {
+  let s = []
+  for (let i = 0; i < data.length; i += 2) {
+    let a = parseInt(data.substring(i, i + 2), 16)
+    let b = preparedKey.charAt((i / 2 + checksum) % preparedKey.length)
+    s.push(a ^ b)
+  }
+  return decode(s.join())
+}
+
+function decode (s) {
+  if (s.indexOf('%') === -1 && s.indexOf('+') === -1) { return s }
+
+  let len = s.length
+  let sb
+  let c
+
+  for (let i = 0; i < len; i++) {
+    c = s.charAt(i)
+    if (c === '%' && i + 2 < len && s.charAt(i + 1) !== '%') {
+      if (s.charAt(i + 1) === 'u' && i + 5 < len) {
+        // unicode hex sequence
+        try {
+          sb.push(parseInt(s.substring(i + 2, i + 4), 16))
+          i += 2
+        } catch (e) {
+          sb.push('%')
+        }
+      } else {
+        try {
+          s.push(parseInt(s.substring(i + 1, i + 3), 16))
+          i += 2
+        } catch (e) {
+          sb.push('%')
+        }
+      }
+      continue
+    }
+
+    if (c === '+') {
+      sb.push(' ')
+    } else {
+      sb.push(c)
+    }
+  }
+  return sb.join('')
+}
+
+module.exports = { compressCells,
+  compressCellId,
+  uncompressCells,
+  uncompressCellId,
+  downloadMap,
+  parseDate,
+  decipherData,
+  prepareKey,
+  checksum }

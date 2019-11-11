@@ -991,7 +991,7 @@
       "OBJECT_TOOL": ["container", [
         {
           "name": "jobId",
-          "type": "su32"
+          "type": "su8"
         }
       ]],
       "OBJECT_WEIGHT": ["scontainer", {"separator": "|", "params": [
@@ -1058,32 +1058,8 @@
       ]],
       "GAME_DATA": ["container", [
         {
-          "name": "type",
-          "type": ["pstring", {
-            "count": 1,
-            "type": "u8"
-          }]
-        },
-        {
           "name": "data",
-          "type": [
-            "switch",
-            {
-              "compareTo": "type",
-              "fields": {
-                "M": ["container", [
-                  {
-                    "name": "data",
-                    "type": ["sarray", { "separator": "|",
-                      "type": ["restToSeparator", { "separator": "|" }]
-                    }]
-                  }
-                ]],
-                "K": ["container", []]
-              },
-              "default": ["container", []]
-            }
-          ]
+          "type": "restString"
         }
       ]],
       "GAME_JOIN": ["scontainer", { "separator": "|", "params": [
@@ -1708,10 +1684,10 @@
           }]
         }
       ]],
-      "TUTORIAL_UNKNOWN1": ["container", [
+      "TUTORIAL_LEAVE": ["container", [
         {
-          "name": "data",
-          "type": "restString"
+          "name": "tutorialId",
+          "type": "su16"
         }
       ]],
       "SUBAREA_UNKNOWN1": ["container", [
@@ -1782,7 +1758,7 @@
                   "0x4456": "DIALOG_LEAVE",
                   "0x464F": "UNKNOWN4",
                   "0x5443": "TUTORIAL_CREATE",
-                  "0x5454": "TUTORIAL_UNKNOWN1",
+                  "0x5454": "TUTORIAL_LEAVE",
                   "0x4F44": "OBJECT_DROP",
                   "0x4F43": "OBJECT_UNKNOWN3",
                   "0x4F41": "OBJECT_ADD",
@@ -1990,7 +1966,7 @@
                   "INFO_UNKNOWN2": "INFO_UNKNOWN2",
                   "BASIC_UNKNOWN2": "BASIC_UNKNOWN2",
                   "BASIC_UNKNOWN3": "BASIC_UNKNOWN3",
-                  "TUTORIAL_UNKNOWN1": "TUTORIAL_UNKNOWN1",
+                  "TUTORIAL_LEAVE": "TUTORIAL_LEAVE",
                   "SUBAREA_UNKNOWN1": "SUBAREA_UNKNOWN1",
                   "SUBAREA_UNKNOWN2": "SUBAREA_UNKNOWN2",
                   "EXCHANGE_SHOP_TYPE": "EXCHANGE_SHOP_TYPE",
