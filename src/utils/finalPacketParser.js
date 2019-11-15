@@ -1,5 +1,5 @@
 
-const { uncompressCells, uncompressCellId, downloadMap, prepareKey, decipherData, checksum } = require('./map')
+const { HASH, uncompressCell, uncompressCells, uncompressCellId } = require('./map')
 const dofusData = require('node-dofus-data')('official_130')
 
 function onMovement (data, isFighting) {
@@ -625,55 +625,56 @@ function onAction (data) {
   let type
   if (data.indexOf(';')) {
     split = data.split(';')
-    obj.id = parseInt(split[2])
-    type = parseInt(split[1])
+    obj.id = parseInt(split[2], 16)
+    type = parseInt(split[1], 16)
   } else if (data.indexOf('|')) {
     split = data.split('|')
-    obj.id = parseInt(split[1])
-    type = parseInt(split[0])
+    obj.id = parseInt(split[1], 16)
+    type = parseInt(split[0], 16)
   }
   switch (type) { // For case list see https://github.com/HydreIO/dofus-protocol-1.29/blob/c9ea6434746e8fb7c16d3b7581d3a21a45ef4db7/src/main/java/fr/aresrpg/dofus/protocol/game/actions/GameActions.java#L18
-    case dofusData.gameAction.unknown:
+    case dofusData.gameActions.unknown:
       break
-    case dofusData.gameAction.server.error:
+    case dofusData.gameActions.server.error:
       break
-    case dofusData.gameAction.move:
+    case dofusData.gameActions.move:
       let compressedCells = split[split.length - 1]
       obj.cells = []
       for (let i = 0; i < compressedCells.length; i += 3) {
-        obj.cells.push(uncompressCellId(compressedCells.substr(i + 1, i + 3)))
+        obj.cells.push({ orientation: dofusData.orientations[Object.keys(dofusData.orientations)[HASH.findIndex(e => e === compressedCells[i])]],
+          id: uncompressCellId(compressedCells.substr(i + 1, i + 3)) })
       }
       break
-    case dofusData.gameAction.server.lifeChange:
+    case dofusData.gameActions.server.lifeChange:
       obj.lifeChange = ''
       break
-    case dofusData.gameAction.server.paChange:
+    case dofusData.gameActions.server.paChange:
       obj.paUsed = split[3].split(',')[1]
       break
-    case dofusData.gameAction.server.kill:
+    case dofusData.gameActions.server.kill:
       obj.kill = ''
       break
-    case dofusData.gameAction.server.tacle:
+    case dofusData.gameActions.server.tacle:
       obj.tacle = ''
       break
-    case dofusData.gameAction.server.pmChange:
+    case dofusData.gameActions.server.pmChange:
       obj.pmUsed = split[3].split(',')[1]
       break
-    case dofusData.gameAction.server.summon:
+    case dofusData.gameActions.server.summon:
       obj.summon = ''
       break
-    case dofusData.gameAction.server.spell:
-      obj.spellLaunched = ''
+    case dofusData.gameActions.server.spell:
+      obj.spellLaunched = '' // { id: parseInt(split[0], 16), cell: parseInt(split[1], 16) }
       break
-    case dofusData.gameAction.server.harvestTime:
+    case dofusData.gameActions.server.harvestTime:
       split = split[3].split(',')
       obj.resourceId = split[0]
       obj.harvestTime = split[1]
       break
-    case dofusData.gameAction.server.duelServerAsk:
+    case dofusData.gameActions.server.duelServerAsk:
       obj.duelServerAsk = ''
       break
-    case dofusData.gameAction.server.fightJoinError:
+    case dofusData.gameActions.server.fightJoinError:
       obj.fightJoinError = ''
       break
   }
@@ -682,33 +683,132 @@ function onAction (data) {
 
 function onAccountSelectCharacter (data) {
   let obj = {}
-  obj.id = data[1]
+  obj.charId = data[1]
   obj.name = data[2]
-  obj.stats = parseEffects(data[10])
+  obj.level = data[3]
+  obj.guild = data[4]
+  obj.sex = data[5]
+  obj.gfxID = data[6]
+  obj.color1 = data[7]
+  obj.color2 = data[8]
+  obj.color3 = data[9]
+  let split = data[10].split(';')
+  obj.items = split.filter(e => e).map(e => {
+    let split = e.split('~')
+    let pos = split[3] === '' ? -1 : parseInt(data[3], 16)
+    return { itemId: parseInt(split[0], 16),
+      itemType: parseInt(split[1], 16),
+      quantity: parseInt(split[2], 16),
+      position: pos,
+      effects: parseEffects(split[4]) }
+  })
   return obj
 }
 
-async function onGameData (data) {
+function onGameData (data) {
   let obj = {}
   let split = data.split('|')
   switch (split[0]) {
-    case 'M':
-      let key = prepareKey(split[2])
-      await downloadMap(split[0], split[1])
-        .then(res => res.text())
-        .then(cellData => decipherData(cellData, key, parseInt(checksum(key).toString(), 16) * 2))
-        .then(decipheredMap => uncompressCells(decipheredMap))
-        .then(e => { obj.map = e })
+    case 'M': // onMapData
+      let mapId = parseInt(split[1], 16)
+      if (typeof dofusData.maps[mapId] === 'undefined') throw new Error('Unknown map id')
+      let currentMap = dofusData.maps[mapId]
+      obj.currentMap = { id: currentMap.id,
+        width: currentMap.width,
+        height: currentMap.height,
+        x: currentMap.x,
+        y: currentMap.y,
+        cells: uncompressCells(currentMap.cells, currentMap.width)
+      }
       break
-    case 'F':
+    case 'K': // onMapLoaded
+      break
+    case 'C': // onCellData
+      /*
+      let _loc4_ = 0
+      while (_loc4_ < split.length) {
+        let _loc5_ = split[_loc4_].split(';')
+        let _loc6_ = Number(_loc5_[0])
+        let _loc7_ = _loc5_[1].substring(0, 10)
+        let _loc8_ = _loc5_[1].substr(10)
+        let _loc9_ = _loc5_[2] != '0' ? 1 : 0
+        this.api.gfx.updateCell(_loc6_, _loc7_, _loc8_, _loc9_)
+        _loc4_ = _loc4_ + 1
+      }
+      */
+      break
+    case 'Z': // onZoneData
+      /*
+      let _loc4_ = 0
+      while (_loc4_ < split.length) {
+        let _loc5_ = split[_loc4_]
+        let _loc6_ = _loc5_.charAt(0) == '+';
+        let _loc7_ = _loc5_.substr(1).split(';')
+        let _loc8_ = Number(_loc7_[0])
+        let _loc9_ = Number(_loc7_[1])
+        let _loc10_ = _loc7_[2]
+        if (_loc6_) {
+          this.api.gfx.drawZone(_loc8_, 0, _loc9_, _loc10_, dofus.Constants.ZONE_COLOR[_loc10_])
+        } else {
+          this.api.gfx.clearZone(_loc8_, _loc9_, _loc10_)
+        }
+        _loc4_ = _loc4_ + 1
+      }
+      */
+      break
+    case 'O': // onCellObject
+      /*
+      let _loc3_ = data.charAt(0) == '+'
+      let _loc4_ = data.substr(1).split('|')
+      let _loc5_ = 0
+      while (_loc5_ < _loc4_.length) {
+        let _loc6_ = _loc4_[_loc5_].split(';')
+        let _loc7_ = Number(_loc6_[0])
+        let _loc8_ = _global.parseInt(_loc6_[1])
+        if (_loc3_) {
+          let _loc9_ = new dofus.datacenter.Item(0, _loc8_)
+          let _loc10_ = Number(_loc6_[2])
+          switch (_loc10_) {
+            case 0:
+              this.api.gfx.updateCellObjectExternalWithExternalClip(_loc7_, _loc9_.iconFile, 1, true, true, _loc9_)
+              break
+            case 1:
+              if (this.api.gfx.mapHandler.getCellData(_loc7_).layerObjectExternalData.unicID != _loc8_) {
+                this.api.gfx.updateCellObjectExternalWithExternalClip(_loc7_, _loc9_.iconFile, 1, true, false, _loc9_)
+              } else {
+                _loc9_ = this.api.gfx.mapHandler.getCellData(_loc7_).layerObjectExternalData
+              }
+              _loc9_.durability = Number(_loc6_[3])
+              _loc9_.durabilityMax = Number(_loc6_[4])
+          }
+        } else {
+          this.api.gfx.initializeCell(_loc7_, 1)
+        }
+        _loc5_ = _loc5_ + 1
+      }
+      */
+      break
+    case 'F': // onFrameObject2
       obj = split.map(e => {
         let split = e.split(';')
         return { objectId: split[0], objectType: split[1], unknown: split[2] }
       })
       break
-    case 'K':
+    case 'E': // onFrameObjectExternal
+      /*
+      let _loc4_ = 0
+      while (_loc4_ < split.length) {
+        let _loc5_ = split[_loc4_].split(';')
+        let _loc6_ = Number(_loc5_[0])
+        let _loc7_ = Number(_loc5_[1])
+        this.api.gfx.setObjectExternalFrame(_loc6_, _loc7_)
+        _loc4_ = _loc4_ + 1
+      }
+      */
       break
   }
   return obj
 }
+
+// TODO: onspell (dofus/aks/DataProcessor.cs L440)
 module.exports = { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter, onGameData }

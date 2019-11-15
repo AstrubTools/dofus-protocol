@@ -70,38 +70,38 @@
       "ACCOUNT_ACCESS_SERVER": ["container", [
         {
           "name": "serverId",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_SET_CHARACTER": ["container", [
         {
           "name": "characterId",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_TICKET": ["container", [
         {
           "name": "ticket",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_GET_GIFTS": ["container", [
         {
           "name": "language",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_IDENTITY": ["container", [
         {
           "name": "identity",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_GET_CHARACTERS": ["container", []],
       "ACCOUNT_KEY": ["container", [
         {
           "name": "key",
-          "type": "restString"
+          "type": "string"
         }
       ]],
       "ACCOUNT_REGION_VERSION": ["container", []],
@@ -142,20 +142,12 @@
           "type": "su32"
         }
       ]],
-      "OBJECT_MOVEMENT": ["scontainer", {"separator": "|", "params": [
+      "OBJECT_MOVEMENT": ["container", [
         {
-          "name": "itemId",
-          "type": "su64"
-        },
-        {
-          "name": "position",
-          "type": "su8"
-        },
-        {
-          "name": "quantity",
-          "type": "restString"
+          "name": "data",
+          "type": "string"
         }
-      ]}],
+      ]],
       "OBJECT_DROP": ["container", [
         {
           "name": "itemId",
@@ -233,10 +225,6 @@
         },
         {
           "name": "message",
-          "type": ["restToSeparator", { "separator": "|" } ]
-        },
-        {
-          "name": "extra",
           "type": "restString"
         }
       ]}],
@@ -536,7 +524,7 @@
           "type": "restString"
         }
       ]],
-      "BASIC_UNKNOWN2": ["container", [
+      "BASIC_AVERAGE_PING": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": "|",
@@ -597,7 +585,7 @@
                   "0x4244": "BASIC_UNKNOWN1",
                   "0x4253": "BASIC_SMILEY",
                   "0x424D": "BASIC_MESSAGE",
-                  "0x4270": "BASIC_UNKNOWN2",
+                  "0x4270": "BASIC_AVERAGE_PING",
                   "0x5272": "MOUNT_PLAYER",
                   "0x4749": "GAME_INFORMATION",
                   "0x4743": "GAME_CREATE",
@@ -741,7 +729,7 @@
                   "UNKNOWN3": "UNKNOWN3",
                   "SPELL_LEVEL_UP": "SPELL_LEVEL_UP",
                   "PARTY_UNKNOWN1": "PARTY_UNKNOWN1",
-                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2",
+                  "BASIC_AVERAGE_PING": "BASIC_AVERAGE_PING",
                   "OBJECT_FEED": "OBJECT_FEED"
                 }
               }
@@ -975,19 +963,15 @@
         },
         {
           "name": "amount",
-          "type": "su8"
+          "type": "su16"
         }
       ]}],
-      "OBJECT_MOVEMENT": ["scontainer", {"separator": "|", "params": [
+      "OBJECT_MOVEMENT": ["container", [
         {
-          "name": "itemId",
-          "type": "su64"
-        },
-        {
-          "name": "position",
+          "name": "data",
           "type": "restString"
         }
-      ]}],
+      ]],
       "OBJECT_TOOL": ["container", [
         {
           "name": "jobId",
@@ -1014,7 +998,7 @@
                 [
                 {
                   "name": "account",
-                  "type": "string"
+                  "type": ["restToSeparator", { "separator": "|" }]
                 },
                 {
                   "name": "state",
@@ -1034,7 +1018,7 @@
                 },
                 {
                   "name": "guild",
-                  "type": "string"
+                  "type": ["restToSeparator", { "separator": "|" }]
                 },
                 {
                   "name": "sex",
@@ -1042,7 +1026,7 @@
                 },
                 {
                   "name": "gfx",
-                  "type": "string"
+                  "type": ["restToSeparator", { "separator": "|" }]
                 }
               ]
             }
@@ -1056,6 +1040,13 @@
           "type": "restString"
         }
       ]],
+      "MOUNT_EQUIP": ["container", []],
+      "MOUNT_NAME": ["container", []],
+      "MOUNT_DATA": ["container", []],
+      "MOUNT_PARK": ["container", []],
+      "MOUNT_PARK_BUY": ["container", []],
+      "MOUNT_LEAVE": ["container", []],
+      "MOUNT_RIDING_STATE": ["container", []],
       "GAME_DATA": ["container", [
         {
           "name": "data",
@@ -1233,12 +1224,12 @@
           "type": "su16"
         }
       ]],
-      "INFO_MESSAGE": ["container",  
+      "INFO_MESSAGE": ["container", [
         {
           "name": "data",
-          "type": "restBuffer"
+          "type": "restString"
         }
-      ],
+      ]],
       "INFO_COMPASS": ["container", [
         {
           "name": "x",
@@ -1365,7 +1356,7 @@
           "type": "restString"
         }
       ]],
-      "SPELL": ["container", [
+      "SPELL_LIST_CHANGE": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": ";",
@@ -1375,7 +1366,10 @@
           }]
         }
       ]],
-      "SUBAREA": ["container", [
+      "SPELL_UPGRADE": ["container", []],
+      "SPELL_BOOST": ["container", []],
+      "SPELL_FORGET": ["container", []],
+      "SUBAREA_LIST": ["container", [
         {
           "name": "unk",
           "type": ["sarray", { "separator": "|",
@@ -1632,13 +1626,13 @@
           "type": "restString"
         }
       ]],
-      "UNKNOWN4": ["container", [
+      "FRIEND_CHANGE": ["container", [
         {
           "name": "data",
           "type": "restString"
         }
       ]],
-      "OBJECT_UNKNOWN1": ["container", [
+      "OBJECT_SET": ["container", [
         {
           "name": "unk",
           "type": ["sarray", { "separator": "|",
@@ -1663,20 +1657,20 @@
           }]
         }
       ]],
-      "BASIC_UNKNOWN1": ["container", []],
-      "INFO_UNKNOWN2": ["container", [
+      "BASIC_AVERAGE_PING": ["container", []],
+      "INFO_LIFE": ["container", [
         {
           "name": "data",
           "type": "restString"
         }
       ]],
-      "BASIC_UNKNOWN2": ["container", [
+      "BASIC_REFERENCE_TIME": ["container", [
         {
           "name": "data",
           "type": "restString"
         }
       ]],
-      "BASIC_UNKNOWN3": ["container", [
+      "BASIC_DATE": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": "|",
@@ -1690,7 +1684,7 @@
           "type": "su16"
         }
       ]],
-      "SUBAREA_UNKNOWN1": ["container", [
+      "SUBAREA_ALIGNMENT_CHANGED": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": "|",
@@ -1698,7 +1692,7 @@
           }]
         }
       ]],
-      "SUBAREA_UNKNOWN2": ["container", [
+      "SUBAREA_ALIGNMENT_MODIFICATION": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": "|",
@@ -1714,7 +1708,7 @@
           }]
         }
       ]],
-      "OBJECT_UNKNOWN3": ["container", [
+      "OBJECT_CHANGE": ["container", [
         {
           "name": "data",
           "type": ["sarray", { "separator": ",",
@@ -1722,6 +1716,19 @@
           }]
         }
       ]],
+      "STORAGE_LIST": ["container", []],
+      "INFO_OBJECT": ["container", []],
+      "INFO_QUANTITY": ["container", []],
+      "INFO_MAP": ["container", []],
+      "OBJECT_ACCESSORIES": ["container", [
+        {
+          "name": "data",
+          "type": "restString"
+        }
+      ]],
+      "FRIEND_ADD": ["container", []],
+      "FRIEND_DELETE": ["container", []],
+      "FRIEND_SPOUSE": ["container", []],
       "packet": [
         "container",
         [
@@ -1756,25 +1763,36 @@
                   "0x4451": "DIALOG_QUESTION",
                   "0x4450": "DIALOG_PAUSE",
                   "0x4456": "DIALOG_LEAVE",
-                  "0x464F": "UNKNOWN4",
+                  "0x4641": "FRIEND_ADD",
+                  "0x4644": "FRIEND_DELETE",
+                  "0x464C": "FRIEND_LIST",
+                  "0x464F": "FRIEND_CHANGE",
+                  "0x4653": "FRIEND_SPOUSE",
                   "0x5443": "TUTORIAL_CREATE",
                   "0x5454": "TUTORIAL_LEAVE",
                   "0x4F44": "OBJECT_DROP",
-                  "0x4F43": "OBJECT_UNKNOWN3",
+                  "0x4F43": "OBJECT_CHANGE",
                   "0x4F41": "OBJECT_ADD",
                   "0x4F51": "OBJECT_QUANTITY",
                   "0x4F52": "OBJECT_REMOVE",
-                  "0x4F53": "OBJECT_UNKNOWN1",
+                  "0x4F53": "OBJECT_SET",
+                  "0x4F61": "OBJECT_ACCESSORIES",
                   "0x4F73": "OBJECT_UNKNOWN2",
                   "0x4F4D": "OBJECT_MOVEMENT",
                   "0x4F54": "OBJECT_TOOL",
                   "0x4F77": "OBJECT_WEIGHT",
-                  "0x464C": "FRIEND_LIST",
                   "0x424E": "BASIC_CONFIRM",
-                  "0x4244": "BASIC_UNKNOWN3",
-                  "0x4254": "BASIC_UNKNOWN2",
-                  "0x4270": "BASIC_UNKNOWN1",
+                  "0x4244": "BASIC_DATE",
+                  "0x4254": "BASIC_REFERENCE_TIME",
+                  "0x4270": "BASIC_AVERAGE_PING",
+                  "0x5265": "MOUNT_EQUIP",
                   "0x5278": "MOUNT_XP",
+                  "0x526E": "MOUNT_NAME",
+                  "0x5264": "MOUNT_DATA",
+                  "0x5270": "MOUNT_PARK",
+                  "0x5244": "MOUNT_PARK_BUY",
+                  "0x5276": "MOUNT_LEAVE",
+                  "0x5272": "MOUNT_RIDING_STATE",
                   "0x4743": "GAME_CREATE",
                   "0x4744": "GAME_DATA",
                   "0x474A": "GAME_JOIN",
@@ -1797,10 +1815,13 @@
                   "0x4A53": "JOB_SKILLS",
                   "0x4A58": "JOB_XP",
                   "0x4A4E": "JOB_LEVEL",
+                  "0x494D": "INFO_MAP",
                   "0x496D": "INFO_MESSAGE",
                   "0x4943": "INFO_COMPASS",
+                  "0x4951": "INFO_QUANTITY",
+                  "0x494F": "INFO_OBJECT",
                   "0x4948": "INFO_COORDINATE",
-                  "0x494C": "INFO_UNKNOWN2",
+                  "0x494C": "INFO_LIFE",
                   "0x4972": "INFO_UNKNOWN1",
                   "0x4D4F": "AKS_MESSAGE",
                   "0x634D": "CHAT_MESSAGE",
@@ -1815,10 +1836,13 @@
                   "0x5061": "PARTY_UNKNOWN1",
                   "0x504D": "PARTY_MOVEMENT",
                   "0x5052": "PARTY_REJECT",
-                  "0x534C": "SPELL",
-                  "0x614d": "SUBAREA_UNKNOWN1",
-                  "0x616d": "SUBAREA_UNKNOWN2",
-                  "0x616C": "SUBAREA",
+                  "0x534C": "SPELL_LIST_CHANGE",
+                  "0x5355": "SPELL_UPGRADE",
+                  "0x5342": "SPELL_BOOST",
+                  "0x5346": "SPELL_FORGET",
+                  "0x614D": "SUBAREA_ALIGNMENT_CHANGED",
+                  "0x616D": "SUBAREA_ALIGNMENT_MODIFICATION",
+                  "0x616C": "SUBAREA_LIST",
                   "0x454C": "EXCHANGE_LIST",
                   "0x4543": "EXCHANGE_CREATE",
                   "0x4552": "EXCHANGE_REQUEST",
@@ -1845,7 +1869,8 @@
                   "0x5776": "ZAAPI_LEAVE",
                   "0x626F": "UNKNOWN1",
                   "0x654C": "UNKNOWN3",
-                  "0xC391": "EXTRA_INFORMATION"
+                  "0xC391": "EXTRA_INFORMATION",
+                  "0x734C": "STORAGE_LIST"
                 }
               }
             ]
@@ -1890,7 +1915,6 @@
                   "OBJECT_WEIGHT": "OBJECT_WEIGHT",
                   "FRIEND_LIST": "FRIEND_LIST",
                   "BASIC_CONFIRM": "BASIC_CONFIRM",
-                  "MOUNT_XP": "MOUNT_XP",
                   "GAME_CREATE": "GAME_CREATE",
                   "GAME_DATA": "GAME_DATA",
                   "GAME_JOIN": "GAME_JOIN",
@@ -1929,8 +1953,11 @@
                   "PARTY_FOLLOW": "PARTY_FOLLOW",
                   "PARTY_MOVEMENT": "PARTY_MOVEMENT",
                   "PARTY_REJECT": "PARTY_REJECT",
-                  "SPELL": "SPELL",
-                  "SUBAREA": "SUBAREA",
+                  "SPELL_LIST_CHANGE": "SPELL_LIST_CHANGE",
+                  "SPELL_UPGRADE": "SPELL_UPGRADE",
+                  "SPELL_BOOST": "SPELL_BOOST",
+                  "SPELL_FORGET": "SPELL_FORGET",
+                  "SUBAREA_LIST": "SUBAREA_LIST",
                   "EXCHANGE_LIST": "EXCHANGE_LIST",
                   "EXCHANGE_CREATE": "EXCHANGE_CREATE",
                   "EXCHANGE_REQUEST": "EXCHANGE_REQUEST",
@@ -1958,19 +1985,35 @@
                   "UNKNOWN1": "UNKNOWN1",
                   "UNKNOWN2": "UNKNOWN2",
                   "UNKNOWN3": "UNKNOWN3",
-                  "UNKNOWN4": "UNKNOWN4",
-                  "OBJECT_UNKNOWN1": "OBJECT_UNKNOWN1",
+                  "FRIEND_CHANGE": "FRIEND_CHANGE",
+                  "OBJECT_SET": "OBJECT_SET",
                   "OBJECT_UNKNOWN2": "OBJECT_UNKNOWN2",
                   "PARTY_UNKNOWN1": "PARTY_UNKNOWN1",
-                  "BASIC_UNKNOWN1": "BASIC_UNKNOWN1",
-                  "INFO_UNKNOWN2": "INFO_UNKNOWN2",
-                  "BASIC_UNKNOWN2": "BASIC_UNKNOWN2",
-                  "BASIC_UNKNOWN3": "BASIC_UNKNOWN3",
+                  "BASIC_AVERAGE_PING": "BASIC_AVERAGE_PING",
+                  "INFO_LIFE": "INFO_LIFE",
+                  "BASIC_REFERENCE_TIME": "BASIC_REFERENCE_TIME",
+                  "BASIC_DATE": "BASIC_DATE",
                   "TUTORIAL_LEAVE": "TUTORIAL_LEAVE",
-                  "SUBAREA_UNKNOWN1": "SUBAREA_UNKNOWN1",
-                  "SUBAREA_UNKNOWN2": "SUBAREA_UNKNOWN2",
+                  "SUBAREA_ALIGNMENT_CHANGED": "SUBAREA_ALIGNMENT_CHANGED",
+                  "SUBAREA_ALIGNMENT_MODIFICATION": "SUBAREA_ALIGNMENT_MODIFICATION",
                   "EXCHANGE_SHOP_TYPE": "EXCHANGE_SHOP_TYPE",
-                  "OBJECT_UNKNOWN3": "OBJECT_UNKNOWN3"
+                  "OBJECT_CHANGE": "OBJECT_CHANGE",
+                  "STORAGE_LIST": "STORAGE_LIST",
+                  "INFO_OBJECT": "INFO_OBJECT",
+                  "INFO_QUANTITY": "INFO_QUANTITY",
+                  "INFO_MAP": "INFO_MAP",
+                  "OBJECT_ACCESSORIES": "OBJECT_ACCESSORIES",
+                  "FRIEND_ADD": "FRIEND_ADD",
+                  "FRIEND_DELETE": "FRIEND_DELETE",
+                  "FRIEND_SPOUSE": "FRIEND_SPOUSE",
+                  "MOUNT_EQUIP": "MOUNT_EQUIP",
+                  "MOUNT_XP": "MOUNT_XP",
+                  "MOUNT_NAME": "MOUNT_NAME",
+                  "MOUNT_DATA": "MOUNT_DATA",
+                  "MOUNT_PARK": "MOUNT_PARK",
+                  "MOUNT_PARK_BUY": "MOUNT_PARK_BUY",
+                  "MOUNT_LEAVE": "MOUNT_LEAVE",
+                  "MOUNT_RIDING_STATE": "MOUNT_RIDING_STATE"
                 }
               }
             ]

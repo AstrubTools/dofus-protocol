@@ -6,7 +6,7 @@ const dofus = require('./src/utils/datatypes/dofus')
 const Splitter = require('./src/transforms/framing')
 const { decryptIp, decryptPort, logger, getRandomNetworkKey, setIntervalAndExecute } = require('./src/utils/utils')
 const { compressCellId } = require('./src/utils/map')
-const { onMovement, onExchangeShop, onAccountStats } = require('./src/utils/packetParser')
+const finalPacketParser = require('./src/utils/finalPacketParser')
 
 const protocol = supportedVersions.reduce((acc, version) => {
   acc[version] = {
@@ -29,8 +29,6 @@ module.exports = {
   logger,
   getRandomNetworkKey,
   setIntervalAndExecute,
-  onMovement,
-  onExchangeShop,
-  onAccountStats,
+  finalPacketParser,
   compressCellId
 }

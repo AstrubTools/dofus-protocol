@@ -37,13 +37,13 @@ function sizeOfRestBuffer (value) {
 
 function readRestString (buffer, offset) {
   return {
-    value: (buffer ? buffer.slice(offset) : '').toString('ascii'),
+    value: (buffer ? buffer.slice(offset) : '').toString(),
     size: buffer ? buffer.length - offset : 0
   }
 }
 
-function writeRestString (value, buffer, offset) {
-  buffer.write(value, offset)
+function writeRestString (value, o, offset) {
+  o.s += value
   return offset + value.length
 }
 
@@ -125,6 +125,7 @@ function readSContainer (buffer, offset, typeArgs, context) {
     size: 0
   }
   const newBuffer = buffer.slice(offset).toString('ascii').split(typeArgs.separator)
+  if (!newBuffer) return results
   let i = 0
   typeArgs.params.forEach(({ type, name, anon }) => {
     tryDoc(() => {

@@ -1,9 +1,26 @@
-const { onMovement, onTurn, onExchangeCreate, onExchangeShop, onAccountStats, onAction, onAccountSelectCharacter, onGameData } = require('./packetParser')
+const { onMovement,
+  onTurn,
+  onExchangeCreate,
+  onExchangeShop,
+  onAccountStats,
+  onAction,
+  onAccountSelectCharacter,
+  onGameData } = require('./finalPacketParser')
 
 const HASH = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
   's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
   'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
   '2', '3', '4', '5', '6', '7', '8', '9', '-', '_']
+
+function hashPassword (password, key) {
+  let str = '#1'
+  for (let i = 0; i < password.length; i++) {
+    let a = Math.floor(password.charCodeAt(i) / 16)
+    let b = password.charCodeAt(i) % 16
+    str = str + HASH[(a + key.charCodeAt(i)) % HASH.length] + HASH[(b + key.charCodeAt(i)) % HASH.length]
+  }
+  return str.toString()// .slice(0, -2) // ?? seems to be two 0 non-needed
+}
 
 function decryptIp (ipCrypt) {
   let ip = []
@@ -29,7 +46,7 @@ function decryptPort (chars) {
   return port
 }
 
-async function logger (data, isToServer, proto) {
+function logger (data, isToServer, proto) {
   const s = isToServer ? 'toServer : ' : 'toClient : '
   let parsed
   console.log(`~`.repeat(10))
@@ -39,7 +56,7 @@ async function logger (data, isToServer, proto) {
     case 'ACCOUNT_SERVER_ENCRYPTED_HOST':
       console.log(`Ready to connect to ${parsed.params.ip}:${parsed.params.port}`)
       break
-    case 'SPELL':
+    case 'SPELL_LIST_CHANGE':
       console.log(`My spells ${parsed.params.data.filter(e => e !== '').map(e => `skill n°${e[0]} - level: ${e[1]} - ?: ${e[2]}\n`)}`)
       break
     case 'GAME_MOVEMENT':
@@ -68,8 +85,7 @@ async function logger (data, isToServer, proto) {
       console.log(`ACCOUNT_SELECT_CHARACTER: ${JSON.stringify(onAccountSelectCharacter(parsed.params.data))}`)
       break
     case 'GAME_DATA':
-      let res = await onGameData(parsed.params.data)
-      console.log(`${JSON.stringify(res)}`)
+      console.log(`${onGameData(parsed.params.data)}`)
       break
   }
   console.log(`raw ${s} ${data.toString('ascii')}`)
@@ -102,15 +118,9 @@ function setIntervalAndExecute (fn, t, stopAfter, failedCallback) {
   }, t))
 }
 
-// More production-designed than logger()
-// POST a log under sessionid
-function log (message, sessionId, logLevel) {
-  // fetch(`apiurl/logs/${sessionId}`, { message, logLevel })
-}
-
-module.exports = { decryptIp,
+module.exports = { hashPassword,
+  decryptIp,
   decryptPort,
   logger,
   setIntervalAndExecute,
-  log,
   HASH }

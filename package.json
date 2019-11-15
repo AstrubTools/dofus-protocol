@@ -28,7 +28,7 @@
     "argparse": "^1.0.10",
     "bit-buffer": "^0.2.4",
     "express": "^4.17.1",
-    "node-dofus-data": "0.0.1",
+    "node-dofus-data": "file:../node-dofus-data",
     "node-fetch": "^2.6.0",
     "once-promise": "^2.0.0",
     "protodef": "^1.6.10"

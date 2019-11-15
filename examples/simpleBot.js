@@ -1,4 +1,4 @@
-const { createClient, defaultVersion, compressCellId } = require('..')
+const { createClient, defaultVersion, compressCellId, finalPacketParser } = require('..')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -24,34 +24,21 @@ async function start () {
   const host = dev ? '190.115.26.126' : '34.251.172.139'
   let client = await createClient({ host, port, username, password, version: defaultVersion, delay })
 
-  client.listenToInformation()
-
   await client.loginToAccount()
-  await client.loginToServer()
+  await client.loginToServer(1)
   await client.pickCharacter(character)
-  /*
-  setInterval(() => {
-    client.write('GAME_ACTION', {
-      data: `001${compressCellId(Math.random() * 200)}`
-    })
-  }, 5000)
-  */
-  /*
-  app.use(bodyParser.json()); // for parsing application/json
-  // app.use(bodyParser.urlencoded({extended: false})); // for parsing application/x-www-form-urlencoded
 
-  // For debugging toServer
-  app.post('/', (req, res) => {
-    console.log(req.body) // req data
-    res.send('POST request!!!')
-    // client.write(req.body)
+  client.on('GAME_DATA', data => {
+    let currentMap = finalPacketParser.onGameData(data)
+    console.log(currentMap.id)
+    /*
+    setInterval(() => {
+      client.write('GAME_ACTION', {
+        data: `001${compressCellId(Math.random() * 200)}`
+      })
+    }, 5000)
+    */
   })
-
-  let postPort = 8001
-  app.listen(postPort, () => {
-    console.log('Server is up and running on port number ' + postPort)
-  })
-  */
 }
 
 start()

@@ -4,9 +4,6 @@ const assert = require('assert')
 const ProtoDef = require('protodef').ProtoDef
 const p = new ProtoDef(false)
 p.addTypes(dofus)
-// (don"t look at failed params in the dump)
-// toClient :  {"name":"ACCOUNT_HOST","params":{"number":"1","servers":[{"serverId":";","sep":"1","state":null,"population":0,"requireSubscription":"1"}]}}
-// raw toClient <Buffer 41 48 31 3b 31 3b 31 30 3b 31>
 
 let buf = Buffer.from('AH1;1;10;1')
 console.log(`ASCII packet ${buf}`)
@@ -24,7 +21,7 @@ let res = p.read('AH1;1;10;1',
             'params': [
               {
                 'name': 'serverId',
-                'type': ['restToSeparator', 
+                'type': ['restToSeparator',
                   { 'separator': ';' }
                 ]
               },
@@ -47,7 +44,7 @@ let res = p.read('AH1;1;10;1',
     }
   ], {})
 console.log(`Parsing the whole packet with scontainer ${JSON.stringify(res)}`)
-assert.strictEqual(JSON.stringify(res), '{"value":{"servers":{"serverId":1,"state":1,"population":10,"requireSubscription":1}},"size":8}')
+assert.strictEqual(JSON.stringify(res), '{"value":{"servers":{"serverId":"1","state":1,"population":10,"requireSubscription":1}},"size":8}')
 
 // Writing the whole packet with split 2
 let o = { s: '' }
@@ -102,7 +99,7 @@ p.write({
     'params': [
       {
         'name': 'serverId',
-        'type': ['restToSeparator', 
+        'type': ['restToSeparator',
           { 'separator': ';' }
         ]
       },
@@ -161,7 +158,7 @@ res = p.read('AH601;1;75;1|605;1;75;1|609;1;75;1|604;1;75;1|608;1;75;1|603;1;75;
           'params': [
             {
               'name': 'serverId',
-              'type': ['restToSeparator', 
+              'type': ['restToSeparator',
                 { 'separator': ';' }
               ]
             },
@@ -185,4 +182,45 @@ res = p.read('AH601;1;75;1|605;1;75;1|609;1;75;1|604;1;75;1|608;1;75;1|603;1;75;
 console.log(`Parsing the whole packet with split \n${JSON.stringify(res)}`)
 assert.strictEqual(res.size, 118)
 assert.strictEqual(res.value.servers.length, 11)
-assert.strictEqual(res.value.servers[0].serverId, 601)
+assert.strictEqual(res.value.servers[0].serverId, '601')
+
+o = { s: '' }
+p.write({
+  'itemId': 50367625,
+  'position': '-1',
+  'quantity': ''
+}, o,
+0,
+['scontainer', { 'separator': '|',
+  'params': [
+    {
+      'name': 'itemId',
+      'type': 'su64'
+    },
+    {
+      'name': 'position',
+      'type': ['restToSeparator',
+        { 'separator': '|' }
+      ]
+    },
+    {
+      'name': 'quantity',
+      'type': 'restString'
+    }
+  ] }], {})
+console.log(o)
+assert.deepStrictEqual(o, { s: '50367625|-1|' })
+
+o = { s: '' }
+p.write({
+  'serverId': '1'
+}, o,
+0,
+['container', [
+  {
+    'name': 'serverId',
+    'type': 'restString'
+  }
+]], {})
+console.log(o)
+assert.deepStrictEqual(o, { s: '1' })

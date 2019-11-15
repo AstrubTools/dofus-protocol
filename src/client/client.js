@@ -23,15 +23,16 @@ class Client extends EventEmitter {
   }
 
   connect (host, port, switching) {
-    return new Promise((resolve, reject) => {
-      this.host = host
-      this.port = port
-      console.log(`Attempting to connect to ${host}:${port} ...`)
-      this.setSocket(net.createConnection({ port: this.port, host: this.host }, () => {
-        console.log(`Connected to ${host}:${port} !`)
-        resolve()
-      }), switching)
-    })
+    this.host = host
+    this.port = port
+    console.log(`Attempting to connect to ${host}:${port} ...`)
+    this.setSocket(net.createConnection({ port: this.port, host: this.host }, () => {
+      console.log(`Connected to ${host}:${port} !`)
+    }), switching)
+  }
+
+  disconnect () {
+    this.socket.end()
   }
 
   setSocket (socket, switching) {
