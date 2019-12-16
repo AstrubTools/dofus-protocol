@@ -14,8 +14,8 @@ function createClient ({ host, port, username, password, version, delay }) {
     return new Promise((resolve, reject) => {
       client.on('HELLO_CONNECTION', ({ key }) => {
         // client.socket.write(Buffer.from('312e34302e310a00', 'hex'))
-        client.socket.write(`${version}.0e\n\0`)
-        // '1.30.0e'
+        client.socket.write(`${version}.14\n\0`)
+        // '1.30.14'
         client.socket.write(client.username + '\n' + hashPassword(client.password, key) + '\n')
         client.write('ACCOUNT_AUTHENTICATION', {})
       })
