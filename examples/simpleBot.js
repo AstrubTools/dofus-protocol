@@ -1,7 +1,4 @@
-const { createClient, defaultVersion, compressCellId, finalPacketParser } = require('..')
-const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
+const { createClient, defaultVersion } = require('..')
 
 var ArgumentParser = require('argparse').ArgumentParser
 var parser = new ArgumentParser({
@@ -12,9 +9,10 @@ var parser = new ArgumentParser({
 parser.addArgument([ '-u', '--username' ], { required: true })
 parser.addArgument([ '-p', '--password' ], { required: true })
 parser.addArgument([ '-c', '--character' ], { required: true })
+parser.addArgument([ '-s', '--server' ], { required: true })
 parser.addArgument([ '-d', '--delay' ], { defaultValue: 0 }) // Only servers with anti hack system (i.e. officials) should use delay between packets
 
-const { username, password, character, delay } = parser.parseArgs()
+const { username, password, character, server, delay } = parser.parseArgs()
 
 async function start () {
   // PORT 887 private serv // 443 dofus retro
@@ -25,20 +23,8 @@ async function start () {
   let client = await createClient({ host, port, username, password, version: defaultVersion, delay })
 
   await client.loginToAccount()
-  await client.loginToServer(1)
+  await client.loginToServer(server)
   await client.pickCharacter(character)
-
-  client.on('GAME_DATA', data => {
-    let currentMap = finalPacketParser.onGameData(data)
-    console.log(currentMap.id)
-    /*
-    setInterval(() => {
-      client.write('GAME_ACTION', {
-        data: `001${compressCellId(Math.random() * 200)}`
-      })
-    }, 5000)
-    */
-  })
 }
 
 start()

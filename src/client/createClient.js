@@ -34,7 +34,6 @@ function createClient ({ host, port, username, password, version, delay }) {
 
   client.loginToServer = (server) => {
     return new Promise((resolve, reject) => {
-      client.server = server
       client.on('ACCOUNT_SERVER_ENCRYPTED_HOST', ({ unk, ip, port, ticket }) => {
         client.ticket = ticket
         client.gameHost = ip
@@ -42,9 +41,9 @@ function createClient ({ host, port, username, password, version, delay }) {
         resolve()
       })
       let foundServer = client.servers.find(s => s.serverId === server)
-      // If we the server we want to join exist and is online, request access
+      console.log('foundServer:', foundServer.serverId)
+      // If the server we want to join exist and is online, request access
       if (foundServer && foundServer.state === 1) {
-        console.log(foundServer.serverId)
         client.write('ACCOUNT_ACCESS_SERVER', {
           serverId: foundServer.serverId
         })
@@ -100,6 +99,7 @@ function createClient ({ host, port, username, password, version, delay }) {
         })
       })
       client.on('GAME_CREATE', (data) => {
+        /*
         if (data.unk.find(e => e === '1')) {
           // This is sort of ping, maybe should investigate the params
           client.on('BASIC_CONFIRM', () => {
@@ -116,10 +116,7 @@ function createClient ({ host, port, username, password, version, delay }) {
         } else {
           reject(Error('Server refused to create game'))
         }
-      })
-
-      client.on('GAME_MOVEMENT', (data) => {
-
+        */
       })
       client.socket.end() // Closing last connection (when switching between servers)
       client.connect(client.gameHost, client.gamePort, true) // Game

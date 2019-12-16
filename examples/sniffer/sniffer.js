@@ -47,7 +47,6 @@ splitterToClient.on('data', data => {
 let gameIp
 const ipOfficial = '34.251.172.139' // Official dofus retro
 const ipPrivate = '190.115.26.126' // Amakna server
-const yoloip = '52.208.25.222'
 let ip = ipPrivate
 // 99106584
 pcapSession.on('packet', function (rawPacket) {

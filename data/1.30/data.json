@@ -145,7 +145,7 @@
       "OBJECT_MOVEMENT": ["container", [
         {
           "name": "data",
-          "type": "string"
+          "type": "restString"
         }
       ]],
       "OBJECT_DROP": ["container", [
@@ -1168,7 +1168,7 @@
       "GUILD_STATS": ["container", [
         {
           "name": "name",
-          "type": "string"
+          "type": "restString"
         },
         {
           "name": "backEmblem",
